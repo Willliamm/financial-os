@@ -1,0 +1,25 @@
+{
+  "brandSubtitle": "Personal Workbook",
+  "groups": {
+    "Overview": "Overview",
+    "Planning": "Planning",
+    "Strategy": "Strategy",
+    "System": "System"
+  },
+  "items": {
+    "Dashboard": "Dashboard",
+    "Data Studio": "Data Studio",
+    "Income": "Income",
+    "Expenses": "Expenses",
+    "Properties": "Properties",
+    "Loans": "Loans",
+    "Investments": "Investments",
+    "Retirement": "Retirement",
+    "Tax Planning": "Tax Planning",
+    "Scenarios": "Scenarios",
+    "Projections": "Projections",
+    "Sync Center": "Sync Center",
+    "Settings": "Settings"
+  },
+  "openMenu": "Open navigation menu"
+}

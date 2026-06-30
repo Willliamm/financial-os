@@ -1,0 +1,94 @@
+{
+  "incomeSource": { "singular": "Fonte de renda", "plural": "Receitas" },
+  "expense": { "singular": "Despesa", "plural": "Despesas" },
+  "property": { "singular": "Imóvel", "plural": "Imóveis" },
+  "loan": { "singular": "Empréstimo", "plural": "Empréstimos" },
+  "investmentAccount": { "singular": "Conta de investimento", "plural": "Investimentos" },
+  "taxStrategy": { "singular": "Estratégia fiscal", "plural": "Estratégias fiscais" },
+  "scenario": { "singular": "Cenário", "plural": "Cenários" },
+  "incomeType": {
+    "w2": "Salário (W-2)",
+    "llc": "PJ / Autônomo",
+    "rental": "Aluguel",
+    "dividend": "Dividendos",
+    "interest": "Juros",
+    "bonus": "Bônus",
+    "other": "Outro"
+  },
+  "taxTreatment": {
+    "ordinary": "Renda ordinária",
+    "qualified_dividend": "Dividendo qualificado",
+    "capital_gain": "Ganho de capital",
+    "tax_free": "Isento de imposto"
+  },
+  "expenseCategory": {
+    "housing": "Moradia",
+    "utilities": "Contas de consumo",
+    "food": "Alimentação",
+    "transportation": "Transporte",
+    "insurance": "Seguro",
+    "healthcare": "Saúde",
+    "debt": "Dívida",
+    "discretionary": "Gastos variáveis",
+    "business": "Negócios",
+    "taxes": "Impostos",
+    "property": "Imóvel",
+    "other": "Outro"
+  },
+  "propertyType": {
+    "townhouse": "Sobrado",
+    "sfh": "Casa unifamiliar",
+    "condo": "Apartamento",
+    "multifamily": "Multifamiliar"
+  },
+  "ownershipType": {
+    "personal": "Pessoal",
+    "llc": "PJ"
+  },
+  "propertyStatus": {
+    "prospect": "Prospecto",
+    "owned": "Próprio",
+    "sold": "Vendido"
+  },
+  "loanType": {
+    "conventional": "Convencional",
+    "fha": "FHA",
+    "va": "VA",
+    "heloc": "HELOC",
+    "private": "Privado",
+    "other": "Outro"
+  },
+  "accountType": {
+    "brokerage": "Corretora",
+    "401k": "401(k)",
+    "solo_401k": "Solo 401(k)",
+    "ira": "IRA",
+    "roth_ira": "Roth IRA",
+    "hsa": "HSA",
+    "cash_balance_plan": "Plano de Saldo em Caixa",
+    "cash": "Dinheiro",
+    "crypto": "Cripto",
+    "other": "Outro"
+  },
+  "accountTax": {
+    "taxable": "Tributável",
+    "tax_deferred": "Imposto diferido",
+    "tax_free": "Isento de imposto"
+  },
+  "strategyStatus": {
+    "idea": "Ideia",
+    "planned": "Planejado",
+    "active": "Ativo",
+    "completed": "Concluído"
+  },
+  "riskLevel": {
+    "low": "Baixo",
+    "medium": "Médio",
+    "high": "Alto"
+  },
+  "scenarioStatus": {
+    "draft": "Rascunho",
+    "active": "Ativo",
+    "archived": "Arquivado"
+  }
+}

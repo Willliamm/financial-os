@@ -1,0 +1,87 @@
+{
+  "list": {
+    "title": "Properties",
+    "description": "Real estate portfolio, candidates and cash-flow analysis.",
+    "addProperty": "Add property",
+    "empty": {
+      "title": "No properties yet",
+      "description": "Add a property you own or one you're considering to analyze its cash flow, cap rate and long-term impact.",
+      "action": "Add property"
+    },
+    "kpi": {
+      "portfolioValue": "Portfolio value",
+      "totalEquity": "Total equity",
+      "monthlyCashFlow": "Monthly cash flow"
+    },
+    "card": {
+      "value": "Value",
+      "capRate": "Cap rate",
+      "cashPerMo": "Cash / mo",
+      "cashOnCash": "Cash-on-cash"
+    },
+    "alerts_one": "{{count}} alert",
+    "alerts_other": "{{count}} alerts"
+  },
+  "status": {
+    "prospect": "Prospect",
+    "owned": "Owned",
+    "sold": "Sold"
+  },
+  "detail": {
+    "back": "Back to properties",
+    "notFound": "Property not found.",
+    "kpi": {
+      "currentValue": "Current value",
+      "equity": "Equity",
+      "monthlyCashFlow": "Monthly cash flow",
+      "capRate": "Cap rate"
+    },
+    "tabs": {
+      "summary": "Summary",
+      "rental": "Rental & Costs",
+      "financing": "Financing",
+      "projections": "Projections",
+      "notes": "Notes"
+    },
+    "summary": {
+      "grossYield": "Gross yield",
+      "cashOnCash": "Cash-on-cash",
+      "noiAnnual": "NOI (annual)",
+      "dscr": "DSCR",
+      "breakEvenRent": "Break-even rent",
+      "cashInvested": "Cash invested",
+      "annualCashFlow": "Annual cash flow",
+      "purchasePrice": "Purchase price"
+    },
+    "rental": {
+      "monthlyRent": "Monthly rent",
+      "vacancy": "Vacancy",
+      "managementFee": "Management fee",
+      "hoaPerMo": "HOA / mo",
+      "propertyTaxPerYr": "Property tax / yr",
+      "insurancePerYr": "Insurance / yr",
+      "maintenancePerYr": "Maintenance / yr",
+      "cddPerYr": "CDD / yr",
+      "appreciation": "Appreciation"
+    },
+    "financing": {
+      "noLoan": "No loan linked to this property.",
+      "addLoan": "Add loan",
+      "loanFallback": "Loan",
+      "editLoan": "Edit loan",
+      "balance": "Balance",
+      "rate": "Rate",
+      "payment": "Payment (P&I)",
+      "payoff": "Payoff",
+      "payoffYears": "{{count}} yrs"
+    },
+    "projections": {
+      "title": "Value & equity over {{years}} years",
+      "value": "Value",
+      "equity": "Equity"
+    },
+    "notes": {
+      "empty": "No notes yet."
+    }
+  }
+}

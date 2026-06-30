@@ -1,0 +1,25 @@
+{
+  "brandSubtitle": "Pasta Pessoal",
+  "groups": {
+    "Overview": "Visão geral",
+    "Planning": "Planejamento",
+    "Strategy": "Estratégia",
+    "System": "Sistema"
+  },
+  "items": {
+    "Dashboard": "Painel",
+    "Data Studio": "Estúdio de Dados",
+    "Income": "Renda",
+    "Expenses": "Despesas",
+    "Properties": "Imóveis",
+    "Loans": "Financiamentos",
+    "Investments": "Investimentos",
+    "Retirement": "Aposentadoria",
+    "Tax Planning": "Planejamento Tributário",
+    "Scenarios": "Cenários",
+    "Projections": "Projeções",
+    "Sync Center": "Central de Sincronização",
+    "Settings": "Configurações"
+  },
+  "openMenu": "Abrir menu de navegação"
+}

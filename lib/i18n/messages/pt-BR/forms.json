@@ -1,0 +1,121 @@
+{
+  "sections": {
+    "general": "Geral",
+    "acquisition": "Aquisição",
+    "rental": "Locação",
+    "costs": "Custos",
+    "notes": "Notas"
+  },
+  "field": {
+    "required": "(obrigatório)"
+  },
+  "validation": {
+    "required": "Este campo é obrigatório.",
+    "fixFields_one": "Corrija {{count}} campo para continuar.",
+    "fixFields_other": "Corrija {{count}} campos para continuar."
+  },
+  "drawer": {
+    "new": "Adicionar {{item}}",
+    "edit": "Editar {{item}}"
+  },
+  "columns": {
+    "type": "Tipo",
+    "annual": "Anual",
+    "growth": "Crescimento",
+    "category": "Categoria",
+    "monthly": "Mensal",
+    "status": "Status",
+    "value": "Valor",
+    "rent": "Aluguel",
+    "balance": "Saldo",
+    "rate": "Taxa",
+    "return": "Retorno",
+    "savings": "Economia",
+    "risk": "Risco",
+    "horizon": "Horizonte"
+  },
+  "incomeSource": {
+    "name": { "label": "Nome" },
+    "type": { "label": "Tipo" },
+    "personId": { "label": "Pessoa" },
+    "annualAmountCents": { "label": "Valor anual" },
+    "growthRateBps": { "label": "Crescimento anual" },
+    "taxTreatment": { "label": "Tratamento fiscal" },
+    "active": { "label": "Ativo" }
+  },
+  "expense": {
+    "name": { "label": "Nome" },
+    "category": { "label": "Categoria" },
+    "monthlyAmountCents": { "label": "Valor mensal" },
+    "inflationRateBps": { "label": "Inflação" },
+    "isDiscretionary": { "label": "Discricionário" }
+  },
+  "property": {
+    "name": { "label": "Nome" },
+    "propertyType": { "label": "Tipo" },
+    "ownershipType": { "label": "Titularidade" },
+    "status": { "label": "Status" },
+    "street": { "label": "Rua" },
+    "city": { "label": "Cidade" },
+    "state": { "label": "Estado" },
+    "zip": { "label": "CEP" },
+    "purchaseDate": { "label": "Data de compra" },
+    "purchasePriceCents": { "label": "Preço de compra" },
+    "currentValueCents": { "label": "Valor atual" },
+    "downPaymentCents": { "label": "Entrada" },
+    "closingCostsCents": { "label": "Custos de fechamento" },
+    "appreciationRateBps": { "label": "Valorização" },
+    "bedrooms": { "label": "Quartos" },
+    "bathrooms": { "label": "Banheiros" },
+    "sqft": { "label": "Metragem" },
+    "yearBuilt": { "label": "Ano de construção" },
+    "rentMonthlyCents": { "label": "Aluguel mensal" },
+    "vacancyRateBps": { "label": "Vacância" },
+    "managementFeeBps": { "label": "Taxa de administração" },
+    "hoaMonthlyCents": { "label": "Condomínio (mensal)" },
+    "cddAnnualCents": { "label": "CDD (anual)" },
+    "propertyTaxAnnualCents": { "label": "IPTU (anual)" },
+    "insuranceAnnualCents": { "label": "Seguro (anual)" },
+    "maintenanceAnnualCents": { "label": "Manutenção (anual)" },
+    "notes": { "label": "Notas" }
+  },
+  "loan": {
+    "lender": { "label": "Credor" },
+    "loanType": { "label": "Tipo" },
+    "propertyId": { "label": "Imóvel" },
+    "originalBalanceCents": { "label": "Saldo original" },
+    "currentBalanceCents": { "label": "Saldo atual" },
+    "interestRateBps": { "label": "Taxa de juros" },
+    "termMonths": { "label": "Prazo (meses)" },
+    "startDate": { "label": "Data de início" },
+    "monthlyPaymentCents": { "label": "Parcela mensal (P&J)" },
+    "escrowMonthlyCents": { "label": "Caução (mensal)" },
+    "extraPaymentMonthlyCents": { "label": "Pagamento extra (mensal)" }
+  },
+  "investmentAccount": {
+    "name": { "label": "Nome" },
+    "accountType": { "label": "Tipo de conta" },
+    "institution": { "label": "Instituição" },
+    "currentBalanceCents": { "label": "Saldo atual" },
+    "expectedReturnBps": { "label": "Retorno esperado" },
+    "contributionMonthlyCents": { "label": "Contribuição mensal" },
+    "taxTreatment": { "label": "Tratamento fiscal" }
+  },
+  "taxStrategy": {
+    "name": { "label": "Nome" },
+    "strategyType": { "label": "Tipo de estratégia" },
+    "year": { "label": "Ano" },
+    "estimatedDeductionCents": { "label": "Dedução estimada" },
+    "estimatedTaxSavingsCents": { "label": "Economia fiscal estimada" },
+    "status": { "label": "Status" },
+    "riskLevel": { "label": "Nível de risco" },
+    "notes": { "label": "Notas" }
+  },
+  "scenario": {
+    "name": { "label": "Nome" },
+    "description": { "label": "Descrição" },
+    "startYear": { "label": "Ano inicial" },
+    "endYear": { "label": "Ano final" },
+    "status": { "label": "Status" }
+  }
+}

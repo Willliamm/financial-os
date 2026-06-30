@@ -1,0 +1,94 @@
+{
+  "incomeSource": { "singular": "Income source", "plural": "Income" },
+  "expense": { "singular": "Expense", "plural": "Expenses" },
+  "property": { "singular": "Property", "plural": "Properties" },
+  "loan": { "singular": "Loan", "plural": "Loans" },
+  "investmentAccount": { "singular": "Investment account", "plural": "Investments" },
+  "taxStrategy": { "singular": "Tax strategy", "plural": "Tax strategies" },
+  "scenario": { "singular": "Scenario", "plural": "Scenarios" },
+  "incomeType": {
+    "w2": "W-2 Job",
+    "llc": "LLC / Self-employed",
+    "rental": "Rental",
+    "dividend": "Dividend",
+    "interest": "Interest",
+    "bonus": "Bonus",
+    "other": "Other"
+  },
+  "taxTreatment": {
+    "ordinary": "Ordinary income",
+    "qualified_dividend": "Qualified dividend",
+    "capital_gain": "Capital gain",
+    "tax_free": "Tax-free"
+  },
+  "expenseCategory": {
+    "housing": "Housing",
+    "utilities": "Utilities",
+    "food": "Food",
+    "transportation": "Transportation",
+    "insurance": "Insurance",
+    "healthcare": "Healthcare",
+    "debt": "Debt",
+    "discretionary": "Discretionary",
+    "business": "Business",
+    "taxes": "Taxes",
+    "property": "Property",
+    "other": "Other"
+  },
+  "propertyType": {
+    "townhouse": "Townhouse",
+    "sfh": "Single-family",
+    "condo": "Condo",
+    "multifamily": "Multifamily"
+  },
+  "ownershipType": {
+    "personal": "Personal",
+    "llc": "LLC"
+  },
+  "propertyStatus": {
+    "prospect": "Prospect",
+    "owned": "Owned",
+    "sold": "Sold"
+  },
+  "loanType": {
+    "conventional": "Conventional",
+    "fha": "FHA",
+    "va": "VA",
+    "heloc": "HELOC",
+    "private": "Private",
+    "other": "Other"
+  },
+  "accountType": {
+    "brokerage": "Brokerage",
+    "401k": "401(k)",
+    "solo_401k": "Solo 401(k)",
+    "ira": "IRA",
+    "roth_ira": "Roth IRA",
+    "hsa": "HSA",
+    "cash_balance_plan": "Cash Balance Plan",
+    "cash": "Cash",
+    "crypto": "Crypto",
+    "other": "Other"
+  },
+  "accountTax": {
+    "taxable": "Taxable",
+    "tax_deferred": "Tax-deferred",
+    "tax_free": "Tax-free"
+  },
+  "strategyStatus": {
+    "idea": "Idea",
+    "planned": "Planned",
+    "active": "Active",
+    "completed": "Completed"
+  },
+  "riskLevel": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "scenarioStatus": {
+    "draft": "Draft",
+    "active": "Active",
+    "archived": "Archived"
+  }
+}

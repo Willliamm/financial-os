@@ -1,0 +1,58 @@
+{
+  "header": {
+    "title": "Dashboard",
+    "description": "Your financial overview.",
+    "descriptionYear": "Financial overview · {{year}}"
+  },
+  "empty": {
+    "title": "Let's add your first data",
+    "description": "Add income, expenses, properties and investments in the Data Studio to see your dashboard come alive.",
+    "openDataStudio": "Open Data Studio"
+  },
+  "perMonth": "/mo",
+  "kpi": {
+    "netWorth": "Net worth",
+    "totalAssets": "Total assets",
+    "totalLiabilities": "Total liabilities",
+    "investableCashFlow": "Investable cash flow",
+    "monthlyIncome": "Monthly income",
+    "monthlyExpenses": "Monthly expenses",
+    "passiveIncome": "Passive income",
+    "savingsRate": "Savings rate",
+    "savingsTarget": "Target 20%"
+  },
+  "cards": {
+    "netWorthProjection": "Net worth projection",
+    "financialIndependence": "Financial independence",
+    "assetAllocation": "Asset allocation",
+    "assetsVsLiabilities": "Assets vs liabilities",
+    "incomeMix": "Income mix (monthly)",
+    "insights": "Insights"
+  },
+  "fire": {
+    "progress": "Progress to FIRE",
+    "effectiveTaxRate": "Effective tax rate",
+    "debtToAsset": "Debt-to-asset"
+  },
+  "insights": {
+    "empty": "No insights right now — your data looks healthy."
+  },
+  "series": {
+    "netWorth": "Net worth",
+    "assets": "Assets",
+    "liabilities": "Liabilities",
+    "active": "Active",
+    "passive": "Passive",
+    "expenses": "Expenses",
+    "today": "Today",
+    "monthly": "Monthly"
+  },
+  "allocation": {
+    "realEstate": "Real estate",
+    "retirement": "Retirement",
+    "brokerage": "Brokerage",
+    "cash": "Cash",
+    "crypto": "Crypto",
+    "other": "Other"
+  }
+}

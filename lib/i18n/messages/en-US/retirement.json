@@ -1,0 +1,35 @@
+{
+  "header": {
+    "title": "Retirement",
+    "description": "Projected growth of your retirement accounts to age {{age}}. Contribution limits are configured manually per account."
+  },
+  "empty": {
+    "title": "No retirement accounts yet",
+    "description": "Add a 401(k), IRA, Roth IRA, HSA or similar account to see your retirement projection.",
+    "addAccount": "Add an account"
+  },
+  "kpi": {
+    "retirementBalance": "Retirement balance",
+    "accounts_one": "{{count}} account",
+    "accounts_other": "{{count}} accounts",
+    "projectedAtAge": "Projected at age {{age}}",
+    "fromAgeToday": "From age {{age}} today",
+    "monthlyContributions": "Monthly contributions",
+    "perYear": "{{amount}} / year"
+  },
+  "chart": {
+    "title": "Projected balance growth",
+    "series": "Retirement balance"
+  },
+  "cards": {
+    "accounts": "Accounts"
+  },
+  "table": {
+    "account": "Account",
+    "type": "Type",
+    "balance": "Balance",
+    "monthly": "Monthly",
+    "return": "Return",
+    "projectedAt": "Projected at {{age}}"
+  }
+}

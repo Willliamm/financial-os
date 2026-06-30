@@ -1,0 +1,43 @@
+{
+  "list": {
+    "title": "Cenários",
+    "description": "Planos de longo prazo do tipo \"e se\" que você pode comparar com seu cenário base."
+  },
+  "detail": {
+    "back": "Voltar para cenários",
+    "notFound": "Cenário não encontrado.",
+    "kpi": {
+      "finalNetWorth": "Patrimônio líquido final",
+      "finalPassiveIncome": "Renda passiva final",
+      "totalEstimatedTax": "Imposto total estimado",
+      "horizon": "Horizonte"
+    },
+    "horizonYears": "{{count}} anos",
+    "assumptions": {
+      "title": "Premissas",
+      "investmentReturn": "Retorno dos investimentos",
+      "incomeGrowth": "Crescimento da renda",
+      "expenseInflation": "Inflação das despesas",
+      "propertyAppreciation": "Valorização dos imóveis",
+      "years": "Anos",
+      "update": "Atualizar premissas",
+      "saving": "Salvando…"
+    },
+    "charts": {
+      "netWorthTitle": "Patrimônio líquido",
+      "cashflowTitle": "Fluxo de caixa anual e imposto",
+      "legend": {
+        "netWorth": "Patrimônio líquido",
+        "assets": "Ativos",
+        "liabilities": "Passivos",
+        "investableCashflow": "Fluxo de caixa investível",
+        "estimatedTax": "Imposto estimado"
+      }
+    },
+    "comparison": {
+      "title": "Comparado com {{name}}",
+      "metric": "Métrica",
+      "difference": "Diferença"
+    }
+  }
+}

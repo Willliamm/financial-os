@@ -1,0 +1,17 @@
+{
+  "header": {
+    "title": "Planejamento tributário",
+    "description": "Estime deduções e estratégias para reduzir impostos."
+  },
+  "disclaimer": {
+    "title": "Apenas estimativas",
+    "body": "Isto não substitui um contador, especialista ou advogado tributário. Os valores são estimativas aproximadas de alíquota efetiva para planejamento, não orientação tributária."
+  },
+  "kpi": {
+    "taxableIncome": "Renda tributável estimada",
+    "annualTax": "Imposto anual estimado",
+    "effectiveRate": "Alíquota efetiva de imposto",
+    "taxSavings": "Economia de imposto estimada",
+    "taxSavingsSub": "Das suas estratégias"
+  }
+}

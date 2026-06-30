@@ -1,0 +1,50 @@
+{
+  "title": "Configurações",
+  "description": "Gerencie sua família, premissas fiscais e preferências de sincronização.",
+  "selectPlaceholder": "Selecionar…",
+  "notConnected": "Não conectada",
+  "languageTitle": "Idioma",
+  "languageDescription": "Escolha o idioma usado em todo o aplicativo.",
+  "household": {
+    "title": "Família",
+    "description": "O perfil da sua família é usado em todo o aplicativo para padrões de impostos e declaração.",
+    "empty": "Nenhuma família encontrada ainda. Ela é criada quando sua planilha é configurada.",
+    "name": "Nome",
+    "baseCurrency": "Moeda base",
+    "country": "País",
+    "state": "Estado",
+    "city": "Cidade",
+    "filingStatusLabel": "Situação de declaração",
+    "save": "Salvar família"
+  },
+  "filingStatus": {
+    "single": "Solteiro(a)",
+    "married_filing_jointly": "Casado(a) declarando em conjunto",
+    "married_filing_separately": "Casado(a) declarando separadamente",
+    "head_of_household": "Chefe de família"
+  },
+  "tax": {
+    "title": "Premissas fiscais ({{year}})",
+    "description": "Taxas efetivas usadas para estimativas de impostos. São apenas dados de planejamento, não aconselhamento fiscal.",
+    "federalRate": "Taxa efetiva federal",
+    "stateRate": "Taxa efetiva estadual",
+    "standardDeduction": "Dedução padrão",
+    "save": "Salvar premissas",
+    "create": "Criar premissas"
+  },
+  "sync": {
+    "title": "Preferências de sincronização",
+    "description": "Controle como seus dados sincronizam com sua Planilha Google.",
+    "autoTitle": "Sincronizar automaticamente",
+    "autoDescription": "Envie alterações locais para sua planilha à medida que você as faz.",
+    "lockTimeout": "Tempo limite de bloqueio",
+    "schemaVersion": "Versão do esquema",
+    "workbook": "Planilha",
+    "workbookId": "ID da planilha"
+  },
+  "backup": {
+    "title": "Backup",
+    "description": "Baixe um instantâneo JSON de todos os seus dados locais.",
+    "export": "Exportar backup JSON"
+  }
+}

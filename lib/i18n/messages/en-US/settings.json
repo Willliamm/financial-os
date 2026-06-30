@@ -1,0 +1,50 @@
+{
+  "title": "Settings",
+  "description": "Manage your household, tax assumptions and sync preferences.",
+  "selectPlaceholder": "Select…",
+  "notConnected": "Not connected",
+  "languageTitle": "Language",
+  "languageDescription": "Choose the language used across the app.",
+  "household": {
+    "title": "Household",
+    "description": "Your household profile is used across the app for tax and filing defaults.",
+    "empty": "No household found yet. It is created when your workbook is set up.",
+    "name": "Name",
+    "baseCurrency": "Base currency",
+    "country": "Country",
+    "state": "State",
+    "city": "City",
+    "filingStatusLabel": "Filing status",
+    "save": "Save household"
+  },
+  "filingStatus": {
+    "single": "Single",
+    "married_filing_jointly": "Married filing jointly",
+    "married_filing_separately": "Married filing separately",
+    "head_of_household": "Head of household"
+  },
+  "tax": {
+    "title": "Tax assumptions ({{year}})",
+    "description": "Effective rates used for tax estimates. These are simple planning inputs, not tax advice.",
+    "federalRate": "Federal effective rate",
+    "stateRate": "State effective rate",
+    "standardDeduction": "Standard deduction",
+    "save": "Save assumptions",
+    "create": "Create assumptions"
+  },
+  "sync": {
+    "title": "Sync preferences",
+    "description": "Control how your data syncs to your Google Sheet.",
+    "autoTitle": "Sync automatically",
+    "autoDescription": "Push local changes to your sheet as you make them.",
+    "lockTimeout": "Lock timeout",
+    "schemaVersion": "Schema version",
+    "workbook": "Workbook",
+    "workbookId": "Workbook ID"
+  },
+  "backup": {
+    "title": "Backup",
+    "description": "Download a JSON snapshot of all your local data.",
+    "export": "Export backup JSON"
+  }
+}

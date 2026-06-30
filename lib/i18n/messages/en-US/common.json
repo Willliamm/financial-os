@@ -1,0 +1,47 @@
+{
+  "actions": {
+    "save": "Save",
+    "saveLocally": "Save locally",
+    "saveAndSync": "Save & sync",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "tryAgain": "Try again",
+    "syncNow": "Sync now",
+    "update": "Update",
+    "signOut": "Sign out",
+    "back": "Back"
+  },
+  "status": {
+    "loading": "Loading…",
+    "loadingData": "Loading your data…",
+    "saving": "Saving…",
+    "syncing": "Syncing…",
+    "upToDate": "Up to date",
+    "synced": "Synced",
+    "localChanges": "Local changes",
+    "offline": "Offline",
+    "online": "Online",
+    "syncFailed": "Sync failed",
+    "conflicts": "Conflicts",
+    "redirecting": "Redirecting…"
+  },
+  "workbookError": {
+    "title": "We couldn't open your workbook"
+  },
+  "locks": {
+    "anotherUser": "another user",
+    "readonlyTitle": "Locked for editing",
+    "readonlyBody": "This item is being edited by {{name}}{{email}}. You can view it, but not edit. The lock expires in about two minutes.",
+    "ownerTitle": "You have the edit lock",
+    "ownerBody": "Changes are saved locally first, then synced to your Google Sheet."
+  },
+  "none": "— None —",
+  "never": "never",
+  "dash": "—",
+  "toggleTheme": "Toggle theme",
+  "language": "Language",
+  "navigation": "Navigation"
+}

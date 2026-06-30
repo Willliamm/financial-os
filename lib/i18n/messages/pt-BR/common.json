@@ -1,0 +1,47 @@
+{
+  "actions": {
+    "save": "Salvar",
+    "saveLocally": "Salvar localmente",
+    "saveAndSync": "Salvar e sincronizar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "search": "Buscar",
+    "tryAgain": "Tentar novamente",
+    "syncNow": "Sincronizar agora",
+    "update": "Atualizar",
+    "signOut": "Sair",
+    "back": "Voltar"
+  },
+  "status": {
+    "loading": "Carregando…",
+    "loadingData": "Carregando seus dados…",
+    "saving": "Salvando…",
+    "syncing": "Sincronizando…",
+    "upToDate": "Atualizado",
+    "synced": "Sincronizado",
+    "localChanges": "Alterações locais",
+    "offline": "Offline",
+    "online": "Online",
+    "syncFailed": "Falha na sincronização",
+    "conflicts": "Conflitos",
+    "redirecting": "Redirecionando…"
+  },
+  "workbookError": {
+    "title": "Não foi possível abrir sua planilha"
+  },
+  "locks": {
+    "anotherUser": "outro usuário",
+    "readonlyTitle": "Bloqueado para edição",
+    "readonlyBody": "Este item está sendo editado por {{name}}{{email}}. Você pode visualizá-lo, mas não editá-lo. O bloqueio expira em cerca de dois minutos.",
+    "ownerTitle": "Você tem o bloqueio de edição",
+    "ownerBody": "As alterações são salvas localmente primeiro e depois sincronizadas com sua Planilha Google."
+  },
+  "none": "— Nenhum —",
+  "never": "nunca",
+  "dash": "—",
+  "toggleTheme": "Alternar tema",
+  "language": "Idioma",
+  "navigation": "Navegação"
+}

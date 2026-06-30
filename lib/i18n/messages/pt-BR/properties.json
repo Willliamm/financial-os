@@ -1,0 +1,87 @@
+{
+  "list": {
+    "title": "Imóveis",
+    "description": "Carteira de imóveis, candidatos e análise de fluxo de caixa.",
+    "addProperty": "Adicionar imóvel",
+    "empty": {
+      "title": "Nenhum imóvel ainda",
+      "description": "Adicione um imóvel que você possui ou está considerando para analisar o fluxo de caixa, a taxa de capitalização e o impacto de longo prazo.",
+      "action": "Adicionar imóvel"
+    },
+    "kpi": {
+      "portfolioValue": "Valor da carteira",
+      "totalEquity": "Patrimônio total",
+      "monthlyCashFlow": "Fluxo de caixa mensal"
+    },
+    "card": {
+      "value": "Valor",
+      "capRate": "Taxa de capitalização",
+      "cashPerMo": "Caixa / mês",
+      "cashOnCash": "Retorno sobre o caixa investido"
+    },
+    "alerts_one": "{{count}} alerta",
+    "alerts_other": "{{count}} alertas"
+  },
+  "status": {
+    "prospect": "Candidato",
+    "owned": "Próprio",
+    "sold": "Vendido"
+  },
+  "detail": {
+    "back": "Voltar para imóveis",
+    "notFound": "Imóvel não encontrado.",
+    "kpi": {
+      "currentValue": "Valor atual",
+      "equity": "Patrimônio líquido",
+      "monthlyCashFlow": "Fluxo de caixa mensal",
+      "capRate": "Taxa de capitalização"
+    },
+    "tabs": {
+      "summary": "Resumo",
+      "rental": "Aluguel e Custos",
+      "financing": "Financiamento",
+      "projections": "Projeções",
+      "notes": "Notas"
+    },
+    "summary": {
+      "grossYield": "Rendimento bruto",
+      "cashOnCash": "Retorno sobre o caixa investido",
+      "noiAnnual": "NOI (anual)",
+      "dscr": "DSCR",
+      "breakEvenRent": "Aluguel de equilíbrio",
+      "cashInvested": "Caixa investido",
+      "annualCashFlow": "Fluxo de caixa anual",
+      "purchasePrice": "Preço de compra"
+    },
+    "rental": {
+      "monthlyRent": "Aluguel mensal",
+      "vacancy": "Vacância",
+      "managementFee": "Taxa de administração",
+      "hoaPerMo": "Condomínio / mês",
+      "propertyTaxPerYr": "IPTU / ano",
+      "insurancePerYr": "Seguro / ano",
+      "maintenancePerYr": "Manutenção / ano",
+      "cddPerYr": "CDD / ano",
+      "appreciation": "Valorização"
+    },
+    "financing": {
+      "noLoan": "Nenhum financiamento vinculado a este imóvel.",
+      "addLoan": "Adicionar financiamento",
+      "loanFallback": "Financiamento",
+      "editLoan": "Editar financiamento",
+      "balance": "Saldo devedor",
+      "rate": "Taxa",
+      "payment": "Parcela (principal e juros)",
+      "payoff": "Quitação",
+      "payoffYears": "{{count}} anos"
+    },
+    "projections": {
+      "title": "Valor e patrimônio ao longo de {{years}} anos",
+      "value": "Valor",
+      "equity": "Patrimônio"
+    },
+    "notes": {
+      "empty": "Nenhuma nota ainda."
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "header": {
+    "title": "Painel",
+    "description": "Sua visão geral financeira.",
+    "descriptionYear": "Visão geral financeira · {{year}}"
+  },
+  "empty": {
+    "title": "Vamos adicionar seus primeiros dados",
+    "description": "Adicione receitas, despesas, imóveis e investimentos no Data Studio para ver seu painel ganhar vida.",
+    "openDataStudio": "Abrir Data Studio"
+  },
+  "perMonth": "/mês",
+  "kpi": {
+    "netWorth": "Patrimônio líquido",
+    "totalAssets": "Total de ativos",
+    "totalLiabilities": "Total de passivos",
+    "investableCashFlow": "Fluxo de caixa investível",
+    "monthlyIncome": "Receita mensal",
+    "monthlyExpenses": "Despesas mensais",
+    "passiveIncome": "Renda passiva",
+    "savingsRate": "Taxa de poupança",
+    "savingsTarget": "Meta de 20%"
+  },
+  "cards": {
+    "netWorthProjection": "Projeção do patrimônio líquido",
+    "financialIndependence": "Independência financeira",
+    "assetAllocation": "Alocação de ativos",
+    "assetsVsLiabilities": "Ativos x passivos",
+    "incomeMix": "Composição da renda (mensal)",
+    "insights": "Insights"
+  },
+  "fire": {
+    "progress": "Progresso rumo à independência financeira",
+    "effectiveTaxRate": "Alíquota efetiva de imposto",
+    "debtToAsset": "Dívida sobre ativos"
+  },
+  "insights": {
+    "empty": "Nenhum insight no momento — seus dados parecem saudáveis."
+  },
+  "series": {
+    "netWorth": "Patrimônio líquido",
+    "assets": "Ativos",
+    "liabilities": "Passivos",
+    "active": "Ativa",
+    "passive": "Passiva",
+    "expenses": "Despesas",
+    "today": "Hoje",
+    "monthly": "Mensal"
+  },
+  "allocation": {
+    "realEstate": "Imóveis",
+    "retirement": "Aposentadoria",
+    "brokerage": "Corretora",
+    "cash": "Caixa",
+    "crypto": "Cripto",
+    "other": "Outros"
+  }
+}

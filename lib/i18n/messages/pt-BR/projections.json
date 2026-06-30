@@ -1,0 +1,42 @@
+{
+  "header": {
+    "title": "Projeções",
+    "description": "Perspectiva de longo prazo para patrimônio líquido, renda, impostos e fluxo de caixa."
+  },
+  "scenario": {
+    "default": "Premissas padrão"
+  },
+  "horizon": {
+    "years": "{{n}} anos"
+  },
+  "perMonth": "/mês",
+  "kpi": {
+    "netWorthIn": "Patrimônio líquido em {{year}}",
+    "assets": "Ativos",
+    "passiveIncome": "Renda passiva",
+    "investablePerYear": "Investível / ano"
+  },
+  "cards": {
+    "netWorthAssetsLiabilities": "Patrimônio líquido, ativos e passivos",
+    "activeVsPassive": "Renda ativa x passiva",
+    "cashFlowTax": "Fluxo de caixa e imposto estimado",
+    "yearByYear": "Ano a ano"
+  },
+  "series": {
+    "netWorth": "Patrimônio líquido",
+    "assets": "Ativos",
+    "liabilities": "Passivos",
+    "active": "Ativa",
+    "passive": "Passiva",
+    "investableCashFlow": "Fluxo de caixa investível",
+    "estimatedTax": "Imposto estimado"
+  },
+  "table": {
+    "year": "Ano",
+    "netWorth": "Patrimônio líquido",
+    "assets": "Ativos",
+    "liabilities": "Passivos",
+    "passivePerMonth": "Passiva / mês",
+    "estTax": "Imp. est."
+  }
+}

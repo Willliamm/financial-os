@@ -1,0 +1,121 @@
+{
+  "sections": {
+    "general": "General",
+    "acquisition": "Acquisition",
+    "rental": "Rental",
+    "costs": "Costs",
+    "notes": "Notes"
+  },
+  "field": {
+    "required": "(required)"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "fixFields_one": "Fix {{count}} field to continue.",
+    "fixFields_other": "Fix {{count}} fields to continue."
+  },
+  "drawer": {
+    "new": "New {{item}}",
+    "edit": "Edit {{item}}"
+  },
+  "columns": {
+    "type": "Type",
+    "annual": "Annual",
+    "growth": "Growth",
+    "category": "Category",
+    "monthly": "Monthly",
+    "status": "Status",
+    "value": "Value",
+    "rent": "Rent",
+    "balance": "Balance",
+    "rate": "Rate",
+    "return": "Return",
+    "savings": "Savings",
+    "risk": "Risk",
+    "horizon": "Horizon"
+  },
+  "incomeSource": {
+    "name": { "label": "Name" },
+    "type": { "label": "Type" },
+    "personId": { "label": "Person" },
+    "annualAmountCents": { "label": "Annual amount" },
+    "growthRateBps": { "label": "Annual growth" },
+    "taxTreatment": { "label": "Tax treatment" },
+    "active": { "label": "Active" }
+  },
+  "expense": {
+    "name": { "label": "Name" },
+    "category": { "label": "Category" },
+    "monthlyAmountCents": { "label": "Monthly amount" },
+    "inflationRateBps": { "label": "Inflation" },
+    "isDiscretionary": { "label": "Discretionary" }
+  },
+  "property": {
+    "name": { "label": "Name" },
+    "propertyType": { "label": "Type" },
+    "ownershipType": { "label": "Ownership" },
+    "status": { "label": "Status" },
+    "street": { "label": "Street" },
+    "city": { "label": "City" },
+    "state": { "label": "State" },
+    "zip": { "label": "ZIP" },
+    "purchaseDate": { "label": "Purchase date" },
+    "purchasePriceCents": { "label": "Purchase price" },
+    "currentValueCents": { "label": "Current value" },
+    "downPaymentCents": { "label": "Down payment" },
+    "closingCostsCents": { "label": "Closing costs" },
+    "appreciationRateBps": { "label": "Appreciation" },
+    "bedrooms": { "label": "Bedrooms" },
+    "bathrooms": { "label": "Bathrooms" },
+    "sqft": { "label": "Sq ft" },
+    "yearBuilt": { "label": "Year built" },
+    "rentMonthlyCents": { "label": "Monthly rent" },
+    "vacancyRateBps": { "label": "Vacancy" },
+    "managementFeeBps": { "label": "Management fee" },
+    "hoaMonthlyCents": { "label": "HOA (monthly)" },
+    "cddAnnualCents": { "label": "CDD (annual)" },
+    "propertyTaxAnnualCents": { "label": "Property tax (annual)" },
+    "insuranceAnnualCents": { "label": "Insurance (annual)" },
+    "maintenanceAnnualCents": { "label": "Maintenance (annual)" },
+    "notes": { "label": "Notes" }
+  },
+  "loan": {
+    "lender": { "label": "Lender" },
+    "loanType": { "label": "Type" },
+    "propertyId": { "label": "Property" },
+    "originalBalanceCents": { "label": "Original balance" },
+    "currentBalanceCents": { "label": "Current balance" },
+    "interestRateBps": { "label": "Interest rate" },
+    "termMonths": { "label": "Term (months)" },
+    "startDate": { "label": "Start date" },
+    "monthlyPaymentCents": { "label": "Monthly payment (P&I)" },
+    "escrowMonthlyCents": { "label": "Escrow (monthly)" },
+    "extraPaymentMonthlyCents": { "label": "Extra payment (monthly)" }
+  },
+  "investmentAccount": {
+    "name": { "label": "Name" },
+    "accountType": { "label": "Account type" },
+    "institution": { "label": "Institution" },
+    "currentBalanceCents": { "label": "Current balance" },
+    "expectedReturnBps": { "label": "Expected return" },
+    "contributionMonthlyCents": { "label": "Monthly contribution" },
+    "taxTreatment": { "label": "Tax treatment" }
+  },
+  "taxStrategy": {
+    "name": { "label": "Name" },
+    "strategyType": { "label": "Strategy type" },
+    "year": { "label": "Year" },
+    "estimatedDeductionCents": { "label": "Estimated deduction" },
+    "estimatedTaxSavingsCents": { "label": "Estimated tax savings" },
+    "status": { "label": "Status" },
+    "riskLevel": { "label": "Risk level" },
+    "notes": { "label": "Notes" }
+  },
+  "scenario": {
+    "name": { "label": "Name" },
+    "description": { "label": "Description" },
+    "startYear": { "label": "Start year" },
+    "endYear": { "label": "End year" },
+    "status": { "label": "Status" }
+  }
+}

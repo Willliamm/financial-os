@@ -1,0 +1,17 @@
+{
+  "header": {
+    "title": "Tax Planning",
+    "description": "Estimate deductions and tax-saving strategies."
+  },
+  "disclaimer": {
+    "title": "Estimates only",
+    "body": "This does not replace a CPA, EA, or attorney. Figures are rough effective-rate estimates for planning, not tax advice."
+  },
+  "kpi": {
+    "taxableIncome": "Estimated taxable income",
+    "annualTax": "Estimated annual tax",
+    "effectiveRate": "Effective tax rate",
+    "taxSavings": "Estimated tax savings",
+    "taxSavingsSub": "From your strategies"
+  }
+}

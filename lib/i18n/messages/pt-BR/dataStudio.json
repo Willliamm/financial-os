@@ -1,0 +1,22 @@
+{
+  "page": {
+    "title": "Data Studio",
+    "description": "Adicione e edite seus dados financeiros. As alterações são salvas localmente primeiro e depois sincronizadas com sua Planilha Google."
+  },
+  "modules": {
+    "incomeSource": { "description": "Salários, renda de negócios, aluguéis, dividendos e juros." },
+    "expense": { "description": "Gastos fixos, variáveis e discricionários." },
+    "property": { "description": "Portfólio de imóveis e prospectos." },
+    "loan": { "description": "Hipotecas e outras dívidas com amortização." },
+    "investmentAccount": { "description": "Contas de corretora, aposentadoria, dinheiro e cripto." },
+    "taxStrategy": { "description": "Deduções e estratégias para economizar impostos." },
+    "scenario": { "description": "Planos de longo prazo hipotéticos e comparações." }
+  },
+  "list": {
+    "searchPlaceholder": "Buscar {{items}}…",
+    "emptyTitle": "Ainda não há {{items}}",
+    "deleteTitle": "Excluir {{item}}?",
+    "deleteDescription": "Isso remove {{name}} da sua pasta de trabalho. Você pode adicioná-lo novamente depois.",
+    "rowActions": "Ações para {{name}}"
+  }
+}

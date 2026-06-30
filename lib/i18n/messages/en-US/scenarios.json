@@ -1,0 +1,43 @@
+{
+  "list": {
+    "title": "Scenarios",
+    "description": "What-if long-term plans you can compare against your base."
+  },
+  "detail": {
+    "back": "Back to scenarios",
+    "notFound": "Scenario not found.",
+    "kpi": {
+      "finalNetWorth": "Final net worth",
+      "finalPassiveIncome": "Final passive income",
+      "totalEstimatedTax": "Total estimated tax",
+      "horizon": "Horizon"
+    },
+    "horizonYears": "{{count}} yrs",
+    "assumptions": {
+      "title": "Assumptions",
+      "investmentReturn": "Investment return",
+      "incomeGrowth": "Income growth",
+      "expenseInflation": "Expense inflation",
+      "propertyAppreciation": "Property appreciation",
+      "years": "Years",
+      "update": "Update assumptions",
+      "saving": "Saving…"
+    },
+    "charts": {
+      "netWorthTitle": "Net worth",
+      "cashflowTitle": "Annual cash flow & tax",
+      "legend": {
+        "netWorth": "Net worth",
+        "assets": "Assets",
+        "liabilities": "Liabilities",
+        "investableCashflow": "Investable cash flow",
+        "estimatedTax": "Estimated tax"
+      }
+    },
+    "comparison": {
+      "title": "Compared to {{name}}",
+      "metric": "Metric",
+      "difference": "Difference"
+    }
+  }
+}

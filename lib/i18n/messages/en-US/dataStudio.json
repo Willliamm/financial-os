@@ -1,0 +1,22 @@
+{
+  "page": {
+    "title": "Data Studio",
+    "description": "Add and edit your financial data. Changes save locally first, then sync to your Google Sheet."
+  },
+  "modules": {
+    "incomeSource": { "description": "Salaries, business income, rentals, dividends and interest." },
+    "expense": { "description": "Fixed, variable and discretionary spending." },
+    "property": { "description": "Real estate portfolio and prospects." },
+    "loan": { "description": "Mortgages and other debt with amortization." },
+    "investmentAccount": { "description": "Brokerage, retirement, cash and crypto accounts." },
+    "taxStrategy": { "description": "Deductions and tax-saving strategies." },
+    "scenario": { "description": "What-if long-term plans and comparisons." }
+  },
+  "list": {
+    "searchPlaceholder": "Search {{items}}…",
+    "emptyTitle": "No {{items}} yet",
+    "deleteTitle": "Delete {{item}}?",
+    "deleteDescription": "This removes {{name}} from your workbook. You can add it again later.",
+    "rowActions": "Actions for {{name}}"
+  }
+}

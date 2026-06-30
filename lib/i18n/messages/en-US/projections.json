@@ -1,0 +1,42 @@
+{
+  "header": {
+    "title": "Projections",
+    "description": "Long-term outlook for net worth, income, taxes and cash flow."
+  },
+  "scenario": {
+    "default": "Default assumptions"
+  },
+  "horizon": {
+    "years": "{{n}} years"
+  },
+  "perMonth": "/mo",
+  "kpi": {
+    "netWorthIn": "Net worth in {{year}}",
+    "assets": "Assets",
+    "passiveIncome": "Passive income",
+    "investablePerYear": "Investable / yr"
+  },
+  "cards": {
+    "netWorthAssetsLiabilities": "Net worth, assets & liabilities",
+    "activeVsPassive": "Active vs passive income",
+    "cashFlowTax": "Cash flow & estimated tax",
+    "yearByYear": "Year-by-year"
+  },
+  "series": {
+    "netWorth": "Net worth",
+    "assets": "Assets",
+    "liabilities": "Liabilities",
+    "active": "Active",
+    "passive": "Passive",
+    "investableCashFlow": "Investable cash flow",
+    "estimatedTax": "Estimated tax"
+  },
+  "table": {
+    "year": "Year",
+    "netWorth": "Net worth",
+    "assets": "Assets",
+    "liabilities": "Liabilities",
+    "passivePerMonth": "Passive / mo",
+    "estTax": "Est. tax"
+  }
+}

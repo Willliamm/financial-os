@@ -1,0 +1,35 @@
+{
+  "header": {
+    "title": "Aposentadoria",
+    "description": "Crescimento projetado das suas contas de aposentadoria até os {{age}} anos. Os limites de contribuição são configurados manualmente por conta."
+  },
+  "empty": {
+    "title": "Nenhuma conta de aposentadoria ainda",
+    "description": "Adicione um 401(k), IRA, Roth IRA, HSA ou conta semelhante para ver sua projeção de aposentadoria.",
+    "addAccount": "Adicionar uma conta"
+  },
+  "kpi": {
+    "retirementBalance": "Saldo de aposentadoria",
+    "accounts_one": "{{count}} conta",
+    "accounts_other": "{{count}} contas",
+    "projectedAtAge": "Projetado aos {{age}} anos",
+    "fromAgeToday": "A partir dos {{age}} anos hoje",
+    "monthlyContributions": "Contribuições mensais",
+    "perYear": "{{amount}} / ano"
+  },
+  "chart": {
+    "title": "Crescimento projetado do saldo",
+    "series": "Saldo de aposentadoria"
+  },
+  "cards": {
+    "accounts": "Contas"
+  },
+  "table": {
+    "account": "Conta",
+    "type": "Tipo",
+    "balance": "Saldo",
+    "monthly": "Mensal",
+    "return": "Retorno",
+    "projectedAt": "Projetado aos {{age}}"
+  }
+}
