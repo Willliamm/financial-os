@@ -32,7 +32,10 @@ jobs:
           # Auto-enable GitHub Pages (Actions source) on first run.
           enablement: true
 
-      - run: npm ci
+      # `npm install` (not `npm ci`) so Linux-only optional native deps
+      # (e.g. Tailwind v4's engine) resolve on the runner regardless of the
+      # platform the lockfile was generated on.
+      - run: npm install --no-audit --no-fund
 
       - run: npm run test
 
