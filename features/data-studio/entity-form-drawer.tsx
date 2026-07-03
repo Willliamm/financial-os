@@ -147,7 +147,7 @@ export function EntityFormDrawer<T extends BaseEntity>({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-xl">
+      <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-2xl">
         <SheetHeader className="border-b">
           <SheetTitle>
             {isEdit
@@ -169,7 +169,7 @@ export function EntityFormDrawer<T extends BaseEntity>({
 
             {config.sections ? (
               <Tabs value={activeSection} onValueChange={setActiveSection}>
-                <TabsList className="flex w-full flex-wrap">
+                <TabsList className="flex h-auto w-full flex-wrap gap-1 group-data-horizontal/tabs:h-auto">
                   {config.sections.map((s) => (
                     <TabsTrigger key={s} value={s}>
                       {t(s)}
@@ -294,20 +294,20 @@ function dynamicOptions(
 ): SelectOption[] {
   if (field.dynamicOptions === "people") {
     return [
-      { value: "", label: "— None —" },
-      ...context.people.map((p) => ({ value: p.id, label: p.name })),
+      { value: "", label: "common:none", raw: false },
+      ...context.people.map((p) => ({ value: p.id, label: p.name, raw: true })),
     ];
   }
   if (field.dynamicOptions === "properties") {
     return [
-      { value: "", label: "— None —" },
-      ...context.properties.map((p) => ({ value: p.id, label: p.name })),
+      { value: "", label: "common:none", raw: false },
+      ...context.properties.map((p) => ({ value: p.id, label: p.name, raw: true })),
     ];
   }
   if (field.dynamicOptions === "scenarios") {
     return [
-      { value: "", label: "— None —" },
-      ...context.scenarios.map((s) => ({ value: s.id, label: s.name })),
+      { value: "", label: "common:none", raw: false },
+      ...context.scenarios.map((s) => ({ value: s.id, label: s.name, raw: true })),
     ];
   }
   return field.options ?? [];
@@ -330,6 +330,7 @@ function FieldControl({
   describedBy?: string;
   onChange: (value: unknown) => void;
 }) {
+  const { t } = useTranslation();
   const ariaProps = {
     "aria-invalid": invalid,
     "aria-describedby": describedBy,
@@ -409,12 +410,12 @@ function FieldControl({
           onValueChange={(v) => onChange(v === "__none__" ? "" : v)}
         >
           <SelectTrigger id={field.name} className="w-full" {...ariaProps}>
-            <SelectValue placeholder="Select…" />
+            <SelectValue placeholder={t("forms:field.selectPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
             {options.map((o) => (
               <SelectItem key={o.value || "none"} value={o.value || "__none__"}>
-                {o.label}
+                {o.raw ? o.label : t(o.label)}
               </SelectItem>
             ))}
           </SelectContent>

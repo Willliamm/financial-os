@@ -14,6 +14,10 @@ export type FieldType =
 export interface SelectOption {
   label: string;
   value: string;
+  /** When true, `label` is literal display text (e.g. an entity name) and
+   * must NOT be passed through `t(...)`. When false/absent, `label` is an
+   * i18n key that render sites must translate. */
+  raw?: boolean;
 }
 
 export interface FieldDef {
