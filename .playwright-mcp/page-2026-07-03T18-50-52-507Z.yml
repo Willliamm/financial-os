@@ -1,0 +1,227 @@
+- generic:
+  - button "Open Next.js Dev Tools" [ref=f1e55] [cursor=pointer]:
+    - img [ref=f1e56]
+  - alert
+  - generic:
+    - complementary:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - img
+            - generic:
+              - paragraph: Financial OS
+              - paragraph: Pasta Pessoal
+        - generic:
+          - generic:
+            - generic:
+              - navigation:
+                - generic:
+                  - paragraph: Visão geral
+                  - generic:
+                    - link:
+                      - /url: /dashboard/
+                      - img
+                      - text: Painel
+                    - link:
+                      - /url: /data-studio/
+                      - img
+                      - text: Estúdio de Dados
+                - generic:
+                  - paragraph: Planejamento
+                  - generic:
+                    - link:
+                      - /url: /income/
+                      - img
+                      - text: Renda
+                    - link:
+                      - /url: /expenses/
+                      - img
+                      - text: Despesas
+                    - link:
+                      - /url: /properties/
+                      - img
+                      - text: Imóveis
+                    - link:
+                      - /url: /loans/
+                      - img
+                      - text: Financiamentos
+                    - link:
+                      - /url: /investments/
+                      - img
+                      - text: Investimentos
+                    - link:
+                      - /url: /retirement/
+                      - img
+                      - text: Aposentadoria
+                    - link:
+                      - /url: /tax-planning/
+                      - img
+                      - text: Planejamento Tributário
+                - generic:
+                  - paragraph: Estratégia
+                  - generic:
+                    - link:
+                      - /url: /scenarios/
+                      - img
+                      - text: Cenários
+                    - link:
+                      - /url: /projections/
+                      - img
+                      - text: Projeções
+                - generic:
+                  - paragraph: Sistema
+                  - generic:
+                    - link:
+                      - /url: /sync/
+                      - img
+                      - text: Central de Sincronização
+                    - link:
+                      - /url: /settings/
+                      - img
+                      - text: Configurações
+    - generic:
+      - banner:
+        - generic:
+          - generic:
+            - img
+            - text: Atualizado
+          - generic: · agora
+        - button:
+          - img
+          - text: Sincronizar agora
+        - button:
+          - img
+        - button:
+          - generic:
+            - generic: DU
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: Imóveis
+              - paragraph: Carteira de imóveis, candidatos e análise de fluxo de caixa.
+            - generic:
+              - button:
+                - img
+                - text: Adicionar imóvel
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Valor da carteira
+                - paragraph: US$ 913.000,00
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Patrimônio total
+                - paragraph: US$ 628.500,00
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Fluxo de caixa mensal
+                - paragraph: US$ 337,18
+          - generic:
+            - link:
+              - /url: /property/?id=930501cb-f292-46c4-9da2-1ff29e4f078a
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - paragraph: Wellness Ridge Townhouse
+                      - paragraph: Clermont, FL
+                    - generic: Próprio
+                  - generic:
+                    - generic:
+                      - paragraph: Valor
+                      - paragraph: US$ 388.000,00
+                    - generic:
+                      - paragraph: Taxa de capitalização
+                      - paragraph: 3.31%
+                    - generic:
+                      - paragraph: Caixa / mês
+                      - paragraph: "-US$ 1.333,33"
+                    - generic:
+                      - paragraph: Retorno sobre o caixa investido
+                      - paragraph: "-19.3%"
+                  - generic:
+                    - img
+                    - text: 2 alertas
+            - link:
+              - /url: /property/?id=34cc7be3-2926-415d-b652-e6b63cfd5e99
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - paragraph: Lakeside Single-Family (Prospect)
+                      - paragraph: Winter Garden, FL
+                    - generic: Candidato
+                  - generic:
+                    - generic:
+                      - paragraph: Valor
+                      - paragraph: US$ 525.000,00
+                    - generic:
+                      - paragraph: Taxa de capitalização
+                      - paragraph: 3.82%
+                    - generic:
+                      - paragraph: Caixa / mês
+                      - paragraph: US$ 1.670,51
+                    - generic:
+                      - paragraph: Retorno sobre o caixa investido
+                      - paragraph: 13.9%
+                  - generic:
+                    - img
+                    - text: 1 alerta
+  - region "Notifications alt+T"
+  - dialog "Adicionar Imóvel" [ref=f1e287]:
+    - generic [ref=f1e288]:
+      - heading "Adicionar Imóvel" [level=2] [ref=f1e289]
+      - paragraph [ref=f1e290]: Portfólio de imóveis e prospectos.
+    - generic [ref=f1e295]:
+      - tablist [ref=f1e296]:
+        - tab "Geral" [active] [selected] [ref=f1e297]
+        - tab "Aquisição" [ref=f1e298]
+        - tab "Locação" [ref=f1e299]
+        - tab "Custos" [ref=f1e300]
+        - tab "Notas" [ref=f1e301]
+      - tabpanel "Geral" [ref=f1e302]:
+        - generic [ref=f1e303]:
+          - generic [ref=f1e304]:
+            - generic [ref=f1e305]:
+              - text: Nome*
+              - generic [ref=f1e306]: (obrigatório)
+            - textbox "Nome* (obrigatório)" [ref=f1e307]
+          - generic [ref=f1e308]:
+            - generic [ref=f1e309]: Tipo
+            - combobox "Tipo" [ref=f1e310]:
+              - generic: Sobrado
+              - img
+          - generic [ref=f1e311]:
+            - generic [ref=f1e312]: Titularidade
+            - combobox "Titularidade" [ref=f1e313]:
+              - generic: Pessoal
+              - img
+          - generic [ref=f1e314]:
+            - generic [ref=f1e315]: Status
+            - combobox "Status" [ref=f1e316]:
+              - generic: Prospecto
+              - img
+          - generic [ref=f1e317]:
+            - generic [ref=f1e318]: Rua
+            - textbox "Rua" [ref=f1e319]
+          - generic [ref=f1e320]:
+            - generic [ref=f1e321]: Cidade
+            - textbox "Cidade" [ref=f1e322]
+          - generic [ref=f1e323]:
+            - generic [ref=f1e324]: Estado
+            - textbox "Estado" [ref=f1e325]
+          - generic [ref=f1e326]:
+            - generic [ref=f1e327]: CEP
+            - textbox "CEP" [ref=f1e328]
+    - generic [ref=f1e329]:
+      - button "Cancelar" [ref=f1e330]
+      - button "Salvar localmente" [ref=f1e331]
+      - button "Salvar e sincronizar" [ref=f1e332]
+    - button "Close" [ref=f1e333]:
+      - img
+      - generic [ref=f1e334]: Close

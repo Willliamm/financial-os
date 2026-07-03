@@ -147,7 +147,7 @@ export function EntityFormDrawer<T extends BaseEntity>({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-2xl">
+      <SheetContent className="flex flex-col gap-0 p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-2xl">
         <SheetHeader className="border-b">
           <SheetTitle>
             {isEdit

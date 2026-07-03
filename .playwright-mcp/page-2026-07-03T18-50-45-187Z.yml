@@ -1,0 +1,160 @@
+- generic [ref=f1e1]:
+  - button "Open Next.js Dev Tools" [ref=f1e55] [cursor=pointer]:
+    - img [ref=f1e56]
+  - alert [ref=f1e116]
+  - generic [ref=f1e117]:
+    - complementary [ref=f1e118]:
+      - generic [ref=f1e119]:
+        - generic [ref=f1e121]:
+          - img [ref=f1e123]
+          - generic [ref=f1e126]:
+            - paragraph [ref=f1e127]: Financial OS
+            - paragraph [ref=f1e128]: Pasta Pessoal
+        - navigation [ref=f1e132]:
+          - generic [ref=f1e133]:
+            - paragraph [ref=f1e134]: Visão geral
+            - generic [ref=f1e135]:
+              - link "Painel" [ref=f1e136] [cursor=pointer]:
+                - /url: /dashboard/
+                - img [ref=f1e137]
+                - text: Painel
+              - link "Estúdio de Dados" [ref=f1e142] [cursor=pointer]:
+                - /url: /data-studio/
+                - img [ref=f1e143]
+                - text: Estúdio de Dados
+          - generic [ref=f1e147]:
+            - paragraph [ref=f1e148]: Planejamento
+            - generic [ref=f1e149]:
+              - link "Renda" [ref=f1e150] [cursor=pointer]:
+                - /url: /income/
+                - img [ref=f1e151]
+                - text: Renda
+              - link "Despesas" [ref=f1e154] [cursor=pointer]:
+                - /url: /expenses/
+                - img [ref=f1e155]
+                - text: Despesas
+              - link "Imóveis" [active] [ref=f1e158] [cursor=pointer]:
+                - /url: /properties/
+                - img [ref=f1e159]
+                - text: Imóveis
+              - link "Financiamentos" [ref=f1e163] [cursor=pointer]:
+                - /url: /loans/
+                - img [ref=f1e164]
+                - text: Financiamentos
+              - link "Investimentos" [ref=f1e166] [cursor=pointer]:
+                - /url: /investments/
+                - img [ref=f1e167]
+                - text: Investimentos
+              - link "Aposentadoria" [ref=f1e170] [cursor=pointer]:
+                - /url: /retirement/
+                - img [ref=f1e171]
+                - text: Aposentadoria
+              - link "Planejamento Tributário" [ref=f1e174] [cursor=pointer]:
+                - /url: /tax-planning/
+                - img [ref=f1e175]
+                - text: Planejamento Tributário
+          - generic [ref=f1e177]:
+            - paragraph [ref=f1e178]: Estratégia
+            - generic [ref=f1e179]:
+              - link "Cenários" [ref=f1e180] [cursor=pointer]:
+                - /url: /scenarios/
+                - img [ref=f1e181]
+                - text: Cenários
+              - link "Projeções" [ref=f1e184] [cursor=pointer]:
+                - /url: /projections/
+                - img [ref=f1e185]
+                - text: Projeções
+          - generic [ref=f1e188]:
+            - paragraph [ref=f1e189]: Sistema
+            - generic [ref=f1e190]:
+              - link "Central de Sincronização" [ref=f1e191] [cursor=pointer]:
+                - /url: /sync/
+                - img [ref=f1e192]
+                - text: Central de Sincronização
+              - link "Configurações" [ref=f1e197] [cursor=pointer]:
+                - /url: /settings/
+                - img [ref=f1e198]
+                - text: Configurações
+    - generic [ref=f1e201]:
+      - banner [ref=f1e202]:
+        - generic [ref=f1e203]:
+          - generic [ref=f1e204]:
+            - img [ref=f1e205]
+            - text: Atualizado
+          - generic [ref=f1e207]: · agora
+        - button "Sincronizar agora" [ref=f1e208]:
+          - img
+          - text: Sincronizar agora
+        - button "Alternar tema" [ref=f1e209]:
+          - img
+        - button "DU" [ref=f1e210]:
+          - generic [ref=f1e212]: DU
+      - main [ref=f1e213]:
+        - generic [ref=f1e214]:
+          - generic [ref=f1e215]:
+            - generic [ref=f1e216]:
+              - heading "Imóveis" [level=1] [ref=f1e217]
+              - paragraph [ref=f1e218]: Carteira de imóveis, candidatos e análise de fluxo de caixa.
+            - button "Adicionar imóvel" [ref=f1e220]:
+              - img
+              - text: Adicionar imóvel
+          - generic [ref=f1e221]:
+            - generic [ref=f1e223]:
+              - paragraph [ref=f1e225]: Valor da carteira
+              - paragraph [ref=f1e226]: US$ 913.000,00
+            - generic [ref=f1e228]:
+              - paragraph [ref=f1e230]: Patrimônio total
+              - paragraph [ref=f1e231]: US$ 628.500,00
+            - generic [ref=f1e233]:
+              - paragraph [ref=f1e235]: Fluxo de caixa mensal
+              - paragraph [ref=f1e236]: US$ 337,18
+          - generic [ref=f1e237]:
+            - link "Wellness Ridge Townhouse Clermont, FL Próprio Valor US$ 388.000,00 Taxa de capitalização 3.31% Caixa / mês -US$ 1.333,33 Retorno sobre o caixa investido -19.3% 2 alertas" [ref=f1e238] [cursor=pointer]:
+              - /url: /property/?id=930501cb-f292-46c4-9da2-1ff29e4f078a
+              - generic [ref=f1e240]:
+                - generic [ref=f1e241]:
+                  - generic [ref=f1e242]:
+                    - paragraph [ref=f1e243]: Wellness Ridge Townhouse
+                    - paragraph [ref=f1e244]: Clermont, FL
+                  - generic [ref=f1e245]: Próprio
+                - generic [ref=f1e246]:
+                  - generic [ref=f1e247]:
+                    - paragraph [ref=f1e248]: Valor
+                    - paragraph [ref=f1e249]: US$ 388.000,00
+                  - generic [ref=f1e250]:
+                    - paragraph [ref=f1e251]: Taxa de capitalização
+                    - paragraph [ref=f1e252]: 3.31%
+                  - generic [ref=f1e253]:
+                    - paragraph [ref=f1e254]: Caixa / mês
+                    - paragraph [ref=f1e255]: "-US$ 1.333,33"
+                  - generic [ref=f1e256]:
+                    - paragraph [ref=f1e257]: Retorno sobre o caixa investido
+                    - paragraph [ref=f1e258]: "-19.3%"
+                - generic [ref=f1e259]:
+                  - img [ref=f1e260]
+                  - text: 2 alertas
+            - link "Lakeside Single-Family (Prospect) Winter Garden, FL Candidato Valor US$ 525.000,00 Taxa de capitalização 3.82% Caixa / mês US$ 1.670,51 Retorno sobre o caixa investido 13.9% 1 alerta" [ref=f1e262] [cursor=pointer]:
+              - /url: /property/?id=34cc7be3-2926-415d-b652-e6b63cfd5e99
+              - generic [ref=f1e264]:
+                - generic [ref=f1e265]:
+                  - generic [ref=f1e266]:
+                    - paragraph [ref=f1e267]: Lakeside Single-Family (Prospect)
+                    - paragraph [ref=f1e268]: Winter Garden, FL
+                  - generic [ref=f1e269]: Candidato
+                - generic [ref=f1e270]:
+                  - generic [ref=f1e271]:
+                    - paragraph [ref=f1e272]: Valor
+                    - paragraph [ref=f1e273]: US$ 525.000,00
+                  - generic [ref=f1e274]:
+                    - paragraph [ref=f1e275]: Taxa de capitalização
+                    - paragraph [ref=f1e276]: 3.82%
+                  - generic [ref=f1e277]:
+                    - paragraph [ref=f1e278]: Caixa / mês
+                    - paragraph [ref=f1e279]: US$ 1.670,51
+                  - generic [ref=f1e280]:
+                    - paragraph [ref=f1e281]: Retorno sobre o caixa investido
+                    - paragraph [ref=f1e282]: 13.9%
+                - generic [ref=f1e283]:
+                  - img [ref=f1e284]
+                  - text: 1 alerta
+  - region "Notifications alt+T"

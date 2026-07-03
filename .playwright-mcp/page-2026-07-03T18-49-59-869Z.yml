@@ -1,0 +1,33 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e6]
+      - generic [ref=e9]: Financial OS
+    - generic [ref=e10]:
+      - heading "Your financial life, as a real product — not a spreadsheet." [level=1] [ref=e11]
+      - paragraph [ref=e12]: Advanced personal financial planning for net worth, real estate, investments, taxes and long-term scenarios. Built on dashboards, forms and projections.
+    - generic [ref=e13]:
+      - button "Continue with Google" [ref=e14]:
+        - img
+        - text: Continue with Google
+      - paragraph [ref=e15]:
+        - img [ref=e16]
+        - text: Your data stays in your own Google Drive. We never store your financial data on our servers.
+      - paragraph [ref=e19]: "Demo mode: runs fully offline with an in-memory workbook and sample data. No Google account required."
+  - generic [ref=e21]:
+    - generic [ref=e23]:
+      - img [ref=e24]
+      - paragraph [ref=e27]: Net worth
+      - paragraph [ref=e28]: Assets, liabilities and cash flow in one place.
+    - generic [ref=e30]:
+      - img [ref=e31]
+      - paragraph [ref=e35]: Real estate
+      - paragraph [ref=e36]: Cap rate, cash-on-cash, DSCR and projections.
+    - generic [ref=e38]:
+      - img [ref=e39]
+      - paragraph [ref=e41]: Tax planning
+      - paragraph [ref=e42]: Estimate deductions and tax-saving strategies.
+    - generic [ref=e44]:
+      - img [ref=e45]
+      - paragraph [ref=e48]: Projections
+      - paragraph [ref=e49]: 10/20/30-year scenarios and FIRE progress.
