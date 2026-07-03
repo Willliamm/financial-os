@@ -100,9 +100,13 @@ export function SyncNowButton({
       variant={variant}
       onClick={() => void sync()}
       disabled={syncing || !online}
+      aria-label={t("common:actions.syncNow")}
+      className="max-sm:size-10 max-sm:justify-center max-sm:p-0"
     >
       <RefreshCw className={cn("size-4", syncing && "animate-spin")} />
-      {syncing ? t("common:status.syncing") : t("common:actions.syncNow")}
+      <span className="hidden sm:inline">
+        {syncing ? t("common:status.syncing") : t("common:actions.syncNow")}
+      </span>
     </Button>
   );
 }

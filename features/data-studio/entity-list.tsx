@@ -139,7 +139,7 @@ export function EntityList<T extends BaseEntity>({
                     {t(c.label)}
                   </TableHead>
                 ))}
-                <TableHead className="w-10" />
+                <TableHead className="sticky right-0 w-10 bg-background sm:static" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -176,13 +176,16 @@ export function EntityList<T extends BaseEntity>({
                       {c.render(entity)}
                     </TableCell>
                   ))}
-                  <TableCell onClick={(e) => e.stopPropagation()}>
+                  <TableCell
+                    onClick={(e) => e.stopPropagation()}
+                    className="sticky right-0 bg-background sm:static sm:bg-transparent"
+                  >
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="size-8"
+                          className="size-8 max-sm:size-10"
                           aria-label={t("dataStudio:list.rowActions", { name: config.primary(entity) })}
                         >
                           <MoreHorizontal className="size-4" />

@@ -105,7 +105,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
           <MobileSidebar />
           <div className="flex-1" />
-          <SyncStatusPill />
+          <div className="hidden sm:flex">
+            <SyncStatusPill />
+          </div>
           <SyncNowButton />
           <ThemeToggle />
           <UserMenu name={user?.name ?? "You"} email={user?.email ?? ""} />
@@ -147,7 +149,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                   href={item.href}
                   onClick={onNavigate}
                   className={cn(
-                    "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    "flex min-h-11 items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:min-h-0",
                     active
                       ? "bg-accent text-accent-foreground"
                       : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
@@ -220,25 +222,37 @@ function DesktopSidebar() {
 
 function MobileSidebar() {
   const { t } = useTranslation();
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  // Safety net: always close the drawer when the route actually changes, even
+  // if a navigation was triggered from somewhere other than a nav link.
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden"
+          className="max-sm:size-10 lg:hidden"
           aria-label={t("nav:openMenu")}
         >
           <Menu className="size-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-72 p-0">
+      <SheetContent
+        side="left"
+        className="p-0 data-[side=left]:w-full data-[side=left]:sm:w-72"
+      >
         <SheetTitle className="sr-only">{t("common:navigation")}</SheetTitle>
         <div className="flex h-14 items-center border-b">
           <Brand />
         </div>
         <ScrollArea className="h-[calc(100vh-3.5rem)] px-3 py-4">
-          <NavLinks />
+          <NavLinks onNavigate={() => setOpen(false)} />
         </ScrollArea>
       </SheetContent>
     </Sheet>
@@ -252,6 +266,7 @@ function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
+      className="max-sm:size-10"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label={t("common:toggleTheme")}
     >
@@ -275,7 +290,7 @@ function UserMenu({ name, email }: { name: string; email: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="ghost" size="icon" className="rounded-full max-sm:size-10">
           <Avatar className="size-8">
             <AvatarFallback>{initials || "U"}</AvatarFallback>
           </Avatar>

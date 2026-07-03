@@ -169,7 +169,7 @@ export function EntityFormDrawer<T extends BaseEntity>({
 
             {config.sections ? (
               <Tabs value={activeSection} onValueChange={setActiveSection}>
-                <TabsList className="flex h-auto w-full flex-wrap gap-1 group-data-horizontal/tabs:h-auto">
+                <TabsList className="flex h-auto w-full gap-1 overflow-x-auto group-data-horizontal/tabs:h-auto [&>button]:flex-none">
                   {config.sections.map((s) => (
                     <TabsTrigger key={s} value={s}>
                       {t(s)}
@@ -207,12 +207,18 @@ export function EntityFormDrawer<T extends BaseEntity>({
           </div>
         </ScrollArea>
 
-        <SheetFooter className="flex-row justify-end gap-2 border-t">
-          <Button variant="ghost" onClick={() => onOpenChange(false)} disabled={saving}>
+        <SheetFooter className="flex-col-reverse gap-2 border-t sm:flex-row sm:justify-end">
+          <Button
+            variant="ghost"
+            className="w-full sm:w-auto"
+            onClick={() => onOpenChange(false)}
+            disabled={saving}
+          >
             {t("common:actions.cancel")}
           </Button>
           <Button
             variant="outline"
+            className="w-full sm:w-auto"
             onClick={() => void handleSave(false)}
             disabled={saving || readOnly}
           >
@@ -221,7 +227,11 @@ export function EntityFormDrawer<T extends BaseEntity>({
             ) : null}
             {t("common:actions.saveLocally")}
           </Button>
-          <Button onClick={() => void handleSave(true)} disabled={saving || readOnly}>
+          <Button
+            className="w-full sm:w-auto"
+            onClick={() => void handleSave(true)}
+            disabled={saving || readOnly}
+          >
             {savingMode === "sync" ? (
               <Loader2 className="size-4 animate-spin" />
             ) : null}

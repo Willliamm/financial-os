@@ -83,7 +83,7 @@ function PropertyDetail() {
         </Button>
       </PageHeader>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard label={t("properties:detail.kpi.currentValue")} value={formatCents(property.currentValueCents)} />
         <KpiCard label={t("properties:detail.kpi.equity")} value={formatCents(analysis.equityCents)} tone="positive" />
         <KpiCard
@@ -107,7 +107,7 @@ function PropertyDetail() {
       ) : null}
 
       <Tabs defaultValue="summary">
-        <TabsList className="flex-wrap">
+        <TabsList className="w-full justify-start overflow-x-auto [&>button]:flex-none">
           <TabsTrigger value="summary">{t("properties:detail.tabs.summary")}</TabsTrigger>
           <TabsTrigger value="rental">{t("properties:detail.tabs.rental")}</TabsTrigger>
           <TabsTrigger value="financing">{t("properties:detail.tabs.financing")}</TabsTrigger>
@@ -282,9 +282,9 @@ function ProjectionsTab({ property, loan }: { property: Property; loan: Loan | n
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="font-medium tabular-nums">{value}</p>
+    <div className="min-w-0">
+      <p className="truncate text-xs text-muted-foreground">{label}</p>
+      <p className="font-medium tabular-nums break-words">{value}</p>
     </div>
   );
 }
