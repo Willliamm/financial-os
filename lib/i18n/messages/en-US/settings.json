@@ -46,5 +46,16 @@
     "title": "Backup",
     "description": "Download a JSON snapshot of all your local data.",
     "export": "Export backup JSON"
+  },
+  "reset": {
+    "title": "Reset local data",
+    "description": "Delete all financial data stored on this device (including leftover demo data), then reload. Your Google workbook is not touched — connected data re-imports from it. You stay signed in.",
+    "button": "Reset local data",
+    "confirmTitle": "Reset local data?",
+    "confirmDescription": "This permanently clears the local database on this device and reloads the app. Data already synced to your Google Sheet stays safe and re-imports. This cannot be undone.",
+    "confirmButton": "Reset data",
+    "resetting": "Resetting…",
+    "done": "Local data reset.",
+    "failed": "Could not reset local data"
   }
 }

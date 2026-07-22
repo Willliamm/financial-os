@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LanguageSwitcher } from "@/components/settings/language-switcher";
+import { ResetLocalData } from "@/components/settings/reset-local-data";
 
 const FILING_STATUS_VALUES: FilingStatus[] = [
   "single",
@@ -440,6 +441,16 @@ export default function SettingsPage() {
             <Download className="size-4" />
             {t("settings:backup.export")}
           </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="border-destructive/30">
+        <CardHeader>
+          <CardTitle>{t("settings:reset.title")}</CardTitle>
+          <CardDescription>{t("settings:reset.description")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResetLocalData />
         </CardContent>
       </Card>
     </div>

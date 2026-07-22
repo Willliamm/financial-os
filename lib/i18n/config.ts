@@ -112,7 +112,7 @@ const resources = {
 export const LANG_STORAGE_KEY = "fos.lang";
 
 /** Detect the initial locale: stored choice → browser language → default. */
-function detectInitialLocale(): AppLocale {
+export function detectInitialLocale(): AppLocale {
   if (typeof window === "undefined") return DEFAULT_LOCALE;
   try {
     const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
@@ -128,9 +128,13 @@ function detectInitialLocale(): AppLocale {
 }
 
 if (!i18n.isInitialized) {
+  // Always initialize with the default locale so the statically prerendered
+  // HTML and the first client render agree (no hydration mismatch). The real
+  // locale is applied after mount in `components/providers.tsx` via
+  // `detectInitialLocale()` + `changeLanguage`.
   void i18n.use(initReactI18next).init({
     resources,
-    lng: detectInitialLocale(),
+    lng: DEFAULT_LOCALE,
     fallbackLng: DEFAULT_LOCALE,
     defaultNS: "common",
     ns: [...NAMESPACES],

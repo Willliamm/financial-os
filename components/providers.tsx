@@ -3,10 +3,11 @@
 import { useEffect } from "react";
 import { ThemeProvider } from "next-themes";
 import { I18nextProvider } from "react-i18next";
-import i18n from "@/lib/i18n/config";
+import i18n, { detectInitialLocale } from "@/lib/i18n/config";
 import { setMoneyLocale } from "@/infrastructure/money/money";
 import { setDateLocale } from "@/infrastructure/dates/date-utils";
 import { useSyncStore } from "@/lib/stores/sync-store";
+import { useAuthStore } from "@/lib/stores/auth-store";
 
 /**
  * App-wide, login-included providers. Kept deliberately light: only the theme
@@ -19,6 +20,12 @@ import { useSyncStore } from "@/lib/stores/sync-store";
 export function Providers({ children }: { children: React.ReactNode }) {
   const setOnline = useSyncStore((s) => s.setOnline);
 
+  // Restore a Google session on load (silent token refresh). Runs once; reads
+  // the action off the store so this effect never re-fires on status changes.
+  useEffect(() => {
+    void useAuthStore.getState().restore();
+  }, []);
+
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
     update();
@@ -29,6 +36,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
       window.removeEventListener("offline", update);
     };
   }, [setOnline]);
+
+  // Apply the user's saved/detected language AFTER mount. i18n initializes with
+  // the default locale so the prerendered HTML matches the first client render;
+  // switching here (post-hydration) avoids a hydration mismatch and re-renders
+  // the tree into the real language.
+  useEffect(() => {
+    const detected = detectInitialLocale();
+    if (detected !== i18n.resolvedLanguage) {
+      void i18n.changeLanguage(detected);
+    }
+  }, []);
 
   // Keep money/date formatting and <html lang> in sync with the active language.
   useEffect(() => {

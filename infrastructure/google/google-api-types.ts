@@ -25,13 +25,31 @@ export interface AppendResult {
   startRow?: number;
 }
 
+/** Options controlling how the Google sign-in prompt behaves. */
+export interface SignInOptions {
+  /**
+   * Attempt a silent token refresh with no UI. Resolves only if the user still
+   * has a live Google session and has already granted consent; otherwise it
+   * rejects instead of popping a window. Used to restore a session on load.
+   */
+  silent?: boolean;
+  /** Force the Google account chooser (to switch accounts). */
+  selectAccount?: boolean;
+}
+
 /** Abstraction over Google Identity Services sign-in. */
 export interface AuthClient {
-  signIn(): Promise<GoogleUser>;
+  signIn(options?: SignInOptions): Promise<GoogleUser>;
   signOut(): Promise<void>;
   getAccessToken(): string | null;
   currentUser(): GoogleUser | null;
   isSignedIn(): boolean;
+  /**
+   * True if a still-valid access token is available (from memory or persisted
+   * storage), so a session can resume on load without any Google round-trip.
+   * Optional: only the real client persists tokens.
+   */
+  hasValidToken?(): boolean;
 }
 
 /** Abstraction over Google Drive (workbook discovery + creation). */

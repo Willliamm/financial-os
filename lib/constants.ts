@@ -8,6 +8,9 @@ export const APP_SCHEMA_VERSION = 3;
 /** Default workbook name created in the user's Google Drive. */
 export const DEFAULT_WORKBOOK_NAME = "Financial OS - Personal Workbook";
 
+/** Name of the dedicated Drive folder that holds the app's workbook. */
+export const DRIVE_FOLDER_NAME = "Financial OS";
+
 export const DEFAULT_CURRENCY = "USD" as const;
 
 /** Soft-lock time to live, in seconds. */
@@ -27,6 +30,12 @@ export const WORKBOOK_APP_PROPERTIES = {
   app: "financial-os",
   workbookType: "personal-finance",
   schemaVersion: String(APP_SCHEMA_VERSION),
+} as const;
+
+/** App properties stamped on the dedicated Drive folder. */
+export const FOLDER_APP_PROPERTIES = {
+  app: "financial-os",
+  driveItem: "folder",
 } as const;
 
 /** Periodic auto-sync interval, in milliseconds. */

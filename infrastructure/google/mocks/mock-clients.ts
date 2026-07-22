@@ -9,6 +9,7 @@ import type {
   SheetDefinition,
   SheetValues,
   SheetsClient,
+  SignInOptions,
   WorkbookRef,
 } from "../google-api-types";
 import { getMockBackend } from "./mock-backend";
@@ -23,8 +24,9 @@ export class MockAuthClient implements AuthClient {
   private token: string | null = null;
   private user: GoogleUser | null = null;
 
-  async signIn(): Promise<GoogleUser> {
-    // Simulate a short network round-trip.
+  async signIn(_options?: SignInOptions): Promise<GoogleUser> {
+    // Simulate a short network round-trip. The mock has no real Google session,
+    // so silent restore always "succeeds" — options are accepted but ignored.
     await delay(150);
     this.token = `mock-access-token-${newId()}`;
     this.user = MOCK_USER;

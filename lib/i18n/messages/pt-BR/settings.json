@@ -46,5 +46,16 @@
     "title": "Backup",
     "description": "Baixe um instantâneo JSON de todos os seus dados locais.",
     "export": "Exportar backup JSON"
+  },
+  "reset": {
+    "title": "Redefinir dados locais",
+    "description": "Apaga todos os dados financeiros guardados neste dispositivo (inclusive dados de demonstração que sobraram) e recarrega. Sua planilha do Google não é tocada — os dados conectados são reimportados dela. Você continua conectado.",
+    "button": "Redefinir dados locais",
+    "confirmTitle": "Redefinir dados locais?",
+    "confirmDescription": "Isto apaga de forma permanente o banco local deste dispositivo e recarrega o app. Os dados já sincronizados com sua planilha do Google ficam seguros e são reimportados. Não dá para desfazer.",
+    "confirmButton": "Redefinir dados",
+    "resetting": "Redefinindo…",
+    "done": "Dados locais redefinidos.",
+    "failed": "Não foi possível redefinir os dados locais"
   }
 }

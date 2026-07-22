@@ -131,4 +131,12 @@
   html {
     @apply font-sans;
   }
+  /* App-wide pointer cursor for buttons. Tailwind v4's Preflight no longer sets
+     this, so without it every button shows the default arrow. Covers native
+     buttons and role="button" elements (Radix triggers); disabled controls keep
+     the default cursor. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]):not([data-disabled]) {
+    cursor: pointer;
+  }
 }

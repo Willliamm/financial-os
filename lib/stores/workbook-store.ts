@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { getGoogleClients } from "@/infrastructure/google";
+import { getGoogleClients, isUsingMockGoogle } from "@/infrastructure/google";
 import type { WorkbookRef } from "@/infrastructure/google/google-api-types";
 import { metadataRepo, META_KEYS } from "@/infrastructure/db/metadata-repo";
 import { importWorkbook } from "@/infrastructure/sync/sync-engine";
@@ -51,8 +51,12 @@ export const useWorkbookStore = create<WorkbookState>((set, get) => ({
       set({ step: "Importing data" });
       await importWorkbook(clients, workbook.id);
 
+      // Seed the sample "Rivera Household" ONLY in demo mode, so a first-time
+      // demo user sees a populated app. With a real Google account we never
+      // inject fake data — the user's (possibly empty) workbook is the source
+      // of truth and they start with their own data.
       set({ step: "Preparing your dashboard" });
-      const seeded = await seedDemoDataIfEmpty();
+      const seeded = isUsingMockGoogle() ? await seedDemoDataIfEmpty() : false;
       if (seeded) {
         set({ step: "Saving starter data" });
         await useSyncStore.getState().sync();
