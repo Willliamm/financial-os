@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import type { ObservationSubjectType } from "@/domain/entities";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,15 +48,25 @@ export function MarkValueDialog({
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
 
-  // Reset to the subject's current state each time the dialog opens.
+  // Reset to the subject's current state only on the closed→open transition,
+  // not on every re-render while open. currentValueCents can change while the
+  // dialog is open (background sync, another tab, a TanStack Query refetch on
+  // window focus) and must not clobber an in-progress edit.
+  const wasOpen = useRef(false);
   useEffect(() => {
-    if (open) {
+    if (open && !wasOpen.current) {
       setObservedAt(todayIsoDate());
       setValueCents(currentValueCents);
       setNote("");
       setSaving(false);
     }
-  }, [open, currentValueCents]);
+    wasOpen.current = open;
+    // currentValueCents is intentionally read only at the open transition
+    // above, not tracked as a dependency that would re-fire this effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const isFutureDate = observedAt > todayIsoDate();
 
   async function handleSave() {
     setSaving(true);
@@ -69,6 +80,9 @@ export function MarkValueDialog({
         note,
       });
       onOpenChange(false);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(t("observations:dialog.saveError"), { description: message });
     } finally {
       setSaving(false);
     }
@@ -92,6 +106,7 @@ export function MarkValueDialog({
               type="date"
               value={observedAt}
               max={todayIsoDate()}
+              aria-invalid={isFutureDate}
               onChange={(e) => setObservedAt(e.target.value)}
             />
           </div>
@@ -125,7 +140,10 @@ export function MarkValueDialog({
           >
             {t("observations:dialog.cancel")}
           </Button>
-          <Button onClick={handleSave} disabled={saving || !observedAt}>
+          <Button
+            onClick={handleSave}
+            disabled={saving || !observedAt || isFutureDate}
+          >
             {saving
               ? t("observations:dialog.saving")
               : t("observations:dialog.save")}

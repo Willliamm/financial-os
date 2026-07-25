@@ -12,7 +12,8 @@
     "notePlaceholder": "De onde veio esse número",
     "cancel": "Cancelar",
     "save": "Salvar marcação",
-    "saving": "Salvando…"
+    "saving": "Salvando…",
+    "saveError": "Não foi possível salvar a marcação"
   },
   "freshness": {
     "fresh": "Atual",

@@ -12,7 +12,8 @@
     "notePlaceholder": "Where this number came from",
     "cancel": "Cancel",
     "save": "Save mark",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "saveError": "Couldn't save the mark"
   },
   "freshness": {
     "fresh": "Fresh",
