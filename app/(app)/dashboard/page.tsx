@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import type { FinancialContext } from "@/domain/context";
 import {
+  buildNetWorthHistory,
   estimateEffectiveTaxRateBps,
   monthlyActiveIncomeCents,
   monthlyExpensesCents,
@@ -49,9 +50,10 @@ import {
 } from "@/components/charts/chart-helpers";
 import { formatCents } from "@/infrastructure/money/money";
 import { formatBps } from "@/domain/value-objects/basis-points";
-import { currentYear } from "@/infrastructure/dates/date-utils";
+import { currentYear, todayIsoDate } from "@/infrastructure/dates/date-utils";
 import { useFinancialContext } from "@/lib/queries/financial-data";
 import { DEFAULT_PROJECTION } from "@/features/projections/assumptions";
+import { NetWorthHistoryChart } from "@/components/charts/net-worth-history-chart";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -60,6 +62,10 @@ export default function DashboardPage() {
 
   const m = useMemo(() => computeMetrics(context, t), [context, t]);
   const insights = useInsights(context);
+  const history = useMemo(
+    () => buildNetWorthHistory(context, { to: todayIsoDate() }),
+    [context],
+  );
 
   const isEmpty =
     context.properties.length === 0 &&
@@ -175,6 +181,22 @@ export default function DashboardPage() {
                 </p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>{t("observations:history.title")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {history.length > 0 ? (
+              <NetWorthHistoryChart points={history} />
+            ) : (
+              <EmptyState
+                title={t("observations:history.title")}
+                description={t("observations:history.empty")}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
