@@ -8,6 +8,7 @@ import {
   makeInvestment,
   makeLoan,
   makeObservation,
+  makeProperty,
 } from "./fixtures";
 
 describe("assessFreshness", () => {
@@ -64,6 +65,54 @@ describe("assessFreshness", () => {
     const rows = assessFreshness(ctx, "2026-07-24");
     expect(rows[0].label).toBe("Never");
     expect(rows[1].label).toBe("Fresh");
+  });
+
+  it("ignores soft-deleted observations and soft-deleted subjects", () => {
+    const ctx = makeContext({
+      investmentAccounts: [
+        makeInvestment({ id: "acct-1", name: "Live Account" }),
+        makeInvestment({
+          id: "acct-deleted",
+          name: "Deleted Account",
+          deletedAt: "2026-07-01T00:00:00.000Z",
+        }),
+      ],
+      properties: [
+        makeProperty({
+          id: "prop-deleted",
+          name: "Deleted Property",
+          deletedAt: "2026-07-01T00:00:00.000Z",
+        }),
+      ],
+      loans: [
+        makeLoan({
+          id: "loan-deleted",
+          lender: "Deleted Bank",
+          deletedAt: "2026-07-01T00:00:00.000Z",
+        }),
+      ],
+      observations: [
+        // Live mark: should be used.
+        makeObservation({ subjectId: "acct-1", observedAt: "2026-07-20" }),
+        // Newer mark, but soft-deleted: must be ignored, so the live mark above wins.
+        makeObservation({
+          subjectId: "acct-1",
+          observedAt: "2026-07-23",
+          deletedAt: "2026-07-23T00:00:00.000Z",
+        }),
+      ],
+    });
+
+    const rows = assessFreshness(ctx, "2026-07-24");
+
+    // Only the live investment account should appear; the soft-deleted
+    // account, property and loan are all excluded.
+    expect(rows).toHaveLength(1);
+    expect(rows.map((r) => r.label)).toEqual(["Live Account"]);
+
+    const [row] = rows;
+    expect(row.lastObservedAt).toBe("2026-07-20");
+    expect(row.level).toBe("fresh");
   });
 });
 
