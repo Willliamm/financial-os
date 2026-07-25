@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import type { FinancialContext } from "@/domain/context";
 import {
+  assessFreshness,
   buildNetWorthHistory,
   estimateEffectiveTaxRateBps,
   monthlyActiveIncomeCents,
@@ -38,6 +39,7 @@ import {
 import { PageHeader } from "@/components/shared/page-header";
 import { KpiCard } from "@/components/shared/kpi-card";
 import { EmptyState } from "@/components/shared/empty-state";
+import { FreshnessBanner } from "@/components/shared/freshness-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -64,6 +66,10 @@ export default function DashboardPage() {
   const insights = useInsights(context);
   const history = useMemo(
     () => buildNetWorthHistory(context, { to: todayIsoDate() }),
+    [context],
+  );
+  const freshness = useMemo(
+    () => assessFreshness(context, todayIsoDate()),
     [context],
   );
 
@@ -96,6 +102,8 @@ export default function DashboardPage() {
         title={t("dashboard:header.title")}
         description={t("dashboard:header.descriptionYear", { year: currentYear() })}
       />
+
+      <FreshnessBanner rows={freshness} />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
