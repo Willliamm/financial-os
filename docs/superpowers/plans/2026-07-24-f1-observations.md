@@ -1137,9 +1137,18 @@ describe("isNewestMark", () => {
     ).toBe(false);
   });
 
-  it("only considers marks on the same subject", () => {
+  it("ignores a newer mark that belongs to a different subject", () => {
+    // acct-2 carries a 2026-12-31 mark. Without subject filtering it would make
+    // this acct-1 mark look backdated, so `true` here proves the filter works.
     expect(
-      isNewestMark(existing, "investment_account", "acct-1", "2026-07-24"),
+      isNewestMark(existing, "investment_account", "acct-1", "2026-07-01"),
+    ).toBe(true);
+    // acct-2 judged on its own marks: 2026-12-31 is still ahead of 2026-07-01.
+    expect(
+      isNewestMark(existing, "investment_account", "acct-2", "2026-07-01"),
+    ).toBe(false);
+    expect(
+      isNewestMark(existing, "investment_account", "acct-2", "2027-01-01"),
     ).toBe(true);
   });
 
