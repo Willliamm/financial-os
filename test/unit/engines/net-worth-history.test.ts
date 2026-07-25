@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { buildNetWorthHistory } from "@/domain/engines/history/net-worth-history";
+import {
+  buildNetWorthHistory,
+  MAX_HISTORY_POINTS,
+} from "@/domain/engines/history/net-worth-history";
 import {
   makeContext,
   makeInvestment,
@@ -116,5 +119,26 @@ describe("net-worth-history", () => {
 
     const series = buildNetWorthHistory(ctx, { to: "2026-02-28" });
     expect(series[1].netWorthCents).toBe(10_000_000);
+  });
+
+  it("caps an oversized series and keeps the most recent points", () => {
+    // A mistyped year ("0026" instead of "2026") produces a ~2000-year
+    // range, which would otherwise generate ~24,000 monthly points.
+    const account = makeInvestment({ id: "acct-1" });
+    const ctx = makeContext({
+      investmentAccounts: [account],
+      observations: [
+        makeObservation({
+          subjectId: "acct-1",
+          observedAt: "0026-06-30",
+          valueCents: 1_000_000,
+        }),
+      ],
+    });
+
+    const series = buildNetWorthHistory(ctx, { to: "2026-06-30" });
+
+    expect(series.length).toBe(MAX_HISTORY_POINTS);
+    expect(series[series.length - 1].date).toBe("2026-06-30");
   });
 });

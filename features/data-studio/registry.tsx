@@ -411,7 +411,7 @@ const observation = def<Observation>({
     { name: "subjectType", label: "forms:observation.subjectType.label", type: "select", options: OBSERVATION_SUBJECT_TYPES, required: true },
     { name: "subjectId", label: "forms:observation.subjectId.label", type: "text", required: true, help: "forms:observation.subjectId.help" },
     { name: "observedAt", label: "forms:observation.observedAt.label", type: "date", required: true },
-    { name: "valueCents", label: "forms:observation.valueCents.label", type: "money", required: true },
+    { name: "valueCents", label: "forms:observation.valueCents.label", type: "money" },
     { name: "note", label: "forms:observation.note.label", type: "textarea", colSpan: 2 },
   ],
   columns: [

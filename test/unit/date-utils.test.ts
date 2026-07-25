@@ -1,6 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import {
   addDaysIso,
+  addMonthsIso,
   diffCalendarDays,
   monthEndsBetween,
   setNowProvider,
@@ -37,6 +38,19 @@ describe("diffCalendarDays", () => {
   });
 });
 
+describe("addMonthsIso", () => {
+  it("adds and subtracts whole months", () => {
+    expect(addMonthsIso("2026-01-15", 1)).toBe("2026-02-15");
+    expect(addMonthsIso("2026-07-24", -5)).toBe("2026-02-24");
+    expect(addMonthsIso("2026-07-24", 0)).toBe("2026-07-24");
+  });
+
+  it("clamps an overflowing day to the target month's last day", () => {
+    expect(addMonthsIso("2026-03-31", -1)).toBe("2026-02-28");
+    expect(addMonthsIso("2026-01-31", 1)).toBe("2026-02-28");
+  });
+});
+
 describe("monthEndsBetween", () => {
   it("returns month ends in range plus the end date itself", () => {
     expect(monthEndsBetween("2026-01-15", "2026-04-10")).toEqual([
@@ -60,5 +74,15 @@ describe("monthEndsBetween", () => {
 
   it("returns an empty list when from is after to", () => {
     expect(monthEndsBetween("2026-05-01", "2026-04-01")).toEqual([]);
+  });
+
+  it("returns an empty list when either bound is not a real date, instead of throwing", () => {
+    const malformed = ["06/30/2026", "1/5/2026", " ", "-", "0"];
+    for (const bad of malformed) {
+      expect(() => monthEndsBetween(bad, "2026-06-30")).not.toThrow();
+      expect(monthEndsBetween(bad, "2026-06-30")).toEqual([]);
+      expect(() => monthEndsBetween("2026-01-01", bad)).not.toThrow();
+      expect(monthEndsBetween("2026-01-01", bad)).toEqual([]);
+    }
   });
 });

@@ -144,6 +144,33 @@ describe("sheet-mapper round-trip", () => {
     expect(parsed?.source).toBe("manual");
     expect(parsed?.note).toBe("Statement, mid-year");
   });
+
+  it("drops an Observation row with a hand-edited, malformed observedAt cell", () => {
+    const observation: Observation = {
+      id: "obs-2",
+      version: 0,
+      createdAt: TS,
+      updatedAt: TS,
+      deletedAt: null,
+      createdBy: "tester@x",
+      updatedBy: "tester@x",
+      householdId: "h1",
+      subjectType: "investment_account",
+      subjectId: "acct-1",
+      observedAt: "2026-06-30",
+      valueCents: 9_600_000,
+      source: "manual",
+      note: "",
+    };
+
+    const headers = headersFor("observation");
+    const row = entityToRow("observation", observation);
+    const dateIndex = headers.indexOf("observed_at");
+    row[dateIndex] = "06/30/2026"; // a plausible hand-edit that isn't ISO
+
+    const parsed = rowToEntity("observation", headers, row);
+    expect(parsed).toBeNull();
+  });
 });
 
 describe("findRowNumberById", () => {

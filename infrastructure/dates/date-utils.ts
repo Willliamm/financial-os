@@ -1,5 +1,6 @@
 import {
   addDays,
+  addMonths,
   differenceInCalendarDays,
   differenceInCalendarMonths,
   differenceInCalendarYears,
@@ -116,14 +117,28 @@ export function diffCalendarDays(from: string, to: string): number {
 }
 
 /**
+ * Add (or subtract, with a negative count) whole calendar months to a
+ * "YYYY-MM-DD" string. Clamps an overflowing day to the target month's last
+ * day, e.g. `addMonthsIso("2026-03-31", -1)` -> "2026-02-28".
+ */
+export function addMonthsIso(isoDate: string, months: number): string {
+  return format(addMonths(parseISO(isoDate), months), DATE_ONLY);
+}
+
+/**
  * Ascending sample dates for a monthly series: every month end within
  * [from, to], plus `to` itself when it is not already a month end.
- * Returns [] when `from` is after `to`.
+ * Returns [] when `from` is after `to`, or when either bound is not a real
+ * calendar date (defensive: `from` can come from untrusted, hand-edited
+ * spreadsheet data via an observation's `observedAt`).
  */
 export function monthEndsBetween(from: string, to: string): string[] {
+  const fromDate = parseDate(from);
+  const toDate = parseDate(to);
+  if (!fromDate || !toDate) return [];
   if (from > to) return [];
   const out: string[] = [];
-  let cursor = endOfMonth(parseISO(from));
+  let cursor = endOfMonth(fromDate);
   while (format(cursor, DATE_ONLY) <= to) {
     const day = format(cursor, DATE_ONLY);
     if (day >= from) out.push(day);

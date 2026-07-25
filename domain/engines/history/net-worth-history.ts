@@ -29,6 +29,15 @@ export interface HistoryPoint {
   coverageBps: BasisPoints;
 }
 
+/**
+ * Upper bound on points returned by `buildNetWorthHistory`, 50 years of
+ * months. Generous for a planning tool, but the series length is otherwise
+ * driven by user-entered dates (`observedAt`), so a mistyped year (e.g.
+ * "0026-06-30") must not be allowed to produce tens of thousands of points
+ * and freeze the chart.
+ */
+export const MAX_HISTORY_POINTS = 600;
+
 export interface HistoryOptions {
   /** Defaults to the earliest observation date. */
   from?: string;
@@ -99,8 +108,14 @@ export function buildNetWorthHistory(
   if (subjects.length === 0) return [];
 
   const from = options.from ?? observations[0].observedAt;
-  const dates = monthEndsBetween(from, options.to);
-  if (dates.length === 0) return [];
+  const allDates = monthEndsBetween(from, options.to);
+  if (allDates.length === 0) return [];
+  // Keep the most recent points when the range is oversized: the newest end
+  // (options.to) matters most to a net-worth chart, so trim from the front.
+  const dates =
+    allDates.length > MAX_HISTORY_POINTS
+      ? allDates.slice(allDates.length - MAX_HISTORY_POINTS)
+      : allDates;
 
   const bySubject = new Map<string, Observation[]>();
   for (const o of observations) {

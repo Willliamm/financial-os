@@ -17,9 +17,10 @@ export interface SchemaMigration {
 }
 
 /**
- * Ordered list of schema migrations. The MVP ships at schema version 3 with no
- * prior versions to migrate from, so this list is empty. New migrations append
- * here with an incrementing version.
+ * Ordered list of schema migrations, applied in ascending version order.
+ * Starts at v4 ("add observations") since the MVP shipped at schema version 3
+ * with no prior versions to migrate from. New migrations append here with an
+ * incrementing version.
  */
 export const MIGRATIONS: SchemaMigration[] = [
   {

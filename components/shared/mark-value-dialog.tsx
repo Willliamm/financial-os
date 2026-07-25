@@ -107,6 +107,7 @@ export function MarkValueDialog({
               value={observedAt}
               max={todayIsoDate()}
               aria-invalid={isFutureDate}
+              disabled={saving}
               onChange={(e) => setObservedAt(e.target.value)}
             />
           </div>
@@ -117,6 +118,7 @@ export function MarkValueDialog({
               id="mark-value"
               value={valueCents}
               onChange={setValueCents}
+              disabled={saving}
             />
           </div>
 
@@ -127,6 +129,7 @@ export function MarkValueDialog({
               rows={2}
               value={note}
               placeholder={t("observations:dialog.notePlaceholder")}
+              disabled={saving}
               onChange={(e) => setNote(e.target.value)}
             />
           </div>

@@ -16,9 +16,30 @@ const cents = z.number().int();
 const nonNegCents = z.number().int().nonnegative();
 const bps = z.number().int();
 const rateBps = z.number().int().min(0).max(1_000_000);
-/** Calendar date "YYYY-MM-DD". Permissive, like the other date fields, so one
- *  malformed spreadsheet cell never drops a whole row. */
-const dateOnly = z.string();
+const DATE_ONLY_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Whether `value` is a real calendar date in strict "YYYY-MM-DD" form. */
+function isValidCalendarDate(value: string): boolean {
+  if (!DATE_ONLY_RE.test(value)) return false;
+  const [y, m, d] = value.split("-").map(Number);
+  if (m < 1 || m > 12) return false;
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return (
+    date.getUTCFullYear() === y &&
+    date.getUTCMonth() === m - 1 &&
+    date.getUTCDate() === d
+  );
+}
+
+/**
+ * Calendar date "YYYY-MM-DD". Strict: rejects anything that isn't a real
+ * calendar date in that exact shape (e.g. "06/30/2026", "2026-13-45", " ").
+ * A single malformed spreadsheet cell must drop only its own row, not crash
+ * the app that later parses it (see net-worth-history / monthEndsBetween).
+ */
+const dateOnly = z.string().refine(isValidCalendarDate, {
+  message: "Invalid calendar date, expected YYYY-MM-DD",
+});
 
 const baseEntityShape = {
   id: idString,

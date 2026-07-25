@@ -17,7 +17,7 @@ import { repositories } from "@/infrastructure/db/repositories";
 import { metadataRepo, META_KEYS } from "@/infrastructure/db/metadata-repo";
 import { dollarsToCents } from "@/infrastructure/money/money";
 import { percentToBps } from "@/domain/value-objects/basis-points";
-import { currentYear } from "@/infrastructure/dates/date-utils";
+import { addMonthsIso, currentYear, todayIsoDate } from "@/infrastructure/dates/date-utils";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("seed");
@@ -141,7 +141,7 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
     notes: "First rental — house-hacked the first year.",
   });
 
-  await createEntity<Property>("property", {
+  const { entity: lakeside } = await createEntity<Property>("property", {
     householdId: household.id,
     name: "Lakeside Single-Family (Prospect)",
     propertyType: "sfh",
@@ -171,7 +171,7 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
   });
 
   // Loan on the townhouse
-  await createEntity<Loan>("loan", {
+  const { entity: townhouseLoan } = await createEntity<Loan>("loan", {
     propertyId: townhouse.id,
     lender: "First Coast Mortgage",
     loanType: "conventional",
@@ -193,46 +193,72 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
     { name: "Cash Reserve", accountType: "cash", institution: "Ally", currentBalanceCents: $(45000), expectedReturnBps: pct(4), contributionMonthlyCents: $(500), taxTreatment: "taxable" },
   ];
   let brokerageId: string | null = null;
+  const accountEntities: InvestmentAccount[] = [];
   for (const a of accounts) {
     const { entity } = await createEntity<InvestmentAccount>(
       "investment_account",
       { householdId: household.id, ...a },
     );
+    accountEntities.push(entity);
     if (a.accountType === "brokerage") brokerageId = entity.id;
   }
 
-  // Six months of marks so the net-worth history has a curve on first run.
+  // Observations: datestamped value marks for the net-worth history chart and
+  // the freshness banner. Dated off the clock (not hardcoded) so the demo
+  // doesn't visibly "age" the moment the calendar turns — the freshness
+  // thresholds (45/180 days) would otherwise mark everything stale over time.
+  const today = todayIsoDate();
+
+  // Six months of marks on the brokerage account so the net-worth history has
+  // a realistic rising curve on first run, ending today.
   if (brokerageId) {
-    const marks: Array<[string, number]> = [
-      ["2026-01-31", 88_000_00],
-      ["2026-02-28", 90_500_00],
-      ["2026-03-31", 89_200_00],
-      ["2026-04-30", 92_800_00],
-      ["2026-05-31", 94_100_00],
-      ["2026-06-30", 96_000_00],
+    const brokerageValues = [
+      88_000_00, 90_500_00, 89_200_00, 92_800_00, 94_100_00, 96_000_00,
     ];
-    for (const [observedAt, valueCents] of marks) {
+    for (let i = 0; i < brokerageValues.length; i++) {
+      const monthsAgo = brokerageValues.length - 1 - i;
       await createEntity<Observation>("observation", {
         householdId: household.id,
         subjectType: "investment_account",
         subjectId: brokerageId,
-        observedAt,
-        valueCents,
+        observedAt: addMonthsIso(today, -monthsAgo),
+        valueCents: brokerageValues[i],
         source: "manual",
         note: "",
       });
     }
   }
 
-  await createEntity<Observation>("observation", {
-    householdId: household.id,
-    subjectType: "property",
-    subjectId: townhouse.id,
-    observedAt: "2026-06-30",
-    valueCents: townhouse.currentValueCents,
-    source: "manual",
-    note: "",
-  });
+  // A fresh mark, dated today, for every OTHER tracked subject (every
+  // investment account besides the brokerage, every property, every loan) so
+  // the demo opens with full coverage and the freshness banner hidden.
+  const coverageMarks: Array<{
+    subjectType: Observation["subjectType"];
+    subjectId: string;
+    valueCents: number;
+  }> = [
+    ...accountEntities
+      .filter((a) => a.id !== brokerageId)
+      .map((a) => ({
+        subjectType: "investment_account" as const,
+        subjectId: a.id,
+        valueCents: a.currentBalanceCents,
+      })),
+    { subjectType: "property", subjectId: townhouse.id, valueCents: townhouse.currentValueCents },
+    { subjectType: "property", subjectId: lakeside.id, valueCents: lakeside.currentValueCents },
+    { subjectType: "loan", subjectId: townhouseLoan.id, valueCents: townhouseLoan.currentBalanceCents },
+  ];
+  for (const mark of coverageMarks) {
+    await createEntity<Observation>("observation", {
+      householdId: household.id,
+      subjectType: mark.subjectType,
+      subjectId: mark.subjectId,
+      observedAt: today,
+      valueCents: mark.valueCents,
+      source: "manual",
+      note: "",
+    });
+  }
 
   // Tax assumption + strategies
   await createEntity<TaxAssumption>("tax_assumption", {

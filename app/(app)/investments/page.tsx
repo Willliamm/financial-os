@@ -12,6 +12,7 @@ export default function InvestmentsPage() {
   const { data: context } = useFinancialContext();
   const [markingId, setMarkingId] = useState<string | null>(null);
 
+  const householdId = context.household?.id ?? null;
   const accounts = context.investmentAccounts.filter((a) => !a.deletedAt);
   const marking = accounts.find((a) => a.id === markingId) ?? null;
 
@@ -22,7 +23,7 @@ export default function InvestmentsPage() {
         title={t("investments:title")}
         description={t("investments:description")}
         header={
-          accounts.length > 0 ? (
+          accounts.length > 0 && householdId ? (
             <div className="flex flex-wrap gap-2">
               {accounts.map((account) => (
                 <Button
@@ -39,11 +40,11 @@ export default function InvestmentsPage() {
         }
       />
 
-      {marking ? (
+      {marking && householdId ? (
         <MarkValueDialog
           open={markingId !== null}
           onOpenChange={(open) => setMarkingId(open ? markingId : null)}
-          householdId={context.household?.id ?? ""}
+          householdId={householdId}
           subjectType="investment_account"
           subjectId={marking.id}
           subjectLabel={marking.name}
