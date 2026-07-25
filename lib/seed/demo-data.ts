@@ -4,6 +4,7 @@ import type {
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Observation,
   Person,
   Property,
   Scenario,
@@ -191,12 +192,47 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
     { name: "HSA", accountType: "hsa", institution: "Lively", currentBalanceCents: $(21000), expectedReturnBps: pct(6), contributionMonthlyCents: $(350), taxTreatment: "tax_free" },
     { name: "Cash Reserve", accountType: "cash", institution: "Ally", currentBalanceCents: $(45000), expectedReturnBps: pct(4), contributionMonthlyCents: $(500), taxTreatment: "taxable" },
   ];
+  let brokerageId: string | null = null;
   for (const a of accounts) {
-    await createEntity<InvestmentAccount>("investment_account", {
-      householdId: household.id,
-      ...a,
-    });
+    const { entity } = await createEntity<InvestmentAccount>(
+      "investment_account",
+      { householdId: household.id, ...a },
+    );
+    if (a.accountType === "brokerage") brokerageId = entity.id;
   }
+
+  // Six months of marks so the net-worth history has a curve on first run.
+  if (brokerageId) {
+    const marks: Array<[string, number]> = [
+      ["2026-01-31", 88_000_00],
+      ["2026-02-28", 90_500_00],
+      ["2026-03-31", 89_200_00],
+      ["2026-04-30", 92_800_00],
+      ["2026-05-31", 94_100_00],
+      ["2026-06-30", 96_000_00],
+    ];
+    for (const [observedAt, valueCents] of marks) {
+      await createEntity<Observation>("observation", {
+        householdId: household.id,
+        subjectType: "investment_account",
+        subjectId: brokerageId,
+        observedAt,
+        valueCents,
+        source: "manual",
+        note: "",
+      });
+    }
+  }
+
+  await createEntity<Observation>("observation", {
+    householdId: household.id,
+    subjectType: "property",
+    subjectId: townhouse.id,
+    observedAt: "2026-06-30",
+    valueCents: townhouse.currentValueCents,
+    source: "manual",
+    note: "",
+  });
 
   // Tax assumption + strategies
   await createEntity<TaxAssumption>("tax_assumption", {
