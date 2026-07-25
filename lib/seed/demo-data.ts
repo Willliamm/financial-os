@@ -192,7 +192,6 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
     { name: "HSA", accountType: "hsa", institution: "Lively", currentBalanceCents: $(21000), expectedReturnBps: pct(6), contributionMonthlyCents: $(350), taxTreatment: "tax_free" },
     { name: "Cash Reserve", accountType: "cash", institution: "Ally", currentBalanceCents: $(45000), expectedReturnBps: pct(4), contributionMonthlyCents: $(500), taxTreatment: "taxable" },
   ];
-  let brokerageId: string | null = null;
   const accountEntities: InvestmentAccount[] = [];
   for (const a of accounts) {
     const { entity } = await createEntity<InvestmentAccount>(
@@ -200,7 +199,6 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
       { householdId: household.id, ...a },
     );
     accountEntities.push(entity);
-    if (a.accountType === "brokerage") brokerageId = entity.id;
   }
 
   // Observations: datestamped value marks for the net-worth history chart and
@@ -209,55 +207,64 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
   // thresholds (45/180 days) would otherwise mark everything stale over time.
   const today = todayIsoDate();
 
-  // Six months of marks on the brokerage account so the net-worth history has
-  // a realistic rising curve on first run, ending today.
-  if (brokerageId) {
-    const brokerageValues = [
-      88_000_00, 90_500_00, 89_200_00, 92_800_00, 94_100_00, 96_000_00,
-    ];
-    for (let i = 0; i < brokerageValues.length; i++) {
-      const monthsAgo = brokerageValues.length - 1 - i;
+  /**
+   * EVERY tracked subject gets the same six monthly marks, ending today at its
+   * current value. Giving only one subject a history and the rest a single
+   * mark dated today produces a flat line that jumps vertically in the final
+   * month — the chart then reads as "net worth 10x'd overnight" when all it
+   * really shows is coverage arriving late.
+   *
+   * Each series walks back from today's value by a per-month factor. Assets
+   * ramp up; a loan balance ramps DOWN toward today as it amortises.
+   */
+  const MONTHS = 6;
+  const ASSET_PATH = [0.915, 0.936, 0.929, 0.962, 0.981, 1]; // oldest → today
+  const LOAN_PATH = [1.045, 1.036, 1.027, 1.018, 1.009, 1]; // balance shrinks
+
+  const series: Array<{
+    subjectType: Observation["subjectType"];
+    subjectId: string;
+    currentCents: number;
+    path: number[];
+  }> = [
+    ...accountEntities.map((a) => ({
+      subjectType: "investment_account" as const,
+      subjectId: a.id,
+      currentCents: a.currentBalanceCents,
+      path: ASSET_PATH,
+    })),
+    {
+      subjectType: "property" as const,
+      subjectId: townhouse.id,
+      currentCents: townhouse.currentValueCents,
+      path: ASSET_PATH,
+    },
+    {
+      subjectType: "property" as const,
+      subjectId: lakeside.id,
+      currentCents: lakeside.currentValueCents,
+      path: ASSET_PATH,
+    },
+    {
+      subjectType: "loan" as const,
+      subjectId: townhouseLoan.id,
+      currentCents: townhouseLoan.currentBalanceCents,
+      path: LOAN_PATH,
+    },
+  ];
+
+  for (const s of series) {
+    for (let i = 0; i < MONTHS; i++) {
       await createEntity<Observation>("observation", {
         householdId: household.id,
-        subjectType: "investment_account",
-        subjectId: brokerageId,
-        observedAt: addMonthsIso(today, -monthsAgo),
-        valueCents: brokerageValues[i],
+        subjectType: s.subjectType,
+        subjectId: s.subjectId,
+        observedAt: addMonthsIso(today, -(MONTHS - 1 - i)),
+        valueCents: Math.round(s.currentCents * s.path[i]),
         source: "manual",
         note: "",
       });
     }
-  }
-
-  // A fresh mark, dated today, for every OTHER tracked subject (every
-  // investment account besides the brokerage, every property, every loan) so
-  // the demo opens with full coverage and the freshness banner hidden.
-  const coverageMarks: Array<{
-    subjectType: Observation["subjectType"];
-    subjectId: string;
-    valueCents: number;
-  }> = [
-    ...accountEntities
-      .filter((a) => a.id !== brokerageId)
-      .map((a) => ({
-        subjectType: "investment_account" as const,
-        subjectId: a.id,
-        valueCents: a.currentBalanceCents,
-      })),
-    { subjectType: "property", subjectId: townhouse.id, valueCents: townhouse.currentValueCents },
-    { subjectType: "property", subjectId: lakeside.id, valueCents: lakeside.currentValueCents },
-    { subjectType: "loan", subjectId: townhouseLoan.id, valueCents: townhouseLoan.currentBalanceCents },
-  ];
-  for (const mark of coverageMarks) {
-    await createEntity<Observation>("observation", {
-      householdId: household.id,
-      subjectType: mark.subjectType,
-      subjectId: mark.subjectId,
-      observedAt: today,
-      valueCents: mark.valueCents,
-      source: "manual",
-      note: "",
-    });
   }
 
   // Tax assumption + strategies

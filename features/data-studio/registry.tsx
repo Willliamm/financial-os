@@ -20,6 +20,7 @@ import type {
   TaxStrategy,
 } from "@/domain/entities";
 import type { EntityType } from "@/domain/entities/base";
+import type { FinancialContext } from "@/domain/context";
 import { formatCents } from "@/infrastructure/money/money";
 import { formatBps } from "@/domain/value-objects/basis-points";
 import { formatDate } from "@/infrastructure/dates/date-utils";
@@ -399,6 +400,34 @@ const scenario = def<Scenario>({
   searchText: (e) => `${e.name} ${e.description}`,
 });
 
+/**
+ * Display name of whatever an observation marks. Falls back to a placeholder
+ * when the subject was deleted or the id was typed by hand and matches nothing —
+ * an orphan mark should read as orphaned, not as a blank row.
+ */
+function observationSubjectName(
+  e: Observation,
+  ctx: FinancialContext,
+): string {
+  const alive = <T extends { deletedAt?: string | null }>(x: T) => !x.deletedAt;
+  if (e.subjectType === "investment_account") {
+    return (
+      ctx.investmentAccounts.filter(alive).find((a) => a.id === e.subjectId)
+        ?.name || i18n.t("observations:unknownSubject")
+    );
+  }
+  if (e.subjectType === "property") {
+    return (
+      ctx.properties.filter(alive).find((p) => p.id === e.subjectId)?.name ||
+      i18n.t("observations:unknownSubject")
+    );
+  }
+  return (
+    ctx.loans.filter(alive).find((l) => l.id === e.subjectId)?.lender ||
+    i18n.t("observations:unknownSubject")
+  );
+}
+
 const observation = def<Observation>({
   type: "observation",
   singular: "entities:observation.singular",
@@ -419,9 +448,13 @@ const observation = def<Observation>({
     { label: "forms:columns.asOf", render: (e) => formatDate(e.observedAt) },
     { label: "forms:columns.value", align: "right", render: (e) => formatCents(e.valueCents) },
   ],
-  primary: (e) => formatDate(e.observedAt),
-  secondary: (e) => `${labelOf(OBSERVATION_SUBJECT_TYPES, e.subjectType)} · ${formatCents(e.valueCents)}`,
-  searchText: (e) => `${e.subjectType} ${e.subjectId} ${e.observedAt} ${e.note}`,
+  // A mark is only meaningful next to the thing it marks, so the row leads
+  // with the subject's name rather than a date every row repeats.
+  primary: (e, ctx) => observationSubjectName(e, ctx),
+  secondary: (e) =>
+    `${labelOf(OBSERVATION_SUBJECT_TYPES, e.subjectType)} · ${formatDate(e.observedAt)} · ${formatCents(e.valueCents)}`,
+  searchText: (e, ctx) =>
+    `${observationSubjectName(e, ctx)} ${e.subjectType} ${e.subjectId} ${e.observedAt} ${e.note}`,
 });
 
 export const ENTITY_REGISTRY: Record<string, EntityConfig<never>> = {

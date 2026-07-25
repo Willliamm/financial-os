@@ -33,5 +33,6 @@
     "empty": "Nenhuma marcação ainda. Registre um valor em uma conta, imóvel ou financiamento para começar o histórico.",
     "coverage": "{{observed}} de {{total}} itens marcados",
     "netWorth": "Patrimônio líquido"
-  }
+  },
+  "unknownSubject": "Item desconhecido"
 }

@@ -33,5 +33,6 @@
     "empty": "No marks yet. Record a value on an account, property or loan to start the history.",
     "coverage": "{{observed}} of {{total}} items marked",
     "netWorth": "Net worth"
-  }
+  },
+  "unknownSubject": "Unknown item"
 }

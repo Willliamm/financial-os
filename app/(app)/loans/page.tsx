@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
+import { History } from "lucide-react";
+import type { BaseEntity } from "@/domain/entities/base";
 import { MarkValueDialog } from "@/components/shared/mark-value-dialog";
 import { ListScreen } from "@/features/data-studio/list-screen";
+import type { RowAction } from "@/features/data-studio/entity-list";
 import { useFinancialContext } from "@/lib/queries/financial-data";
 
 export default function LoansPage() {
@@ -16,28 +18,28 @@ export default function LoansPage() {
   const loans = context.loans.filter((l) => !l.deletedAt);
   const marking = loans.find((l) => l.id === markingId) ?? null;
 
+  const rowActions = useMemo<RowAction<BaseEntity>[] | undefined>(
+    () =>
+      householdId
+        ? [
+            {
+              key: "mark-balance",
+              label: t("observations:markBalance"),
+              icon: History,
+              onSelect: (entity) => setMarkingId(entity.id),
+            },
+          ]
+        : undefined,
+    [householdId, t],
+  );
+
   return (
     <>
       <ListScreen
         type="loan"
         title={t("loans:title")}
         description={t("loans:description")}
-        header={
-          loans.length > 0 && householdId ? (
-            <div className="flex flex-wrap gap-2">
-              {loans.map((loan) => (
-                <Button
-                  key={loan.id}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setMarkingId(loan.id)}
-                >
-                  {t("observations:markBalance")}: {loan.lender}
-                </Button>
-              ))}
-            </div>
-          ) : null
-        }
+        rowActions={rowActions}
       />
 
       {marking && householdId ? (

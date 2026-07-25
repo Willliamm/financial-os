@@ -22,6 +22,11 @@ export function EChartImpl({ option, className }: EChartProps) {
   const chartRef = useRef<ECharts | null>(null);
   const { resolvedTheme } = useTheme();
 
+  // Latest option, readable from the init effect without making that effect
+  // depend on `option` (which would re-create the chart on every data change).
+  const optionRef = useRef(option);
+  optionRef.current = option;
+
   useEffect(() => {
     if (!containerRef.current) return;
     const chart = echarts.init(
@@ -30,6 +35,11 @@ export function EChartImpl({ option, className }: EChartProps) {
       { renderer: "canvas" },
     );
     chartRef.current = chart;
+    // A theme switch disposes the old instance and builds a new, empty one.
+    // Seed it immediately: `option` has not changed, so the effect below will
+    // not fire and the canvas would otherwise stay blank until the next
+    // data change or a full page reload.
+    chart.setOption(optionRef.current, true);
 
     const resizeObserver = new ResizeObserver(() => chart.resize());
     resizeObserver.observe(containerRef.current);
