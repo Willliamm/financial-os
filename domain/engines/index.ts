@@ -13,3 +13,4 @@ export * from "./retirement/retirement-engine";
 export * from "./analysis/real-estate-analyzer";
 export * from "./analysis/data-quality-checker";
 export * from "./insights/insight-provider";
+export * from "./history/net-worth-history";
