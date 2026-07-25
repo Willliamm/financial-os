@@ -10,7 +10,8 @@
     "loan": { "description": "Mortgages and other debt with amortization." },
     "investmentAccount": { "description": "Brokerage, retirement, cash and crypto accounts." },
     "taxStrategy": { "description": "Deductions and tax-saving strategies." },
-    "scenario": { "description": "What-if long-term plans and comparisons." }
+    "scenario": { "description": "What-if long-term plans and comparisons." },
+    "observation": { "description": "Datestamped values that build your net-worth history." }
   },
   "list": {
     "searchPlaceholder": "Search {{items}}…",

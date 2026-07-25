@@ -33,7 +33,10 @@
     "return": "Return",
     "savings": "Savings",
     "risk": "Risk",
-    "horizon": "Horizon"
+    "horizon": "Horizon",
+    "subject": "Subject",
+    "asOf": "As of",
+    "lastMarked": "Last marked"
   },
   "incomeSource": {
     "name": { "label": "Name" },
@@ -118,5 +121,15 @@
     "startYear": { "label": "Start year" },
     "endYear": { "label": "End year" },
     "status": { "label": "Status" }
+  },
+  "observation": {
+    "subjectType": { "label": "Subject type" },
+    "subjectId": {
+      "label": "Subject ID",
+      "help": "Prefer the Mark value button on the account, property or loan."
+    },
+    "observedAt": { "label": "As of" },
+    "valueCents": { "label": "Value" },
+    "note": { "label": "Note" }
   }
 }

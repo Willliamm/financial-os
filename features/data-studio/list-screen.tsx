@@ -29,6 +29,8 @@ export function selectEntities(
       return context.taxAssumptions;
     case "scenario":
       return context.scenarios;
+    case "observation":
+      return context.observations;
     case "scenario_assumption":
       return context.scenarioAssumptions;
     case "person":

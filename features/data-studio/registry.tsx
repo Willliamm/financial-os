@@ -2,6 +2,7 @@ import {
   Banknote,
   Building2,
   CreditCard,
+  History,
   Landmark,
   PiggyBank,
   Receipt,
@@ -13,6 +14,7 @@ import type {
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Observation,
   Property,
   Scenario,
   TaxStrategy,
@@ -110,6 +112,12 @@ const STRATEGY_STATUS = enumOpts("strategyStatus", [
 ]);
 const RISK_LEVELS = enumOpts("riskLevel", ["low", "medium", "high"]);
 const SCENARIO_STATUS = enumOpts("scenarioStatus", ["draft", "active", "archived"]);
+
+const OBSERVATION_SUBJECT_TYPES = enumOpts("observationSubjectType", [
+  "investment_account",
+  "property",
+  "loan",
+]);
 
 /** Resolve a value to its translated enum label (label holds an i18n key). */
 function labelOf(options: SelectOption[], value: string): string {
@@ -391,6 +399,31 @@ const scenario = def<Scenario>({
   searchText: (e) => `${e.name} ${e.description}`,
 });
 
+const observation = def<Observation>({
+  type: "observation",
+  singular: "entities:observation.singular",
+  plural: "entities:observation.plural",
+  icon: History,
+  href: "/observations",
+  description: "dataStudio:modules.observation.description",
+  inject: (ctx) => ({ householdId: ctx.householdId }),
+  fields: [
+    { name: "subjectType", label: "forms:observation.subjectType.label", type: "select", options: OBSERVATION_SUBJECT_TYPES, required: true },
+    { name: "subjectId", label: "forms:observation.subjectId.label", type: "text", required: true, help: "forms:observation.subjectId.help" },
+    { name: "observedAt", label: "forms:observation.observedAt.label", type: "date", required: true },
+    { name: "valueCents", label: "forms:observation.valueCents.label", type: "money", required: true },
+    { name: "note", label: "forms:observation.note.label", type: "textarea", colSpan: 2 },
+  ],
+  columns: [
+    { label: "forms:columns.subject", render: (e) => <Badge variant="secondary">{labelOf(OBSERVATION_SUBJECT_TYPES, e.subjectType)}</Badge> },
+    { label: "forms:columns.asOf", render: (e) => formatDate(e.observedAt) },
+    { label: "forms:columns.value", align: "right", render: (e) => formatCents(e.valueCents) },
+  ],
+  primary: (e) => formatDate(e.observedAt),
+  secondary: (e) => `${labelOf(OBSERVATION_SUBJECT_TYPES, e.subjectType)} · ${formatCents(e.valueCents)}`,
+  searchText: (e) => `${e.subjectType} ${e.subjectId} ${e.observedAt} ${e.note}`,
+});
+
 export const ENTITY_REGISTRY: Record<string, EntityConfig<never>> = {
   income_source: income as EntityConfig<never>,
   expense: expense as EntityConfig<never>,
@@ -399,6 +432,7 @@ export const ENTITY_REGISTRY: Record<string, EntityConfig<never>> = {
   investment_account: investment as EntityConfig<never>,
   tax_strategy: taxStrategy as EntityConfig<never>,
   scenario: scenario as EntityConfig<never>,
+  observation: observation as EntityConfig<never>,
 };
 
 /** Entity types managed through the generic Data Studio CRUD UI. */
@@ -410,6 +444,7 @@ export const DATA_STUDIO_MODULES: EntityType[] = [
   "investment_account",
   "tax_strategy",
   "scenario",
+  "observation",
 ];
 
 export function getEntityConfig(type: EntityType): EntityConfig<never> {

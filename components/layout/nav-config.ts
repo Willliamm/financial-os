@@ -2,6 +2,7 @@ import {
   Banknote,
   Building2,
   CreditCard,
+  History,
   LayoutDashboard,
   LineChart,
   Database,
@@ -33,6 +34,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
       { label: "Data Studio", href: "/data-studio", icon: Database },
+      { label: "Marks", href: "/observations", icon: History },
     ],
   },
   {

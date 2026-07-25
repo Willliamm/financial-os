@@ -6,6 +6,17 @@
   "investmentAccount": { "singular": "Conta de investimento", "plural": "Investimentos" },
   "taxStrategy": { "singular": "Estratégia fiscal", "plural": "Estratégias fiscais" },
   "scenario": { "singular": "Cenário", "plural": "Cenários" },
+  "observation": { "singular": "Marcação", "plural": "Marcações" },
+  "observationSubjectType": {
+    "investment_account": "Conta de investimento",
+    "property": "Imóvel",
+    "loan": "Financiamento"
+  },
+  "observationSource": {
+    "manual": "Manual",
+    "quote": "Cotação",
+    "import": "Importação"
+  },
   "incomeType": {
     "w2": "Salário (W-2)",
     "llc": "PJ / Autônomo",
