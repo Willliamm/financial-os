@@ -216,6 +216,48 @@ export interface ProjectionSnapshot extends BaseEntity {
   investableCashflowCents: number;
 }
 
+/** What an observation can be a mark of. */
+export type ObservationSubjectType =
+  | "investment_account"
+  | "property"
+  | "loan";
+
+export type ObservationSource = "manual" | "quote" | "import";
+
+/**
+ * A datestamped value mark for an asset or liability. Observations are additive
+ * history: they never replace an entity's current-value field, they record what
+ * that value was on a given calendar day.
+ */
+export interface Observation extends BaseEntity {
+  householdId: string;
+  subjectType: ObservationSubjectType;
+  subjectId: string;
+  /** Calendar day of the mark, "YYYY-MM-DD". Not a timestamp. */
+  observedAt: string;
+  /**
+   * The value as reported, normally positive. A loan balance is stored positive;
+   * the history engine subtracts it. Negative is allowed so a margin account can
+   * be marked honestly.
+   */
+  valueCents: number;
+  source: ObservationSource;
+  note: string;
+}
+
+/**
+ * Whether a subject reduces net worth. Lives in the domain (not in features/)
+ * because the pure history engine needs it and domain must not import features.
+ */
+export const OBSERVATION_SUBJECT_IS_LIABILITY: Record<
+  ObservationSubjectType,
+  boolean
+> = {
+  investment_account: false,
+  property: false,
+  loan: true,
+};
+
 /** Discriminated union of all entities, keyed by entity type, for generic code. */
 export type AnyEntity =
   | Household
@@ -229,4 +271,5 @@ export type AnyEntity =
   | TaxAssumption
   | Scenario
   | ScenarioAssumption
-  | ProjectionSnapshot;
+  | ProjectionSnapshot
+  | Observation;

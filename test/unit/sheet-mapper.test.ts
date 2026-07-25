@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { IncomeSource, Property } from "@/domain/entities";
+import type { IncomeSource, Observation, Property } from "@/domain/entities";
 import { headersFor } from "@/infrastructure/sync/sheet-schema";
 import {
   entityToRow,
@@ -109,6 +109,40 @@ describe("sheet-mapper round-trip", () => {
     const badRow = headers.map(() => "");
     const parsed = rowToEntity("property", headers, badRow);
     expect(parsed).toBeNull();
+  });
+
+  it("round-trips an Observation through a sheet row", () => {
+    const observation: Observation = {
+      id: "obs-1",
+      version: 0,
+      createdAt: TS,
+      updatedAt: TS,
+      deletedAt: null,
+      createdBy: "tester@x",
+      updatedBy: "tester@x",
+      householdId: "h1",
+      subjectType: "investment_account",
+      subjectId: "acct-1",
+      observedAt: "2026-06-30",
+      valueCents: 9_600_000,
+      source: "manual",
+      note: "Statement, mid-year",
+    };
+
+    const row = entityToRow("observation", observation);
+    const parsed = rowToEntity(
+      "observation",
+      headersFor("observation"),
+      row,
+    ) as Observation | null;
+
+    expect(parsed).not.toBeNull();
+    expect(parsed?.subjectType).toBe("investment_account");
+    expect(parsed?.subjectId).toBe("acct-1");
+    expect(parsed?.observedAt).toBe("2026-06-30");
+    expect(parsed?.valueCents).toBe(9_600_000);
+    expect(parsed?.source).toBe("manual");
+    expect(parsed?.note).toBe("Statement, mid-year");
   });
 });
 

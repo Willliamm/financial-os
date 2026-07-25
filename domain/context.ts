@@ -4,6 +4,7 @@ import type {
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Observation,
   Person,
   Property,
   Scenario,
@@ -29,6 +30,7 @@ export interface FinancialContext {
   taxAssumptions: TaxAssumption[];
   scenarios: Scenario[];
   scenarioAssumptions: ScenarioAssumption[];
+  observations: Observation[];
 }
 
 export function emptyContext(): FinancialContext {
@@ -44,6 +46,7 @@ export function emptyContext(): FinancialContext {
     taxAssumptions: [],
     scenarios: [],
     scenarioAssumptions: [],
+    observations: [],
   };
 }
 

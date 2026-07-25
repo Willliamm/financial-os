@@ -16,6 +16,9 @@ const cents = z.number().int();
 const nonNegCents = z.number().int().nonnegative();
 const bps = z.number().int();
 const rateBps = z.number().int().min(0).max(1_000_000);
+/** Calendar date "YYYY-MM-DD". Permissive, like the other date fields, so one
+ *  malformed spreadsheet cell never drops a whole row. */
+const dateOnly = z.string();
 
 const baseEntityShape = {
   id: idString,
@@ -273,6 +276,23 @@ export const projectionSnapshotSchema = z.object({
   investableCashflowCents: cents,
 });
 
+export const observationSubjectTypeSchema = z.enum([
+  "investment_account",
+  "property",
+  "loan",
+]);
+
+export const observationSchema = z.object({
+  ...baseEntityShape,
+  householdId: idString,
+  subjectType: observationSubjectTypeSchema,
+  subjectId: idString,
+  observedAt: dateOnly,
+  valueCents: cents,
+  source: z.enum(["manual", "quote", "import"]).default("manual"),
+  note: z.string().default(""),
+});
+
 import type { EntityType } from "@/domain/entities/base";
 import type { ZodType } from "zod";
 
@@ -290,4 +310,5 @@ export const ENTITY_SCHEMAS: Record<EntityType, ZodType> = {
   scenario: scenarioSchema,
   scenario_assumption: scenarioAssumptionSchema,
   projection_snapshot: projectionSnapshotSchema,
+  observation: observationSchema,
 };

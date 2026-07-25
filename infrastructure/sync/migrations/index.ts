@@ -21,7 +21,17 @@ export interface SchemaMigration {
  * prior versions to migrate from, so this list is empty. New migrations append
  * here with an incrementing version.
  */
-export const MIGRATIONS: SchemaMigration[] = [];
+export const MIGRATIONS: SchemaMigration[] = [
+  {
+    version: 4,
+    name: "add observations",
+    async up() {
+      // No data transform needed. initWorkbook -> ensureSheets creates the new
+      // tab idempotently from SHEET_COLUMNS. This entry exists so the workbook
+      // stamps schema_version 4.
+    },
+  },
+];
 
 async function readSchemaVersion(
   clients: GoogleClients,
