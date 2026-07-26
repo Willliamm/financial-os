@@ -178,6 +178,30 @@ export const SHEET_COLUMNS: Record<EntityType, ColumnDef[]> = {
     col("source", "source", "string"),
     col("note", "note", "string"),
   ]),
+  holding: entityColumns([
+    col("account_id", "accountId", "string"),
+    col("ticker", "ticker", "string"),
+    col("name", "name", "string"),
+    col("asset_class", "assetClass", "string"),
+    col("target_allocation_bps", "targetAllocationBps", "number"),
+  ]),
+  lot: entityColumns([
+    col("holding_id", "holdingId", "string"),
+    col("trade_date", "tradeDate", "string"),
+    col("shares_micro", "sharesMicro", "number"),
+    col("cost_total_cents", "costTotalCents", "number"),
+    col("fees_cents", "feesCents", "number"),
+    col("status", "status", "string"),
+    col("close_date", "closeDate", "string"),
+    col("proceeds_cents", "proceedsCents", "number"),
+    col("note", "note", "string"),
+  ]),
+  price_quote: entityColumns([
+    col("ticker", "ticker", "string"),
+    col("quote_date", "quoteDate", "string"),
+    col("price_cents", "priceCents", "number"),
+    col("source", "source", "string"),
+  ]),
 };
 
 export function headersFor(type: EntityType): string[] {
@@ -214,4 +238,5 @@ export const TECHNICAL_SHEETS: Record<string, string[]> = {
     "status",
   ],
   __schema_migrations: ["id", "version", "applied_at", "applied_by"],
+  __quotes: ["ticker", "price", "name", "currency", "updated_at"],
 };

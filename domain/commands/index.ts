@@ -49,7 +49,16 @@ export type CommandType =
   | "DeleteProjectionSnapshot"
   | "CreateObservation"
   | "UpdateObservation"
-  | "DeleteObservation";
+  | "DeleteObservation"
+  | "CreateHolding"
+  | "UpdateHolding"
+  | "DeleteHolding"
+  | "CreateLot"
+  | "UpdateLot"
+  | "DeleteLot"
+  | "CreatePriceQuote"
+  | "UpdatePriceQuote"
+  | "DeletePriceQuote";
 
 export interface Command<TPayload = unknown> {
   id: string;
@@ -79,6 +88,9 @@ const ENTITY_PASCAL: Record<EntityType, string> = {
   scenario_assumption: "ScenarioAssumption",
   projection_snapshot: "ProjectionSnapshot",
   observation: "Observation",
+  holding: "Holding",
+  lot: "Lot",
+  price_quote: "PriceQuote",
 };
 
 const OP_PREFIX: Record<CommandOperation, string> = {

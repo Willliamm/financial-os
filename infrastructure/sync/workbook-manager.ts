@@ -49,6 +49,9 @@ const DOMAIN_SHEET_NAMES: Record<EntityType, string> = {
   scenario_assumption: "scenario_assumptions",
   projection_snapshot: "projection_snapshots",
   observation: "observations",
+  holding: "holdings",
+  lot: "lots",
+  price_quote: "price_quotes",
 };
 
 /**

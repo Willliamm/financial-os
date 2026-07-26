@@ -258,6 +258,64 @@ export const OBSERVATION_SUBJECT_IS_LIABILITY: Record<
   loan: true,
 };
 
+export type AssetClass =
+  | "us_equity"
+  | "intl_equity"
+  | "bond"
+  | "reit"
+  | "cash"
+  | "crypto"
+  | "other";
+
+/** A position: one instrument held inside one investment account. */
+export interface Holding extends BaseEntity {
+  accountId: string;
+  /** Uppercase symbol, e.g. "VOO". Empty for an unquoted holding. */
+  ticker: string;
+  name: string;
+  assetClass: AssetClass;
+  /** Target weight in the portfolio, in bps. 0 means "no target set". */
+  targetAllocationBps: number;
+}
+
+export type LotStatus = "open" | "closed";
+
+/**
+ * One purchase. Cost is stored as the TOTAL paid, never a per-share price:
+ * $512.4013 x 12 shares cannot round-trip through an integer per-share cent
+ * value, and the total is what the brokerage statement and the IRS both use.
+ */
+export interface Lot extends BaseEntity {
+  holdingId: string;
+  /** Trade date, "YYYY-MM-DD". */
+  tradeDate: string;
+  /** Integer millionths of a share. 1 share = 1_000_000. */
+  sharesMicro: number;
+  /** Total paid for the shares, excluding fees. */
+  costTotalCents: number;
+  feesCents: number;
+  status: LotStatus;
+  closeDate: string | null;
+  /** Gross proceeds when closed; 0 while open. */
+  proceedsCents: number;
+  note: string;
+}
+
+export type QuoteSource = "googlefinance" | "manual";
+
+export interface PriceQuote extends BaseEntity {
+  ticker: string;
+  /** "YYYY-MM-DD". At most one quote per ticker per day. */
+  quoteDate: string;
+  /**
+   * Price per share in integer cents, rounded. Max error is half a cent per
+   * share — about 0.001% on a 10,000-share position, against a feed that is
+   * itself ~20 minutes delayed. Sub-cent precision here would be false.
+   */
+  priceCents: number;
+  source: QuoteSource;
+}
+
 /** Discriminated union of all entities, keyed by entity type, for generic code. */
 export type AnyEntity =
   | Household
@@ -272,4 +330,7 @@ export type AnyEntity =
   | Scenario
   | ScenarioAssumption
   | ProjectionSnapshot
-  | Observation;
+  | Observation
+  | Holding
+  | Lot
+  | PriceQuote;

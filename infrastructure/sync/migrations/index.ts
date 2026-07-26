@@ -32,6 +32,15 @@ export const MIGRATIONS: SchemaMigration[] = [
       // stamps schema_version 4.
     },
   },
+  {
+    version: 5,
+    name: "add holdings, lots, price_quotes",
+    async up() {
+      // No data transform. initWorkbook -> ensureSheets creates the new tabs
+      // (and the __quotes scratch tab) idempotently from SHEET_COLUMNS and
+      // TECHNICAL_SHEETS. This entry exists so the workbook stamps version 5.
+    },
+  },
 ];
 
 async function readSchemaVersion(

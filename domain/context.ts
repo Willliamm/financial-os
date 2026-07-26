@@ -1,11 +1,14 @@
 import type {
   Expense,
+  Holding,
   Household,
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Lot,
   Observation,
   Person,
+  PriceQuote,
   Property,
   Scenario,
   ScenarioAssumption,
@@ -31,6 +34,9 @@ export interface FinancialContext {
   scenarios: Scenario[];
   scenarioAssumptions: ScenarioAssumption[];
   observations: Observation[];
+  holdings: Holding[];
+  lots: Lot[];
+  priceQuotes: PriceQuote[];
 }
 
 export function emptyContext(): FinancialContext {
@@ -47,6 +53,9 @@ export function emptyContext(): FinancialContext {
     scenarios: [],
     scenarioAssumptions: [],
     observations: [],
+    holdings: [],
+    lots: [],
+    priceQuotes: [],
   };
 }
 

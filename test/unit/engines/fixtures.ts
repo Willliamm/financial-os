@@ -6,11 +6,14 @@
 
 import type {
   Expense,
+  Holding,
   Household,
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Lot,
   Observation,
+  PriceQuote,
   Property,
   Scenario,
   ScenarioAssumption,
@@ -229,6 +232,48 @@ export function makeObservation(over: Partial<Observation> = {}): Observation {
     valueCents: 1_000_000,
     source: "manual",
     note: "",
+    ...over,
+  };
+}
+
+export function makeHolding(over: Partial<Holding> = {}): Holding {
+  return {
+    id: nextId("hold"),
+    ...base(),
+    accountId: "acct-1",
+    ticker: "VOO",
+    name: "Vanguard S&P 500 ETF",
+    assetClass: "us_equity",
+    targetAllocationBps: 0,
+    ...over,
+  };
+}
+
+export function makeLot(over: Partial<Lot> = {}): Lot {
+  return {
+    id: nextId("lot"),
+    ...base(),
+    holdingId: "hold-1",
+    tradeDate: "2026-01-15",
+    sharesMicro: 10_000_000,
+    costTotalCents: 500_000,
+    feesCents: 0,
+    status: "open",
+    closeDate: null,
+    proceedsCents: 0,
+    note: "",
+    ...over,
+  };
+}
+
+export function makeQuote(over: Partial<PriceQuote> = {}): PriceQuote {
+  return {
+    id: nextId("q"),
+    ...base(),
+    ticker: "VOO",
+    quoteDate: "2026-07-26",
+    priceCents: 67_914,
+    source: "googlefinance",
     ...over,
   };
 }
