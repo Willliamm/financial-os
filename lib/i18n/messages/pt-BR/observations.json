@@ -1,0 +1,38 @@
+{
+  "title": "Marcações",
+  "description": "Valores com data para suas contas, imóveis e financiamentos. As marcações constroem seu histórico de patrimônio.",
+  "markValue": "Marcar valor",
+  "markBalance": "Marcar saldo",
+  "dialog": {
+    "title": "Marcar valor",
+    "subtitle": "Registre quanto {{subject}} valia em um dia específico.",
+    "date": "Na data de",
+    "value": "Valor",
+    "note": "Observação",
+    "notePlaceholder": "De onde veio esse número",
+    "cancel": "Cancelar",
+    "save": "Salvar marcação",
+    "saving": "Salvando…",
+    "saveError": "Não foi possível salvar a marcação"
+  },
+  "freshness": {
+    "fresh": "Atual",
+    "aging": "Envelhecendo",
+    "stale": "Desatualizado",
+    "never": "Nunca marcado",
+    "bannerTitle": "{{count}} item precisa de marcação nova",
+    "bannerTitle_other": "{{count}} itens precisam de marcação nova",
+    "bannerBody": "Sua projeção vale o que valem os dados. Mais antigos: {{names}}.",
+    "confidence": "Confiança dos dados",
+    "lastMarked": "Marcado em {{date}}",
+    "ageDays": "há {{count}} dia",
+    "ageDays_other": "há {{count}} dias"
+  },
+  "history": {
+    "title": "Histórico de patrimônio",
+    "empty": "Nenhuma marcação ainda. Registre um valor em uma conta, imóvel ou financiamento para começar o histórico.",
+    "coverage": "{{observed}} de {{total}} itens marcados",
+    "netWorth": "Patrimônio líquido"
+  },
+  "unknownSubject": "Item desconhecido"
+}

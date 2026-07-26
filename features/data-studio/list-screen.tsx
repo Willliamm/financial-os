@@ -4,7 +4,7 @@ import type { BaseEntity, EntityType } from "@/domain/entities/base";
 import type { FinancialContext } from "@/domain/context";
 import { PageHeader } from "@/components/shared/page-header";
 import { useFinancialContext } from "@/lib/queries/financial-data";
-import { EntityList } from "./entity-list";
+import { EntityList, type RowAction } from "./entity-list";
 import { getEntityConfig } from "./registry";
 
 /** Pick the entity array for a given type out of the loaded context. */
@@ -29,6 +29,8 @@ export function selectEntities(
       return context.taxAssumptions;
     case "scenario":
       return context.scenarios;
+    case "observation":
+      return context.observations;
     case "scenario_assumption":
       return context.scenarioAssumptions;
     case "person":
@@ -48,6 +50,8 @@ interface ListScreenProps {
   header?: React.ReactNode;
   children?: React.ReactNode;
   onRowClick?: (entity: BaseEntity) => void;
+  /** Extra per-row menu items, e.g. "Mark value". */
+  rowActions?: RowAction<BaseEntity>[];
 }
 
 export function ListScreen({
@@ -58,6 +62,7 @@ export function ListScreen({
   header,
   children,
   onRowClick,
+  rowActions,
 }: ListScreenProps) {
   const { data: context } = useFinancialContext();
   getEntityConfig(type); // assert config exists
@@ -74,6 +79,7 @@ export function ListScreen({
         context={context}
         injectDefaults={injectDefaults}
         onRowClick={onRowClick}
+        rowActions={rowActions}
       />
     </div>
   );

@@ -13,6 +13,7 @@ import {
 } from "@/domain/engines";
 import { PageHeader } from "@/components/shared/page-header";
 import { KpiCard } from "@/components/shared/kpi-card";
+import { MarkValueDialog } from "@/components/shared/mark-value-dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -49,6 +50,7 @@ function PropertyDetail() {
   const { data: context } = useFinancialContext();
   const [editOpen, setEditOpen] = useState(false);
   const [editLoanOpen, setEditLoanOpen] = useState(false);
+  const [markOpen, setMarkOpen] = useState(false);
 
   const property = context.properties.find((p) => p.id === id) ?? null;
   const loan = property ? loanForProperty(context, property.id) : null;
@@ -67,6 +69,7 @@ function PropertyDetail() {
   }
 
   return (
+    <>
     <div className="space-y-6">
       <BackLink />
       <PageHeader
@@ -78,6 +81,9 @@ function PropertyDetail() {
         <Badge variant="secondary">
           {t(`properties:status.${property.status}`)}
         </Badge>
+        <Button variant="outline" size="sm" onClick={() => setMarkOpen(true)}>
+          {t("observations:markValue")}
+        </Button>
         <Button variant="outline" onClick={() => setEditOpen(true)}>
           <Pencil className="size-4" /> {t("common:actions.edit")}
         </Button>
@@ -181,6 +187,18 @@ function PropertyDetail() {
         injectDefaults={{ propertyId: property.id }}
       />
     </div>
+    {property ? (
+      <MarkValueDialog
+        open={markOpen}
+        onOpenChange={setMarkOpen}
+        householdId={property.householdId}
+        subjectType="property"
+        subjectId={property.id}
+        subjectLabel={property.name}
+        currentValueCents={property.currentValueCents}
+      />
+    ) : null}
+    </>
   );
 }
 

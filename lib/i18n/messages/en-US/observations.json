@@ -1,0 +1,38 @@
+{
+  "title": "Marks",
+  "description": "Datestamped values for your accounts, properties and loans. Marks build your net-worth history.",
+  "markValue": "Mark value",
+  "markBalance": "Mark balance",
+  "dialog": {
+    "title": "Mark value",
+    "subtitle": "Record what {{subject}} was worth on a given day.",
+    "date": "As of",
+    "value": "Value",
+    "note": "Note",
+    "notePlaceholder": "Where this number came from",
+    "cancel": "Cancel",
+    "save": "Save mark",
+    "saving": "Saving…",
+    "saveError": "Couldn't save the mark"
+  },
+  "freshness": {
+    "fresh": "Fresh",
+    "aging": "Aging",
+    "stale": "Stale",
+    "never": "Never marked",
+    "bannerTitle": "{{count}} item needs a fresh mark",
+    "bannerTitle_other": "{{count}} items need a fresh mark",
+    "bannerBody": "Your projection is only as good as its inputs. Oldest: {{names}}.",
+    "confidence": "Data confidence",
+    "lastMarked": "Last marked {{date}}",
+    "ageDays": "{{count}} day ago",
+    "ageDays_other": "{{count}} days ago"
+  },
+  "history": {
+    "title": "Net worth history",
+    "empty": "No marks yet. Record a value on an account, property or loan to start the history.",
+    "coverage": "{{observed}} of {{total}} items marked",
+    "netWorth": "Net worth"
+  },
+  "unknownSubject": "Unknown item"
+}

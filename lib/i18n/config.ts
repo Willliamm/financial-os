@@ -21,6 +21,7 @@ import enSync from "./messages/en-US/sync.json";
 import enSettings from "./messages/en-US/settings.json";
 import enForms from "./messages/en-US/forms.json";
 import enEntities from "./messages/en-US/entities.json";
+import enObservations from "./messages/en-US/observations.json";
 
 import ptCommon from "./messages/pt-BR/common.json";
 import ptNav from "./messages/pt-BR/nav.json";
@@ -40,6 +41,7 @@ import ptSync from "./messages/pt-BR/sync.json";
 import ptSettings from "./messages/pt-BR/settings.json";
 import ptForms from "./messages/pt-BR/forms.json";
 import ptEntities from "./messages/pt-BR/entities.json";
+import ptObservations from "./messages/pt-BR/observations.json";
 
 export const SUPPORTED_LOCALES = ["en-US", "pt-BR"] as const;
 export type AppLocale = (typeof SUPPORTED_LOCALES)[number];
@@ -64,6 +66,7 @@ export const NAMESPACES = [
   "settings",
   "forms",
   "entities",
+  "observations",
 ] as const;
 
 const resources = {
@@ -86,6 +89,7 @@ const resources = {
     settings: enSettings,
     forms: enForms,
     entities: enEntities,
+    observations: enObservations,
   },
   "pt-BR": {
     common: ptCommon,
@@ -106,6 +110,7 @@ const resources = {
     settings: ptSettings,
     forms: ptForms,
     entities: ptEntities,
+    observations: ptObservations,
   },
 } as const;
 

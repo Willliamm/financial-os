@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import type { FinancialContext } from "@/domain/context";
 import {
+  assessFreshness,
+  buildNetWorthHistory,
   estimateEffectiveTaxRateBps,
   monthlyActiveIncomeCents,
   monthlyExpensesCents,
@@ -37,6 +39,7 @@ import {
 import { PageHeader } from "@/components/shared/page-header";
 import { KpiCard } from "@/components/shared/kpi-card";
 import { EmptyState } from "@/components/shared/empty-state";
+import { FreshnessBanner } from "@/components/shared/freshness-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -49,9 +52,10 @@ import {
 } from "@/components/charts/chart-helpers";
 import { formatCents } from "@/infrastructure/money/money";
 import { formatBps } from "@/domain/value-objects/basis-points";
-import { currentYear } from "@/infrastructure/dates/date-utils";
+import { currentYear, todayIsoDate } from "@/infrastructure/dates/date-utils";
 import { useFinancialContext } from "@/lib/queries/financial-data";
 import { DEFAULT_PROJECTION } from "@/features/projections/assumptions";
+import { NetWorthHistoryChart } from "@/components/charts/net-worth-history-chart";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -60,6 +64,14 @@ export default function DashboardPage() {
 
   const m = useMemo(() => computeMetrics(context, t), [context, t]);
   const insights = useInsights(context);
+  const history = useMemo(
+    () => buildNetWorthHistory(context, { to: todayIsoDate() }),
+    [context],
+  );
+  const freshness = useMemo(
+    () => assessFreshness(context, todayIsoDate()),
+    [context],
+  );
 
   const isEmpty =
     context.properties.length === 0 &&
@@ -90,6 +102,8 @@ export default function DashboardPage() {
         title={t("dashboard:header.title")}
         description={t("dashboard:header.descriptionYear", { year: currentYear() })}
       />
+
+      <FreshnessBanner rows={freshness} />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
@@ -175,6 +189,22 @@ export default function DashboardPage() {
                 </p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>{t("observations:history.title")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {history.length > 0 ? (
+              <NetWorthHistoryChart points={history} />
+            ) : (
+              <EmptyState
+                title={t("observations:history.title")}
+                description={t("observations:history.empty")}
+              />
+            )}
           </CardContent>
         </Card>
       </div>

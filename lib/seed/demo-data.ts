@@ -4,6 +4,7 @@ import type {
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Observation,
   Person,
   Property,
   Scenario,
@@ -16,7 +17,7 @@ import { repositories } from "@/infrastructure/db/repositories";
 import { metadataRepo, META_KEYS } from "@/infrastructure/db/metadata-repo";
 import { dollarsToCents } from "@/infrastructure/money/money";
 import { percentToBps } from "@/domain/value-objects/basis-points";
-import { currentYear } from "@/infrastructure/dates/date-utils";
+import { addMonthsIso, currentYear, todayIsoDate } from "@/infrastructure/dates/date-utils";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("seed");
@@ -140,7 +141,7 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
     notes: "First rental — house-hacked the first year.",
   });
 
-  await createEntity<Property>("property", {
+  const { entity: lakeside } = await createEntity<Property>("property", {
     householdId: household.id,
     name: "Lakeside Single-Family (Prospect)",
     propertyType: "sfh",
@@ -170,7 +171,7 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
   });
 
   // Loan on the townhouse
-  await createEntity<Loan>("loan", {
+  const { entity: townhouseLoan } = await createEntity<Loan>("loan", {
     propertyId: townhouse.id,
     lender: "First Coast Mortgage",
     loanType: "conventional",
@@ -191,11 +192,79 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
     { name: "HSA", accountType: "hsa", institution: "Lively", currentBalanceCents: $(21000), expectedReturnBps: pct(6), contributionMonthlyCents: $(350), taxTreatment: "tax_free" },
     { name: "Cash Reserve", accountType: "cash", institution: "Ally", currentBalanceCents: $(45000), expectedReturnBps: pct(4), contributionMonthlyCents: $(500), taxTreatment: "taxable" },
   ];
+  const accountEntities: InvestmentAccount[] = [];
   for (const a of accounts) {
-    await createEntity<InvestmentAccount>("investment_account", {
-      householdId: household.id,
-      ...a,
-    });
+    const { entity } = await createEntity<InvestmentAccount>(
+      "investment_account",
+      { householdId: household.id, ...a },
+    );
+    accountEntities.push(entity);
+  }
+
+  // Observations: datestamped value marks for the net-worth history chart and
+  // the freshness banner. Dated off the clock (not hardcoded) so the demo
+  // doesn't visibly "age" the moment the calendar turns — the freshness
+  // thresholds (45/180 days) would otherwise mark everything stale over time.
+  const today = todayIsoDate();
+
+  /**
+   * EVERY tracked subject gets the same six monthly marks, ending today at its
+   * current value. Giving only one subject a history and the rest a single
+   * mark dated today produces a flat line that jumps vertically in the final
+   * month — the chart then reads as "net worth 10x'd overnight" when all it
+   * really shows is coverage arriving late.
+   *
+   * Each series walks back from today's value by a per-month factor. Assets
+   * ramp up; a loan balance ramps DOWN toward today as it amortises.
+   */
+  const MONTHS = 6;
+  const ASSET_PATH = [0.915, 0.936, 0.929, 0.962, 0.981, 1]; // oldest → today
+  const LOAN_PATH = [1.045, 1.036, 1.027, 1.018, 1.009, 1]; // balance shrinks
+
+  const series: Array<{
+    subjectType: Observation["subjectType"];
+    subjectId: string;
+    currentCents: number;
+    path: number[];
+  }> = [
+    ...accountEntities.map((a) => ({
+      subjectType: "investment_account" as const,
+      subjectId: a.id,
+      currentCents: a.currentBalanceCents,
+      path: ASSET_PATH,
+    })),
+    {
+      subjectType: "property" as const,
+      subjectId: townhouse.id,
+      currentCents: townhouse.currentValueCents,
+      path: ASSET_PATH,
+    },
+    {
+      subjectType: "property" as const,
+      subjectId: lakeside.id,
+      currentCents: lakeside.currentValueCents,
+      path: ASSET_PATH,
+    },
+    {
+      subjectType: "loan" as const,
+      subjectId: townhouseLoan.id,
+      currentCents: townhouseLoan.currentBalanceCents,
+      path: LOAN_PATH,
+    },
+  ];
+
+  for (const s of series) {
+    for (let i = 0; i < MONTHS; i++) {
+      await createEntity<Observation>("observation", {
+        householdId: household.id,
+        subjectType: s.subjectType,
+        subjectId: s.subjectId,
+        observedAt: addMonthsIso(today, -(MONTHS - 1 - i)),
+        valueCents: Math.round(s.currentCents * s.path[i]),
+        source: "manual",
+        note: "",
+      });
+    }
   }
 
   // Tax assumption + strategies

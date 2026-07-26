@@ -10,7 +10,8 @@
     "loan": { "description": "Hipotecas e outras dívidas com amortização." },
     "investmentAccount": { "description": "Contas de corretora, aposentadoria, dinheiro e cripto." },
     "taxStrategy": { "description": "Deduções e estratégias para economizar impostos." },
-    "scenario": { "description": "Planos de longo prazo hipotéticos e comparações." }
+    "scenario": { "description": "Planos de longo prazo hipotéticos e comparações." },
+    "observation": { "description": "Valores com data que constroem seu histórico de patrimônio." }
   },
   "list": {
     "searchPlaceholder": "Buscar {{items}}…",

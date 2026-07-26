@@ -169,6 +169,15 @@ export const SHEET_COLUMNS: Record<EntityType, ColumnDef[]> = {
     col("estimated_tax_cents", "estimatedTaxCents", "number"),
     col("investable_cashflow_cents", "investableCashflowCents", "number"),
   ]),
+  observation: entityColumns([
+    col("household_id", "householdId", "string"),
+    col("subject_type", "subjectType", "string"),
+    col("subject_id", "subjectId", "string"),
+    col("observed_at", "observedAt", "string"),
+    col("value_cents", "valueCents", "number"),
+    col("source", "source", "string"),
+    col("note", "note", "string"),
+  ]),
 };
 
 export function headersFor(type: EntityType): string[] {

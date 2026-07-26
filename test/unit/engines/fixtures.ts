@@ -10,6 +10,7 @@ import type {
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Observation,
   Property,
   Scenario,
   ScenarioAssumption,
@@ -213,6 +214,21 @@ export function makeScenarioAssumption(
     key: "investment_return_bps",
     value: "700",
     valueType: "bps",
+    ...over,
+  };
+}
+
+export function makeObservation(over: Partial<Observation> = {}): Observation {
+  return {
+    id: nextId("obs"),
+    ...base(),
+    householdId: "hh-1",
+    subjectType: "investment_account",
+    subjectId: "acct-1",
+    observedAt: "2026-01-31",
+    valueCents: 1_000_000,
+    source: "manual",
+    note: "",
     ...over,
   };
 }

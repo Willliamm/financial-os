@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader2, MoreHorizontal, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type { BaseEntity, EntityType } from "@/domain/entities/base";
 import type { FinancialContext } from "@/domain/context";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,15 @@ import { getEntityConfig } from "./registry";
 import { EntityFormDrawer } from "./entity-form-drawer";
 import { useEntityActions } from "./use-entity-actions";
 
+/** An extra per-row menu item a screen can inject, e.g. "Mark value". */
+export interface RowAction<T> {
+  key: string;
+  /** Already-translated display text. */
+  label: string;
+  icon?: LucideIcon;
+  onSelect: (entity: T) => void;
+}
+
 interface EntityListProps<T extends BaseEntity> {
   type: EntityType;
   entities: T[];
@@ -45,6 +55,8 @@ interface EntityListProps<T extends BaseEntity> {
   onRowClick?: (entity: T) => void;
   addLabel?: string;
   searchable?: boolean;
+  /** Extra menu items shown above Edit in each row's actions menu. */
+  rowActions?: RowAction<T>[];
 }
 
 export function EntityList<T extends BaseEntity>({
@@ -55,6 +67,7 @@ export function EntityList<T extends BaseEntity>({
   onRowClick,
   addLabel,
   searchable = true,
+  rowActions,
 }: EntityListProps<T>) {
   const config = getEntityConfig(type) as unknown as EntityConfig<T>;
   const { t } = useTranslation();
@@ -69,9 +82,11 @@ export function EntityList<T extends BaseEntity>({
     if (!query.trim()) return entities;
     const q = query.toLowerCase();
     return entities.filter((e) =>
-      (config.searchText?.(e) ?? config.primary(e)).toLowerCase().includes(q),
+      (config.searchText?.(e, context) ?? config.primary(e, context))
+        .toLowerCase()
+        .includes(q),
     );
-  }, [entities, query, config]);
+  }, [entities, query, config, context]);
 
   function openCreate() {
     setEditing(null);
@@ -158,10 +173,12 @@ export function EntityList<T extends BaseEntity>({
                   }}
                 >
                   <TableCell>
-                    <div className="font-medium">{config.primary(entity)}</div>
+                    <div className="font-medium">
+                      {config.primary(entity, context)}
+                    </div>
                     {config.secondary ? (
                       <div className="text-xs text-muted-foreground">
-                        {config.secondary(entity)}
+                        {config.secondary(entity, context)}
                       </div>
                     ) : null}
                   </TableCell>
@@ -173,7 +190,7 @@ export function EntityList<T extends BaseEntity>({
                         c.align === "right" && "text-right",
                       )}
                     >
-                      {c.render(entity)}
+                      {c.render(entity, context)}
                     </TableCell>
                   ))}
                   <TableCell
@@ -186,12 +203,24 @@ export function EntityList<T extends BaseEntity>({
                           variant="ghost"
                           size="icon"
                           className="size-8 max-sm:size-10"
-                          aria-label={t("dataStudio:list.rowActions", { name: config.primary(entity) })}
+                          aria-label={t("dataStudio:list.rowActions", { name: config.primary(entity, context) })}
                         >
                           <MoreHorizontal className="size-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        {rowActions?.map((action) => {
+                          const ActionIcon = action.icon;
+                          return (
+                            <DropdownMenuItem
+                              key={action.key}
+                              onClick={() => action.onSelect(entity)}
+                            >
+                              {ActionIcon ? <ActionIcon className="size-4" /> : null}
+                              {action.label}
+                            </DropdownMenuItem>
+                          );
+                        })}
                         <DropdownMenuItem onClick={() => openEdit(entity)}>
                           <Pencil className="size-4" />
                           {t("common:actions.edit")}
@@ -228,7 +257,7 @@ export function EntityList<T extends BaseEntity>({
             <DialogTitle>{t("dataStudio:list.deleteTitle", { item: singularLower })}</DialogTitle>
             <DialogDescription>
               {t("dataStudio:list.deleteDescription", {
-                name: toDelete ? config.primary(toDelete) : t("common:none"),
+                name: toDelete ? config.primary(toDelete, context) : t("common:none"),
               })}
             </DialogDescription>
           </DialogHeader>

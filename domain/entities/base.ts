@@ -11,7 +11,8 @@ export type EntityType =
   | "tax_assumption"
   | "scenario"
   | "scenario_assumption"
-  | "projection_snapshot";
+  | "projection_snapshot"
+  | "observation";
 
 /** Fields every persisted domain entity shares. */
 export interface BaseEntity {
@@ -38,6 +39,7 @@ export const ENTITY_SHEET: Record<EntityType, string> = {
   scenario: "scenarios",
   scenario_assumption: "scenario_assumptions",
   projection_snapshot: "projection_snapshots",
+  observation: "observations",
 };
 
 /** Lock resource type for an entity (used in __locks resource_key). */
@@ -54,4 +56,5 @@ export const ENTITY_LOCK_TYPE: Record<EntityType, string> = {
   scenario: "scenario",
   scenario_assumption: "scenario_assumption",
   projection_snapshot: "projection_snapshot",
+  observation: "observation",
 };

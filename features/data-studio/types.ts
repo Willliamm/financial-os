@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { EntityType } from "@/domain/entities/base";
+import type { FinancialContext } from "@/domain/context";
 
 export type FieldType =
   | "text"
@@ -39,7 +40,11 @@ export interface FieldDef {
 export interface ListColumn<T> {
   label: string;
   align?: "left" | "right";
-  render: (entity: T) => React.ReactNode;
+  /**
+   * `context` lets a column resolve a reference to another entity — e.g. an
+   * observation naming the account it marks. Most columns ignore it.
+   */
+  render: (entity: T, context: FinancialContext) => React.ReactNode;
 }
 
 export interface EntityConfig<T> {
@@ -59,11 +64,14 @@ export interface EntityConfig<T> {
   sections?: string[];
   /** Columns shown in the list/table. */
   columns: ListColumn<T>[];
-  /** Title and subtitle for list rows / cards. */
-  primary: (entity: T) => string;
-  secondary?: (entity: T) => string;
+  /**
+   * Title and subtitle for list rows / cards. `context` is supplied so a row
+   * can name a referenced entity rather than showing a raw id or a bare type.
+   */
+  primary: (entity: T, context: FinancialContext) => string;
+  secondary?: (entity: T, context: FinancialContext) => string;
   /** Free-text used for client-side search. */
-  searchText?: (entity: T) => string;
+  searchText?: (entity: T, context: FinancialContext) => string;
   /** Fields injected on create that are not part of the form (e.g. householdId). */
   inject?: (ctx: RegistryContext) => Record<string, unknown>;
 }

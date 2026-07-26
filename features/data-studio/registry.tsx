@@ -2,6 +2,7 @@ import {
   Banknote,
   Building2,
   CreditCard,
+  History,
   Landmark,
   PiggyBank,
   Receipt,
@@ -13,11 +14,13 @@ import type {
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Observation,
   Property,
   Scenario,
   TaxStrategy,
 } from "@/domain/entities";
 import type { EntityType } from "@/domain/entities/base";
+import type { FinancialContext } from "@/domain/context";
 import { formatCents } from "@/infrastructure/money/money";
 import { formatBps } from "@/domain/value-objects/basis-points";
 import { formatDate } from "@/infrastructure/dates/date-utils";
@@ -110,6 +113,12 @@ const STRATEGY_STATUS = enumOpts("strategyStatus", [
 ]);
 const RISK_LEVELS = enumOpts("riskLevel", ["low", "medium", "high"]);
 const SCENARIO_STATUS = enumOpts("scenarioStatus", ["draft", "active", "archived"]);
+
+const OBSERVATION_SUBJECT_TYPES = enumOpts("observationSubjectType", [
+  "investment_account",
+  "property",
+  "loan",
+]);
 
 /** Resolve a value to its translated enum label (label holds an i18n key). */
 function labelOf(options: SelectOption[], value: string): string {
@@ -391,6 +400,63 @@ const scenario = def<Scenario>({
   searchText: (e) => `${e.name} ${e.description}`,
 });
 
+/**
+ * Display name of whatever an observation marks. Falls back to a placeholder
+ * when the subject was deleted or the id was typed by hand and matches nothing —
+ * an orphan mark should read as orphaned, not as a blank row.
+ */
+function observationSubjectName(
+  e: Observation,
+  ctx: FinancialContext,
+): string {
+  const alive = <T extends { deletedAt?: string | null }>(x: T) => !x.deletedAt;
+  if (e.subjectType === "investment_account") {
+    return (
+      ctx.investmentAccounts.filter(alive).find((a) => a.id === e.subjectId)
+        ?.name || i18n.t("observations:unknownSubject")
+    );
+  }
+  if (e.subjectType === "property") {
+    return (
+      ctx.properties.filter(alive).find((p) => p.id === e.subjectId)?.name ||
+      i18n.t("observations:unknownSubject")
+    );
+  }
+  return (
+    ctx.loans.filter(alive).find((l) => l.id === e.subjectId)?.lender ||
+    i18n.t("observations:unknownSubject")
+  );
+}
+
+const observation = def<Observation>({
+  type: "observation",
+  singular: "entities:observation.singular",
+  plural: "entities:observation.plural",
+  icon: History,
+  href: "/observations",
+  description: "dataStudio:modules.observation.description",
+  inject: (ctx) => ({ householdId: ctx.householdId }),
+  fields: [
+    { name: "subjectType", label: "forms:observation.subjectType.label", type: "select", options: OBSERVATION_SUBJECT_TYPES, required: true },
+    { name: "subjectId", label: "forms:observation.subjectId.label", type: "text", required: true, help: "forms:observation.subjectId.help" },
+    { name: "observedAt", label: "forms:observation.observedAt.label", type: "date", required: true },
+    { name: "valueCents", label: "forms:observation.valueCents.label", type: "money" },
+    { name: "note", label: "forms:observation.note.label", type: "textarea", colSpan: 2 },
+  ],
+  columns: [
+    { label: "forms:columns.subject", render: (e) => <Badge variant="secondary">{labelOf(OBSERVATION_SUBJECT_TYPES, e.subjectType)}</Badge> },
+    { label: "forms:columns.asOf", render: (e) => formatDate(e.observedAt) },
+    { label: "forms:columns.value", align: "right", render: (e) => formatCents(e.valueCents) },
+  ],
+  // A mark is only meaningful next to the thing it marks, so the row leads
+  // with the subject's name rather than a date every row repeats.
+  primary: (e, ctx) => observationSubjectName(e, ctx),
+  secondary: (e) =>
+    `${labelOf(OBSERVATION_SUBJECT_TYPES, e.subjectType)} · ${formatDate(e.observedAt)} · ${formatCents(e.valueCents)}`,
+  searchText: (e, ctx) =>
+    `${observationSubjectName(e, ctx)} ${e.subjectType} ${e.subjectId} ${e.observedAt} ${e.note}`,
+});
+
 export const ENTITY_REGISTRY: Record<string, EntityConfig<never>> = {
   income_source: income as EntityConfig<never>,
   expense: expense as EntityConfig<never>,
@@ -399,6 +465,7 @@ export const ENTITY_REGISTRY: Record<string, EntityConfig<never>> = {
   investment_account: investment as EntityConfig<never>,
   tax_strategy: taxStrategy as EntityConfig<never>,
   scenario: scenario as EntityConfig<never>,
+  observation: observation as EntityConfig<never>,
 };
 
 /** Entity types managed through the generic Data Studio CRUD UI. */
@@ -410,6 +477,7 @@ export const DATA_STUDIO_MODULES: EntityType[] = [
   "investment_account",
   "tax_strategy",
   "scenario",
+  "observation",
 ];
 
 export function getEntityConfig(type: EntityType): EntityConfig<never> {

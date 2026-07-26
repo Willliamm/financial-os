@@ -6,6 +6,17 @@
   "investmentAccount": { "singular": "Investment account", "plural": "Investments" },
   "taxStrategy": { "singular": "Tax strategy", "plural": "Tax strategies" },
   "scenario": { "singular": "Scenario", "plural": "Scenarios" },
+  "observation": { "singular": "Mark", "plural": "Marks" },
+  "observationSubjectType": {
+    "investment_account": "Investment account",
+    "property": "Property",
+    "loan": "Loan"
+  },
+  "observationSource": {
+    "manual": "Manual",
+    "quote": "Quote",
+    "import": "Import"
+  },
   "incomeType": {
     "w2": "W-2 Job",
     "llc": "LLC / Self-employed",

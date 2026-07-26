@@ -33,7 +33,10 @@
     "return": "Retorno",
     "savings": "Economia",
     "risk": "Risco",
-    "horizon": "Horizonte"
+    "horizon": "Horizonte",
+    "subject": "Item",
+    "asOf": "Data",
+    "lastMarked": "Última marcação"
   },
   "incomeSource": {
     "name": { "label": "Nome" },
@@ -118,5 +121,15 @@
     "startYear": { "label": "Ano inicial" },
     "endYear": { "label": "Ano final" },
     "status": { "label": "Status" }
+  },
+  "observation": {
+    "subjectType": { "label": "Tipo de item" },
+    "subjectId": {
+      "label": "ID do item",
+      "help": "Prefira o botão Marcar valor na conta, imóvel ou financiamento."
+    },
+    "observedAt": { "label": "Na data de" },
+    "valueCents": { "label": "Valor" },
+    "note": { "label": "Observação" }
   }
 }

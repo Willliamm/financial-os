@@ -1,6 +1,10 @@
 import {
+  addDays,
+  addMonths,
+  differenceInCalendarDays,
   differenceInCalendarMonths,
   differenceInCalendarYears,
+  endOfMonth,
   format,
   parseISO,
 } from "date-fns";
@@ -92,4 +96,54 @@ export function isOlderThanSeconds(value: string | null | undefined, seconds: nu
   const d = parseDate(value ?? null);
   if (!d) return true;
   return nowProvider().getTime() - d.getTime() > seconds * 1000;
+}
+
+/** Calendar-date format used for marks, trades and quotes. */
+const DATE_ONLY = "yyyy-MM-dd";
+
+/** Today as a calendar date string, "YYYY-MM-DD". Honors setNowProvider. */
+export function todayIsoDate(): string {
+  return format(nowProvider(), DATE_ONLY);
+}
+
+/** Add (or subtract) days to a "YYYY-MM-DD" string, same format out. */
+export function addDaysIso(isoDate: string, days: number): string {
+  return format(addDays(parseISO(isoDate), days), DATE_ONLY);
+}
+
+/** Whole calendar days from `from` to `to`. Negative when `to` precedes `from`. */
+export function diffCalendarDays(from: string, to: string): number {
+  return differenceInCalendarDays(parseISO(to), parseISO(from));
+}
+
+/**
+ * Add (or subtract, with a negative count) whole calendar months to a
+ * "YYYY-MM-DD" string. Clamps an overflowing day to the target month's last
+ * day, e.g. `addMonthsIso("2026-03-31", -1)` -> "2026-02-28".
+ */
+export function addMonthsIso(isoDate: string, months: number): string {
+  return format(addMonths(parseISO(isoDate), months), DATE_ONLY);
+}
+
+/**
+ * Ascending sample dates for a monthly series: every month end within
+ * [from, to], plus `to` itself when it is not already a month end.
+ * Returns [] when `from` is after `to`, or when either bound is not a real
+ * calendar date (defensive: `from` can come from untrusted, hand-edited
+ * spreadsheet data via an observation's `observedAt`).
+ */
+export function monthEndsBetween(from: string, to: string): string[] {
+  const fromDate = parseDate(from);
+  const toDate = parseDate(to);
+  if (!fromDate || !toDate) return [];
+  if (from > to) return [];
+  const out: string[] = [];
+  let cursor = endOfMonth(fromDate);
+  while (format(cursor, DATE_ONLY) <= to) {
+    const day = format(cursor, DATE_ONLY);
+    if (day >= from) out.push(day);
+    cursor = endOfMonth(addDays(cursor, 1));
+  }
+  if (out[out.length - 1] !== to) out.push(to);
+  return out;
 }
