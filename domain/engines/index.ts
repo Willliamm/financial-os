@@ -15,3 +15,4 @@ export * from "./analysis/data-quality-checker";
 export * from "./insights/insight-provider";
 export * from "./history/net-worth-history";
 export * from "./history/data-freshness";
+export * from "./portfolio/portfolio-engine";
