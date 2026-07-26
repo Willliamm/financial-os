@@ -846,8 +846,40 @@ Charts follow the existing lazy ECharts pattern in `components/charts/`.
 
 ### 7.1 The spike comes first
 
-Before any production code: verify that a `GOOGLEFINANCE` cell can be written and its
-computed value read back through the Sheets REST API with the app's existing token.
+> **RESULT — 2026-07-26: PASS.** Run against a throwaway spreadsheet created and deleted
+> with the app's own client id and scopes (`drive.file` + `spreadsheets`), so the real
+> workbook was never touched and no file was left in Drive.
+>
+> | Formula | `UNFORMATTED_VALUE` | JS type |
+> | --- | --- | --- |
+> | `=GOOGLEFINANCE("VOO")` | `679.14` | number |
+> | `=GOOGLEFINANCE("VOO","price")` | `679.14` | number |
+> | `=GOOGLEFINANCE("NYSEARCA:VOO","price")` | `679.14` | number |
+> | `=GOOGLEFINANCE("NASDAQ:AAPL","price")` | `333.02` | number |
+> | `=GOOGLEFINANCE("BND","price")` | `72.31` | number |
+> | `=GOOGLEFINANCE("CURRENCY:USDBRL")` | `5.0835` | number |
+> | `=GOOGLEFINANCE("VOO","name")` | `Vanguard S&P 500 ETF` | string |
+> | `=GOOGLEFINANCE("VOO","currency")` | `USD` | string |
+> | `=GOOGLEFINANCE("ZZZZNOTREAL","price")` | `#N/A (…returned no data.)` | string |
+>
+> Findings that change the plan:
+>
+> 1. **Current price is readable, as a real JSON number.** `UNFORMATTED_VALUE` returns
+>    `679.14`, not `"679.14"` — so §7.2's string-mapping step matters, and the parser
+>    never has to strip a locale separator.
+> 2. **`valueInputOption` is confirmed load-bearing.** A control row written with `RAW`
+>    came back as the literal text `=GOOGLEFINANCE("VOO","price")`. Without the
+>    `USER_ENTERED` change in §7.2, nothing evaluates. D-confirmed.
+> 3. **An unknown ticker returns a string beginning with `#N/A`**, exactly the shape
+>    §7.3's parsing rule already expects (leading `#` ⇒ null).
+> 4. **Historical data was readable too, contrary to the assumption below.**
+>    `=INDEX(GOOGLEFINANCE("VOO","price",TODAY()-7,TODAY()),2,2)` returned `682.21` as a
+>    number. What appears to be blocked is reading the raw *array* result; wrapping it in
+>    `INDEX` to extract one scalar cell works. This was a single observation and is NOT
+>    load-bearing — the design still builds its own price history (D7) and needs only the
+>    current price. Treat it as an opportunity to revisit later, not a fact to build on.
+>
+> The original caveat is kept below for the record.
 
 **Spike procedure** (manual, ~30 minutes, real Google mode):
 
