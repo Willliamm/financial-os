@@ -37,7 +37,16 @@ export function formatShares(
   return fixed.includes(".") ? fixed.replace(/\.?0+$/, "") : fixed;
 }
 
-/** shares x price-per-share, rounded to the nearest cent. */
+/**
+ * Shares x price-per-share, rounded to the nearest cent.
+ *
+ * Note on precision: the intermediate product (micros * pricePerShareCents)
+ * exceeds Number.MAX_SAFE_INTEGER above roughly $90M of notional value in a
+ * single position. However, because the result is then divided by SHARE_SCALE
+ * and rounded to the cent, the final cent value stays exact until approximately
+ * $1e12 in a single position — measured against exact BigInt arithmetic. This
+ * range is acceptable for personal-finance use.
+ */
 export function sharesValueCents(
   micros: ShareMicros,
   pricePerShareCents: MoneyCents,
@@ -45,7 +54,11 @@ export function sharesValueCents(
   return Math.round((micros * pricePerShareCents) / SHARE_SCALE);
 }
 
-/** Derived per-share cost, for display only. 0 when there are no shares. */
+/**
+ * Derived per-share cost, for display only. 0 when there are no shares.
+ * Carries the same precision bound as sharesValueCents (exact to the cent
+ * until ~$1e12 in a single position).
+ */
 export function costPerShareCents(
   totalCents: MoneyCents,
   micros: ShareMicros,

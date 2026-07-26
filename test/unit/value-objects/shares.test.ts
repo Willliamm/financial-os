@@ -74,3 +74,20 @@ describe("parseSharesToMicros", () => {
     expect(parseSharesToMicros("abc")).toBe(0);
   });
 });
+
+describe("large positions", () => {
+  it("computes exact share values at $500M notional", () => {
+    // 100,000 shares at $5,000 = $500M
+    expect(sharesValueCents(sharesToMicros(100_000), 500_000)).toBe(50_000_000_000);
+  });
+
+  it("computes exact share values at $5B notional", () => {
+    // 1M shares at $5,000 = $5B
+    expect(sharesValueCents(sharesToMicros(1_000_000), 500_000)).toBe(500_000_000_000);
+  });
+
+  it("round-trips per-share cost at $500M notional", () => {
+    // costPerShareCents should invert sharesValueCents
+    expect(costPerShareCents(50_000_000_000, sharesToMicros(100_000))).toBe(500_000);
+  });
+});
