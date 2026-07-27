@@ -10,12 +10,14 @@ import type {
   AppendResult,
   AuthClient,
   DriveClient,
+  GetValuesOptions,
   GoogleClients,
   GoogleUser,
   SheetDefinition,
   SheetValues,
   SheetsClient,
   SignInOptions,
+  UpdateRangeOptions,
   WorkbookRef,
 } from "./google-api-types";
 
@@ -359,15 +361,28 @@ export class GoogleSheetsClient implements SheetsClient {
     }
   }
 
-  async getValues(spreadsheetId: string, range: string): Promise<SheetValues> {
-    const url = `${SHEETS_API}/${spreadsheetId}/values/${encodeURIComponent(range)}`;
+  async getValues(
+    spreadsheetId: string,
+    range: string,
+    options: GetValuesOptions = {},
+  ): Promise<SheetValues> {
+    const query = options.unformatted
+      ? "?valueRenderOption=UNFORMATTED_VALUE"
+      : "";
+    const url = `${SHEETS_API}/${spreadsheetId}/values/${encodeURIComponent(range)}${query}`;
     const resp = await fetch(url, { headers: authHeader(this.auth) });
     if (!resp.ok) {
       if (resp.status === 400) return [];
       throw new Error(`Get values failed: ${resp.status}`);
     }
-    const data = (await resp.json()) as { values?: SheetValues };
-    return data.values ?? [];
+    const data = (await resp.json()) as { values?: unknown[][] };
+    // UNFORMATTED_VALUE returns JSON numbers and booleans; SheetValues is
+    // string[][], so normalise every cell here rather than at each call site
+    // (verified against the live API: GOOGLEFINANCE came back as a real
+    // JSON number, e.g. 679.14, not a formatted string).
+    return (data.values ?? []).map((row) =>
+      row.map((cell) => (cell === null || cell === undefined ? "" : String(cell))),
+    );
   }
 
   async batchGetValues(
@@ -417,10 +432,15 @@ export class GoogleSheetsClient implements SheetsClient {
     spreadsheetId: string,
     range: string,
     values: SheetValues,
+    options: UpdateRangeOptions = {},
   ): Promise<void> {
+    // USER_ENTERED evaluates a leading "=..." as a formula; RAW stores it as
+    // literal text. Verified against the live API: a RAW write of a
+    // GOOGLEFINANCE formula came back unevaluated.
+    const inputOption = options.formulas ? "USER_ENTERED" : "RAW";
     const url = `${SHEETS_API}/${spreadsheetId}/values/${encodeURIComponent(
       range,
-    )}?valueInputOption=RAW`;
+    )}?valueInputOption=${inputOption}`;
     const resp = await fetch(url, {
       method: "PUT",
       headers: authHeader(this.auth),
