@@ -7,6 +7,8 @@
   "taxStrategy": { "singular": "Estratégia fiscal", "plural": "Estratégias fiscais" },
   "scenario": { "singular": "Cenário", "plural": "Cenários" },
   "observation": { "singular": "Marcação", "plural": "Marcações" },
+  "holding": { "singular": "Posição", "plural": "Posições" },
+  "lot": { "singular": "Lote", "plural": "Lotes" },
   "observationSubjectType": {
     "investment_account": "Conta de investimento",
     "property": "Imóvel",
@@ -101,5 +103,18 @@
     "draft": "Rascunho",
     "active": "Ativo",
     "archived": "Arquivado"
+  },
+  "assetClass": {
+    "us_equity": "Ações EUA",
+    "intl_equity": "Ações internacionais",
+    "bond": "Renda fixa",
+    "reit": "Fundos imobiliários (REIT)",
+    "cash": "Caixa",
+    "crypto": "Cripto",
+    "other": "Outros"
+  },
+  "lotStatus": {
+    "open": "Aberto",
+    "closed": "Fechado"
   }
 }

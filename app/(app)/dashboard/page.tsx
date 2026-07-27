@@ -34,6 +34,7 @@ import {
   totalAssetsCents,
   totalLiabilitiesCents,
   type Insight,
+  type PriceMap,
   RuleBasedInsightProvider,
 } from "@/domain/engines";
 import { PageHeader } from "@/components/shared/page-header";
@@ -54,6 +55,7 @@ import { formatCents } from "@/infrastructure/money/money";
 import { formatBps } from "@/domain/value-objects/basis-points";
 import { currentYear, todayIsoDate } from "@/infrastructure/dates/date-utils";
 import { useFinancialContext } from "@/lib/queries/financial-data";
+import { useLatestPrices } from "@/lib/queries/market-data";
 import { DEFAULT_PROJECTION } from "@/features/projections/assumptions";
 import { NetWorthHistoryChart } from "@/components/charts/net-worth-history-chart";
 import Link from "next/link";
@@ -61,8 +63,9 @@ import Link from "next/link";
 export default function DashboardPage() {
   const { t } = useTranslation();
   const { data: context } = useFinancialContext();
+  const { prices } = useLatestPrices();
 
-  const m = useMemo(() => computeMetrics(context, t), [context, t]);
+  const m = useMemo(() => computeMetrics(context, prices, t), [context, prices, t]);
   const insights = useInsights(context);
   const history = useMemo(
     () => buildNetWorthHistory(context, { to: todayIsoDate() }),
@@ -289,10 +292,10 @@ function useInsights(context: FinancialContext): Insight[] {
   return insights;
 }
 
-function computeMetrics(context: FinancialContext, t: TFunction) {
-  const assets = totalAssetsCents(context);
+function computeMetrics(context: FinancialContext, prices: PriceMap, t: TFunction) {
+  const assets = totalAssetsCents(context, prices);
   const liabilities = totalLiabilitiesCents(context);
-  const netWorth = netWorthCents(context);
+  const netWorth = netWorthCents(context, prices);
   const income = monthlyActiveIncomeCents(context) + monthlyPassiveIncomeCents(context);
   const expenses = monthlyExpensesCents(context);
   const passive = monthlyPassiveIncomeCents(context);

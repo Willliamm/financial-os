@@ -11,7 +11,9 @@
     "investmentAccount": { "description": "Brokerage, retirement, cash and crypto accounts." },
     "taxStrategy": { "description": "Deductions and tax-saving strategies." },
     "scenario": { "description": "What-if long-term plans and comparisons." },
-    "observation": { "description": "Datestamped values that build your net-worth history." }
+    "observation": { "description": "Datestamped values that build your net-worth history." },
+    "holding": { "description": "Positions held inside your investment accounts." },
+    "lot": { "description": "Individual purchases that make up a holding." }
   },
   "list": {
     "searchPlaceholder": "Search {{items}}…",

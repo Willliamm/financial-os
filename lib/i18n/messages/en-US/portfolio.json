@@ -1,0 +1,48 @@
+{
+  "title": "Portfolio",
+  "description": "Positions, allocation and lot-level detail across every investment account.",
+  "asOf": "as of {{date}}",
+  "summary": {
+    "marketValue": "Market value",
+    "costBasis": "Cost basis",
+    "unrealizedGain": "Unrealized gain",
+    "moneyWeightedReturn": "Money-weighted return",
+    "missingPrices_one": "{{count}} position missing a price",
+    "missingPrices_other": "{{count}} positions missing a price"
+  },
+  "positions": {
+    "title": "Positions",
+    "empty": "Add a holding and a lot to see your positions here.",
+    "noPrice": "No price",
+    "setPrice": "Set price"
+  },
+  "lots": {
+    "title": "Lots",
+    "longTerm": "Long-term",
+    "daysToLongTerm_one": "{{count}} day to long-term",
+    "daysToLongTerm_other": "{{count}} days to long-term",
+    "perShare": "/ share"
+  },
+  "allocation": {
+    "title": "Allocation",
+    "drift": "Drift vs. target",
+    "overweight": "{{amount}} over target",
+    "underweight": "{{amount}} under target",
+    "noTargets": "Set a target allocation on a holding to see drift here."
+  },
+  "refresh": {
+    "button": "Refresh prices",
+    "running": "Refreshing prices…",
+    "success": "Refreshed {{count}} price(s); {{skipped}} already up to date today.",
+    "skipped": "No tickers needed a refresh.",
+    "failed": "Could not get a price for: {{tickers}}.",
+    "noWorkbook": "Connect Google Sheets to refresh prices."
+  },
+  "manualPrice": {
+    "title": "Set price",
+    "subtitle": "Enter today's price for {{ticker}}.",
+    "label": "Price per share",
+    "save": "Save",
+    "saveError": "Could not save the price."
+  }
+}

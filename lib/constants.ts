@@ -3,7 +3,7 @@
 export const APP_NAME = "Financial OS";
 
 /** Schema version this build of the app understands. */
-export const APP_SCHEMA_VERSION = 4;
+export const APP_SCHEMA_VERSION = 5;
 
 /** Default workbook name created in the user's Google Drive. */
 export const DEFAULT_WORKBOOK_NAME = "Financial OS - Personal Workbook";

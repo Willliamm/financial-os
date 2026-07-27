@@ -1,6 +1,7 @@
 import {
   addDays,
   addMonths,
+  addYears,
   differenceInCalendarDays,
   differenceInCalendarMonths,
   differenceInCalendarYears,
@@ -146,4 +147,14 @@ export function monthEndsBetween(from: string, to: string): string[] {
   }
   if (out[out.length - 1] !== to) out.push(to);
   return out;
+}
+
+/**
+ * Add (or subtract) calendar years to a "YYYY-MM-DD" string. 29 February
+ * clamps to 28 February in a non-leap target year, matching date-fns.
+ */
+export function addYearsIso(isoDate: string, years: number): string {
+  const parsed = parseDate(isoDate);
+  if (!parsed) return isoDate;
+  return format(addYears(parsed, years), DATE_ONLY);
 }

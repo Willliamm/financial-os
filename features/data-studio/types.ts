@@ -8,6 +8,7 @@ export type FieldType =
   | "money"
   | "percent"
   | "number"
+  | "shares"
   | "select"
   | "switch"
   | "date";
@@ -27,7 +28,12 @@ export interface FieldDef {
   type: FieldType;
   options?: SelectOption[];
   /** Pull options from the loaded context at render time. */
-  dynamicOptions?: "people" | "properties" | "scenarios";
+  dynamicOptions?:
+    | "people"
+    | "properties"
+    | "scenarios"
+    | "investmentAccounts"
+    | "holdings";
   required?: boolean;
   placeholder?: string;
   help?: string;

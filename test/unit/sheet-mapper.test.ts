@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest";
-import type { IncomeSource, Observation, Property } from "@/domain/entities";
+import type {
+  Holding,
+  IncomeSource,
+  Lot,
+  Observation,
+  PriceQuote,
+  Property,
+} from "@/domain/entities";
 import { headersFor } from "@/infrastructure/sync/sheet-schema";
 import {
   entityToRow,
@@ -170,6 +177,108 @@ describe("sheet-mapper round-trip", () => {
 
     const parsed = rowToEntity("observation", headers, row);
     expect(parsed).toBeNull();
+  });
+});
+
+describe("portfolio entities round-trip", () => {
+  it("round-trips a Holding", () => {
+    const holding: Holding = {
+      id: "hold-1",
+      version: 0,
+      createdAt: TS,
+      updatedAt: TS,
+      deletedAt: null,
+      createdBy: "tester@x",
+      updatedBy: "tester@x",
+      accountId: "acct-1",
+      ticker: "VOO",
+      name: "Vanguard S&P 500 ETF",
+      assetClass: "us_equity",
+      targetAllocationBps: 4000,
+    };
+    const parsed = rowToEntity(
+      "holding",
+      headersFor("holding"),
+      entityToRow("holding", holding),
+    ) as Holding | null;
+
+    expect(parsed).not.toBeNull();
+    expect(parsed?.ticker).toBe("VOO");
+    expect(parsed?.assetClass).toBe("us_equity");
+    expect(parsed?.targetAllocationBps).toBe(4000);
+  });
+
+  it("round-trips an open Lot with a null close date", () => {
+    const lot: Lot = {
+      id: "lot-1",
+      version: 0,
+      createdAt: TS,
+      updatedAt: TS,
+      deletedAt: null,
+      createdBy: "tester@x",
+      updatedBy: "tester@x",
+      holdingId: "hold-1",
+      tradeDate: "2026-03-14",
+      sharesMicro: 12_000_000,
+      costTotalCents: 614_880,
+      feesCents: 0,
+      status: "open",
+      closeDate: null,
+      proceedsCents: 0,
+      note: "Initial buy, DCA",
+    };
+    const parsed = rowToEntity(
+      "lot",
+      headersFor("lot"),
+      entityToRow("lot", lot),
+    ) as Lot | null;
+
+    expect(parsed).not.toBeNull();
+    expect(parsed?.sharesMicro).toBe(12_000_000);
+    expect(parsed?.costTotalCents).toBe(614_880);
+    expect(parsed?.tradeDate).toBe("2026-03-14");
+    expect(parsed?.status).toBe("open");
+    expect(parsed?.closeDate).toBeNull();
+    expect(parsed?.note).toBe("Initial buy, DCA");
+  });
+
+  it("round-trips a PriceQuote", () => {
+    const quote: PriceQuote = {
+      id: "q-1",
+      version: 0,
+      createdAt: TS,
+      updatedAt: TS,
+      deletedAt: null,
+      createdBy: "tester@x",
+      updatedBy: "tester@x",
+      ticker: "VOO",
+      quoteDate: "2026-07-26",
+      priceCents: 67_914,
+      source: "googlefinance",
+    };
+    const parsed = rowToEntity(
+      "price_quote",
+      headersFor("price_quote"),
+      entityToRow("price_quote", quote),
+    ) as PriceQuote | null;
+
+    expect(parsed).not.toBeNull();
+    expect(parsed?.priceCents).toBe(67_914);
+    expect(parsed?.source).toBe("googlefinance");
+  });
+
+  it("drops a Lot row whose trade date is not a real calendar date", () => {
+    const headers = headersFor("lot");
+    const cols = headers.map(() => "");
+    cols[headers.indexOf("id")] = "lot-bad";
+    cols[headers.indexOf("version")] = "0";
+    cols[headers.indexOf("created_at")] = TS;
+    cols[headers.indexOf("updated_at")] = TS;
+    cols[headers.indexOf("holding_id")] = "hold-1";
+    cols[headers.indexOf("trade_date")] = "03/14/2026";
+    cols[headers.indexOf("shares_micro")] = "12000000";
+    cols[headers.indexOf("cost_total_cents")] = "614880";
+    expect(rowToEntity("lot", headers, cols)).toBeNull();
   });
 });
 

@@ -25,6 +25,22 @@ export interface AppendResult {
   startRow?: number;
 }
 
+export interface GetValuesOptions {
+  /**
+   * Ask Sheets for raw values instead of display strings. Required to read a
+   * GOOGLEFINANCE result as a number rather than a locale-formatted string.
+   */
+  unformatted?: boolean;
+}
+
+export interface UpdateRangeOptions {
+  /**
+   * Send valueInputOption=USER_ENTERED so "=FORMULA(...)" is evaluated by
+   * Sheets. Without it the formula is stored as literal text — verified.
+   */
+  formulas?: boolean;
+}
+
 /** Options controlling how the Google sign-in prompt behaves. */
 export interface SignInOptions {
   /**
@@ -63,7 +79,11 @@ export interface SheetsClient {
   /** Ensure every sheet exists with its header row. */
   ensureSheets(spreadsheetId: string, sheets: SheetDefinition[]): Promise<void>;
   listSheetTitles(spreadsheetId: string): Promise<string[]>;
-  getValues(spreadsheetId: string, range: string): Promise<SheetValues>;
+  getValues(
+    spreadsheetId: string,
+    range: string,
+    options?: GetValuesOptions,
+  ): Promise<SheetValues>;
   batchGetValues(
     spreadsheetId: string,
     ranges: string[],
@@ -77,6 +97,7 @@ export interface SheetsClient {
     spreadsheetId: string,
     range: string,
     values: SheetValues,
+    options?: UpdateRangeOptions,
   ): Promise<void>;
 }
 

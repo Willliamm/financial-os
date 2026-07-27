@@ -36,7 +36,16 @@
     "horizon": "Horizon",
     "subject": "Subject",
     "asOf": "As of",
-    "lastMarked": "Last marked"
+    "lastMarked": "Last marked",
+    "ticker": "Ticker",
+    "shares": "Shares",
+    "costBasis": "Cost basis",
+    "marketValue": "Market value",
+    "gain": "Gain",
+    "weight": "Weight",
+    "tradeDate": "Trade date",
+    "price": "Price",
+    "account": "Account"
   },
   "incomeSource": {
     "name": { "label": "Name" },
@@ -130,6 +139,24 @@
     },
     "observedAt": { "label": "As of" },
     "valueCents": { "label": "Value" },
+    "note": { "label": "Note" }
+  },
+  "holding": {
+    "accountId": { "label": "Account" },
+    "ticker": { "label": "Ticker" },
+    "name": { "label": "Name" },
+    "assetClass": { "label": "Asset class" },
+    "targetAllocationBps": { "label": "Target allocation" }
+  },
+  "lot": {
+    "holdingId": { "label": "Holding" },
+    "tradeDate": { "label": "Trade date" },
+    "sharesMicro": { "label": "Shares" },
+    "costTotalCents": { "label": "Total cost" },
+    "feesCents": { "label": "Fees" },
+    "status": { "label": "Status" },
+    "closeDate": { "label": "Close date" },
+    "proceedsCents": { "label": "Proceeds" },
     "note": { "label": "Note" }
   }
 }

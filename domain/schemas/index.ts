@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeTicker } from "@/domain/value-objects/ticker";
 
 /**
  * Zod schemas for every entity. These validate data coming from Google Sheets
@@ -314,6 +315,50 @@ export const observationSchema = z.object({
   note: z.string().default(""),
 });
 
+export const assetClassSchema = z.enum([
+  "us_equity",
+  "intl_equity",
+  "bond",
+  "reit",
+  "cash",
+  "crypto",
+  "other",
+]);
+
+export const holdingSchema = z.object({
+  ...baseEntityShape,
+  accountId: idString,
+  // Normalized on the way in so a row imported from Google Sheets can never
+  // disagree, by case alone, with the ticker a quote is stored under.
+  // `applyCommand` does not run Zod, so entities created in the app instead
+  // normalize at each lookup/write site — see domain/value-objects/ticker.ts.
+  ticker: z.string().default("").transform(normalizeTicker),
+  name: z.string().default(""),
+  assetClass: assetClassSchema.default("us_equity"),
+  targetAllocationBps: rateBps.default(0),
+});
+
+export const lotSchema = z.object({
+  ...baseEntityShape,
+  holdingId: idString,
+  tradeDate: dateOnly,
+  sharesMicro: z.number().int().nonnegative(),
+  costTotalCents: nonNegCents,
+  feesCents: nonNegCents.default(0),
+  status: z.enum(["open", "closed"]).default("open"),
+  closeDate: dateOnly.nullable().default(null),
+  proceedsCents: nonNegCents.default(0),
+  note: z.string().default(""),
+});
+
+export const priceQuoteSchema = z.object({
+  ...baseEntityShape,
+  ticker: z.string().min(1).transform(normalizeTicker),
+  quoteDate: dateOnly,
+  priceCents: nonNegCents,
+  source: z.enum(["googlefinance", "manual"]).default("manual"),
+});
+
 import type { EntityType } from "@/domain/entities/base";
 import type { ZodType } from "zod";
 
@@ -332,4 +377,7 @@ export const ENTITY_SCHEMAS: Record<EntityType, ZodType> = {
   scenario_assumption: scenarioAssumptionSchema,
   projection_snapshot: projectionSnapshotSchema,
   observation: observationSchema,
+  holding: holdingSchema,
+  lot: lotSchema,
+  price_quote: priceQuoteSchema,
 };

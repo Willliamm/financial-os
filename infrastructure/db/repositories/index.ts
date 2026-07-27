@@ -1,11 +1,14 @@
 import type {
   Expense,
+  Holding,
   Household,
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Lot,
   Observation,
   Person,
+  PriceQuote,
   Property,
   Scenario,
   ScenarioAssumption,
@@ -37,6 +40,9 @@ export const repositories = {
     "projection_snapshot",
   ),
   observation: new EntityRepository<Observation>("observation"),
+  holding: new EntityRepository<Holding>("holding"),
+  lot: new EntityRepository<Lot>("lot"),
+  price_quote: new EntityRepository<PriceQuote>("price_quote"),
 } as const;
 
 export function repositoryFor(type: EntityType): EntityRepository<never> {
@@ -58,6 +64,9 @@ export async function loadFinancialContext(): Promise<FinancialContext> {
     scenarios,
     scenarioAssumptions,
     observations,
+    holdings,
+    lots,
+    priceQuotes,
   ] = await Promise.all([
     repositories.household.list(),
     repositories.person.list(),
@@ -71,6 +80,9 @@ export async function loadFinancialContext(): Promise<FinancialContext> {
     repositories.scenario.list(),
     repositories.scenario_assumption.list(),
     repositories.observation.list(),
+    repositories.holding.list(),
+    repositories.lot.list(),
+    repositories.price_quote.list(),
   ]);
 
   return {
@@ -86,6 +98,9 @@ export async function loadFinancialContext(): Promise<FinancialContext> {
     scenarios,
     scenarioAssumptions,
     observations,
+    holdings,
+    lots,
+    priceQuotes,
   };
 }
 

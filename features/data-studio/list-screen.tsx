@@ -23,6 +23,10 @@ export function selectEntities(
       return context.loans;
     case "investment_account":
       return context.investmentAccounts;
+    case "holding":
+      return context.holdings;
+    case "lot":
+      return context.lots;
     case "tax_strategy":
       return context.taxStrategies;
     case "tax_assumption":
