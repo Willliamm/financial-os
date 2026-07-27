@@ -1,11 +1,14 @@
 import type {
   Expense,
+  Holding,
   Household,
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Lot,
   Observation,
   Person,
+  PriceQuote,
   Property,
   Scenario,
   ScenarioAssumption,
@@ -17,7 +20,9 @@ import { repositories } from "@/infrastructure/db/repositories";
 import { metadataRepo, META_KEYS } from "@/infrastructure/db/metadata-repo";
 import { dollarsToCents } from "@/infrastructure/money/money";
 import { percentToBps } from "@/domain/value-objects/basis-points";
+import { sharesToMicros } from "@/domain/value-objects/shares";
 import { addMonthsIso, currentYear, todayIsoDate } from "@/infrastructure/dates/date-utils";
+import { mockPriceFor } from "@/infrastructure/google/mocks/mock-backend";
 import { createLogger } from "@/lib/logger";
 
 const log = createLogger("seed");
@@ -201,11 +206,96 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
     accountEntities.push(entity);
   }
 
+  // Dated off the clock (not hardcoded) so the demo doesn't visibly "age" as
+  // the calendar turns — both the portfolio's lot trade dates below and the
+  // observation marks further down depend on this.
+  const today = todayIsoDate();
+
+  // Portfolio: give the taxable brokerage real holdings and lots instead of
+  // just a balance, so the portfolio screen (allocation, gain/loss, holding
+  // periods) has something to show. Quote prices come from the same mock
+  // pricing function a real "refresh prices" would hit, so the seed always
+  // agrees with a refresh.
+  const brokerage = accountEntities.find((a) => a.accountType === "brokerage")!;
+
+  const vooPriceCents = Math.round(mockPriceFor("VOO", today) * 100);
+  const bndPriceCents = Math.round(mockPriceFor("BND", today) * 100);
+  const vxusPriceCents = Math.round(mockPriceFor("VXUS", today) * 100);
+
+  const { entity: vooHolding } = await createEntity<Holding>("holding", {
+    accountId: brokerage.id,
+    ticker: "VOO",
+    name: "Vanguard S&P 500 ETF",
+    assetClass: "us_equity",
+    targetAllocationBps: pct(60),
+  });
+  const { entity: bndHolding } = await createEntity<Holding>("holding", {
+    accountId: brokerage.id,
+    ticker: "BND",
+    name: "Vanguard Total Bond Market ETF",
+    assetClass: "bond",
+    targetAllocationBps: pct(30),
+  });
+  const { entity: vxusHolding } = await createEntity<Holding>("holding", {
+    accountId: brokerage.id,
+    ticker: "VXUS",
+    name: "Vanguard Total International Stock ETF",
+    assetClass: "intl_equity",
+    targetAllocationBps: pct(10),
+  });
+
+  const lots: Array<{
+    holdingId: string;
+    tradeDate: string;
+    shares: number;
+    /** Fraction of today's quote paid per share — <1 is a gain, >1 a loss. */
+    costFactor: number;
+  }> = [
+    // VOO: an older, larger buy well below today's price (a solid gain)...
+    { holdingId: vooHolding.id, tradeDate: addMonthsIso(today, -14), shares: 25, costFactor: 0.78 },
+    // ...topped up recently just above today's price — a small paper loss,
+    // so lotsAtALoss has something to show.
+    { holdingId: vooHolding.id, tradeDate: addMonthsIso(today, -2), shares: 5, costFactor: 1.03 },
+    { holdingId: bndHolding.id, tradeDate: addMonthsIso(today, -8), shares: 100, costFactor: 0.96 },
+    { holdingId: vxusHolding.id, tradeDate: addMonthsIso(today, -5), shares: 40, costFactor: 0.9 },
+  ];
+  const priceByHoldingId: Record<string, number> = {
+    [vooHolding.id]: vooPriceCents,
+    [bndHolding.id]: bndPriceCents,
+    [vxusHolding.id]: vxusPriceCents,
+  };
+  for (const lot of lots) {
+    const costPerShareCents = Math.round(priceByHoldingId[lot.holdingId] * lot.costFactor);
+    await createEntity<Lot>("lot", {
+      holdingId: lot.holdingId,
+      tradeDate: lot.tradeDate,
+      sharesMicro: sharesToMicros(lot.shares),
+      costTotalCents: costPerShareCents * lot.shares,
+      feesCents: 0,
+      status: "open",
+      closeDate: null,
+      proceedsCents: 0,
+      note: "",
+    });
+  }
+
+  for (const [ticker, priceCents] of [
+    ["VOO", vooPriceCents],
+    ["BND", bndPriceCents],
+    ["VXUS", vxusPriceCents],
+  ] as const) {
+    await createEntity<PriceQuote>("price_quote", {
+      ticker,
+      quoteDate: today,
+      priceCents,
+      source: "googlefinance",
+    });
+  }
+
   // Observations: datestamped value marks for the net-worth history chart and
   // the freshness banner. Dated off the clock (not hardcoded) so the demo
   // doesn't visibly "age" the moment the calendar turns — the freshness
   // thresholds (45/180 days) would otherwise mark everything stale over time.
-  const today = todayIsoDate();
 
   /**
    * EVERY tracked subject gets the same six monthly marks, ending today at its
