@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Position } from "@/domain/engines";
 import { Badge } from "@/components/ui/badge";
@@ -23,10 +23,11 @@ export interface PositionsTableProps {
   asOf: Record<string, string>;
   accountNameById: Record<string, string>;
   onSetPrice: (ticker: string, currentPriceCents: number) => void;
+  onAddLot: (holdingId: string) => void;
 }
 
 export function PositionsTable({
-  positions, prices, asOf, accountNameById, onSetPrice,
+  positions, prices, asOf, accountNameById, onSetPrice, onAddLot,
 }: PositionsTableProps) {
   const { t } = useTranslation();
 
@@ -43,6 +44,7 @@ export function PositionsTable({
             <TableHead className="text-right">{t("forms:columns.marketValue")}</TableHead>
             <TableHead className="text-right">{t("forms:columns.gain")}</TableHead>
             <TableHead className="text-right">{t("forms:columns.weight")}</TableHead>
+            <TableHead className="w-10" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -121,6 +123,18 @@ export function PositionsTable({
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
                   {p.hasPrice ? formatBps(p.weightBps) : "—"}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="size-6"
+                    aria-label={t("portfolio:addLot")}
+                    title={t("portfolio:addLot")}
+                    onClick={() => onAddLot(p.holdingId)}
+                  >
+                    <Plus className="size-3.5" />
+                  </Button>
                 </TableCell>
               </TableRow>
             );

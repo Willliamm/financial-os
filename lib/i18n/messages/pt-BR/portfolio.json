@@ -9,6 +9,8 @@
   },
   "title": "Carteira",
   "description": "Posições, alocação e detalhe por lote em todas as contas de investimento.",
+  "addHolding": "Adicionar posição",
+  "addLot": "Adicionar lote",
   "asOf": "em {{date}}",
   "summary": {
     "marketValue": "Valor de mercado",

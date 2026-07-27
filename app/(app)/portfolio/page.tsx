@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, Plus, RefreshCw } from "lucide-react";
 import {
   allocationByAssetClass,
   allocationDrift,
@@ -29,6 +29,8 @@ import { PositionsTable } from "@/features/portfolio/positions-table";
 import { LotsTable } from "@/features/portfolio/lots-table";
 import { useRefreshQuotes } from "@/features/portfolio/use-refresh-quotes";
 import { SetPriceDialog } from "@/features/portfolio/set-price-dialog";
+import { EntityFormDrawer } from "@/features/data-studio/entity-form-drawer";
+import { getEntityConfig } from "@/features/data-studio/registry";
 
 export default function PortfolioPage() {
   const { t } = useTranslation();
@@ -38,6 +40,8 @@ export default function PortfolioPage() {
   const [priceDialog, setPriceDialog] = useState<{ ticker: string; currentPriceCents: number } | null>(
     null,
   );
+  const [addingHolding, setAddingHolding] = useState(false);
+  const [addingLotFor, setAddingLotFor] = useState<string | null>(null);
 
   const model = useMemo(() => {
     const today = todayIsoDate();
@@ -67,7 +71,24 @@ export default function PortfolioPage() {
     return (
       <div className="space-y-6">
         <PageHeader title={t("portfolio:title")} description={t("portfolio:description")} />
-        <EmptyState title={t("portfolio:positions.title")} description={t("portfolio:positions.empty")} />
+        <EmptyState
+          title={t("portfolio:positions.title")}
+          description={t("portfolio:positions.empty")}
+          action={
+            <Button variant="outline" size="sm" onClick={() => setAddingHolding(true)}>
+              <Plus className="size-4" />
+              {t("portfolio:addHolding")}
+            </Button>
+          }
+        />
+
+        <EntityFormDrawer
+          config={getEntityConfig("holding")}
+          open={addingHolding}
+          onOpenChange={setAddingHolding}
+          entity={null}
+          context={context}
+        />
       </div>
     );
   }
@@ -75,6 +96,10 @@ export default function PortfolioPage() {
   return (
     <div className="space-y-6">
       <PageHeader title={t("portfolio:title")} description={t("portfolio:description")}>
+        <Button variant="outline" size="sm" onClick={() => setAddingHolding(true)}>
+          <Plus className="size-4" />
+          {t("portfolio:addHolding")}
+        </Button>
         <Button variant="outline" onClick={() => void refresh()} disabled={running}>
           {running ? (
             <Loader2 className="size-4 animate-spin" />
@@ -127,6 +152,7 @@ export default function PortfolioPage() {
             asOf={asOf}
             accountNameById={accountNameById}
             onSetPrice={(ticker, currentPriceCents) => setPriceDialog({ ticker, currentPriceCents })}
+            onAddLot={setAddingLotFor}
           />
         </CardContent>
       </Card>
@@ -196,6 +222,23 @@ export default function PortfolioPage() {
         }}
         ticker={priceDialog?.ticker ?? ""}
         currentPriceCents={priceDialog?.currentPriceCents ?? 0}
+      />
+
+      <EntityFormDrawer
+        config={getEntityConfig("holding")}
+        open={addingHolding}
+        onOpenChange={setAddingHolding}
+        entity={null}
+        context={context}
+      />
+
+      <EntityFormDrawer
+        config={getEntityConfig("lot")}
+        open={addingLotFor !== null}
+        onOpenChange={(open) => setAddingLotFor(open ? addingLotFor : null)}
+        entity={null}
+        context={context}
+        injectDefaults={addingLotFor ? { holdingId: addingLotFor } : undefined}
       />
     </div>
   );

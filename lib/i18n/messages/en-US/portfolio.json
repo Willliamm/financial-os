@@ -9,6 +9,8 @@
   },
   "title": "Portfolio",
   "description": "Positions, allocation and lot-level detail across every investment account.",
+  "addHolding": "Add holding",
+  "addLot": "Add lot",
   "asOf": "as of {{date}}",
   "summary": {
     "marketValue": "Market value",
