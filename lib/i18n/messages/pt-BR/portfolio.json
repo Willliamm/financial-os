@@ -33,14 +33,16 @@
   "refresh": {
     "button": "Atualizar preços",
     "running": "Atualizando preços…",
-    "success": "Preços atualizados.",
+    "success": "{{count}} preço(s) atualizado(s); {{skipped}} já estava(m) em dia hoje.",
     "skipped": "Nenhum ticker precisou de atualização.",
-    "failed": "Não foi possível atualizar os preços. Tente novamente mais tarde.",
+    "failed": "Não foi possível obter preço para: {{tickers}}.",
     "noWorkbook": "Conecte o Google Sheets para atualizar os preços."
   },
   "manualPrice": {
     "title": "Definir preço",
+    "subtitle": "Informe o preço de hoje para {{ticker}}.",
     "label": "Preço por cota",
-    "save": "Salvar"
+    "save": "Salvar",
+    "saveError": "Não foi possível salvar o preço."
   }
 }

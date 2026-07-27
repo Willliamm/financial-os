@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Loader2, RefreshCw } from "lucide-react";
 import {
   allocationByAssetClass,
   allocationDrift,
@@ -15,6 +16,7 @@ import {
 import { PageHeader } from "@/components/shared/page-header";
 import { KpiCard } from "@/components/shared/kpi-card";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EChart } from "@/components/charts/echart";
 import { donutMoneyOption, toDollars } from "@/components/charts/chart-helpers";
@@ -25,11 +27,15 @@ import { useFinancialContext } from "@/lib/queries/financial-data";
 import { useLatestPrices } from "@/lib/queries/market-data";
 import { PositionsTable } from "@/features/portfolio/positions-table";
 import { LotsTable } from "@/features/portfolio/lots-table";
+import { useRefreshQuotes } from "@/features/portfolio/use-refresh-quotes";
+import { SetPriceDialog } from "@/features/portfolio/set-price-dialog";
 
 export default function PortfolioPage() {
   const { t } = useTranslation();
   const { data: context } = useFinancialContext();
   const { prices, asOf } = useLatestPrices();
+  const { refresh, running } = useRefreshQuotes();
+  const [settingPriceFor, setSettingPriceFor] = useState<string | null>(null);
 
   const model = useMemo(() => {
     const today = todayIsoDate();
@@ -66,7 +72,16 @@ export default function PortfolioPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title={t("portfolio:title")} description={t("portfolio:description")} />
+      <PageHeader title={t("portfolio:title")} description={t("portfolio:description")}>
+        <Button variant="outline" onClick={() => void refresh()} disabled={running}>
+          {running ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <RefreshCw className="size-4" />
+          )}
+          {running ? t("portfolio:refresh.running") : t("portfolio:refresh.button")}
+        </Button>
+      </PageHeader>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
@@ -108,7 +123,7 @@ export default function PortfolioPage() {
             positions={model.positions}
             asOf={asOf}
             accountNameById={accountNameById}
-            onSetPrice={() => undefined}
+            onSetPrice={setSettingPriceFor}
           />
         </CardContent>
       </Card>
@@ -170,6 +185,15 @@ export default function PortfolioPage() {
           <LotsTable views={model.lotViews} />
         </CardContent>
       </Card>
+
+      <SetPriceDialog
+        open={settingPriceFor !== null}
+        onOpenChange={(open) => {
+          if (!open) setSettingPriceFor(null);
+        }}
+        ticker={settingPriceFor ?? ""}
+        currentPriceCents={settingPriceFor ? (prices[settingPriceFor] ?? 0) : 0}
+      />
     </div>
   );
 }
