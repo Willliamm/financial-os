@@ -2,6 +2,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import {
   addDaysIso,
   addMonthsIso,
+  addYearsIso,
   diffCalendarDays,
   monthEndsBetween,
   setNowProvider,
@@ -84,5 +85,16 @@ describe("monthEndsBetween", () => {
       expect(() => monthEndsBetween("2026-01-01", bad)).not.toThrow();
       expect(monthEndsBetween("2026-01-01", bad)).toEqual([]);
     }
+  });
+});
+
+describe("addYearsIso", () => {
+  it("adds calendar years", () => {
+    expect(addYearsIso("2026-03-14", 1)).toBe("2027-03-14");
+    expect(addYearsIso("2026-03-14", -1)).toBe("2025-03-14");
+  });
+
+  it("clamps 29 February to 28 February in a non-leap year", () => {
+    expect(addYearsIso("2024-02-29", 1)).toBe("2025-02-28");
   });
 });
