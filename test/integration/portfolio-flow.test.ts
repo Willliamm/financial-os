@@ -75,7 +75,12 @@ describe("portfolio flow (Dexie + mock Google)", () => {
       expect(await db.commands.where("entityId").equals(id).count()).toBe(1);
     }
     expect(await db.syncQueue.where("entityType").equals("holding").count()).toBe(1);
-    expect(await db.syncQueue.where("entityType").equals("lot").count()).toBe(2);
+    const lotQueueItems = await db.syncQueue
+      .where("entityType")
+      .equals("lot")
+      .toArray();
+    expect(lotQueueItems.filter((i) => i.entityId === lot1.id)).toHaveLength(1);
+    expect(lotQueueItems.filter((i) => i.entityId === lot2.id)).toHaveLength(1);
   });
 
   it("pushes holding and lots to the sheets and re-imports them", async () => {
@@ -133,6 +138,9 @@ describe("portfolio flow (Dexie + mock Google)", () => {
     const reimportedLot1 = reimportedLots.find((l) => l.id === lot1.id)!;
     expect(reimportedLot1.sharesMicro).toBe(sharesToMicros(10));
     expect(reimportedLot1.costTotalCents).toBe(500_000);
+    const reimportedLot2 = reimportedLots.find((l) => l.id === lot2.id)!;
+    expect(reimportedLot2.sharesMicro).toBe(sharesToMicros(2));
+    expect(reimportedLot2.costTotalCents).toBe(130_000);
   });
 
   it("refreshes quotes for a holding's ticker and surfaces the latest price", async () => {

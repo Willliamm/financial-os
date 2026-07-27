@@ -15,12 +15,12 @@ import type {
   TaxAssumption,
   TaxStrategy,
 } from "@/domain/entities";
-import { createEntity } from "@/infrastructure/db/command-service";
+import { createEntity, updateEntity } from "@/infrastructure/db/command-service";
 import { repositories } from "@/infrastructure/db/repositories";
 import { metadataRepo, META_KEYS } from "@/infrastructure/db/metadata-repo";
 import { dollarsToCents } from "@/infrastructure/money/money";
 import { percentToBps } from "@/domain/value-objects/basis-points";
-import { sharesToMicros } from "@/domain/value-objects/shares";
+import { sharesToMicros, sharesValueCents } from "@/domain/value-objects/shares";
 import { addMonthsIso, currentYear, todayIsoDate } from "@/infrastructure/dates/date-utils";
 import { mockPriceFor } from "@/infrastructure/google/mocks/mock-backend";
 import { createLogger } from "@/lib/logger";
@@ -291,6 +291,28 @@ export async function seedDemoDataIfEmpty(): Promise<boolean> {
       source: "googlefinance",
     });
   }
+
+  // currentBalanceCents is only a fallback for accounts with no holdings —
+  // accountValueCents (portfolio engine) already prefers summed positions
+  // once an account has any. But the Investments list and the account's own
+  // row still read this typed field directly, so leaving it at its original
+  // placeholder value would make the demo visibly disagree with itself (the
+  // Portfolio screen would total the positions to a different number).
+  // Recompute it from the exact lots and prices just seeded, reusing the
+  // same priceByHoldingId map used for the quote rows, so the two can never
+  // drift apart.
+  const brokerageValueCents = lots.reduce(
+    (sum, lot) =>
+      sum +
+      sharesValueCents(sharesToMicros(lot.shares), priceByHoldingId[lot.holdingId]),
+    0,
+  );
+  const { entity: updatedBrokerage } = await updateEntity<InvestmentAccount>(
+    "investment_account",
+    { id: brokerage.id, currentBalanceCents: brokerageValueCents },
+  );
+  const brokerageIndex = accountEntities.findIndex((a) => a.id === brokerage.id);
+  if (brokerageIndex !== -1) accountEntities[brokerageIndex] = updatedBrokerage;
 
   // Observations: datestamped value marks for the net-worth history chart and
   // the freshness banner. Dated off the clock (not hardcoded) so the demo
