@@ -30,6 +30,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2 } from "lucide-react";
 import { MoneyInput } from "@/components/forms/money-input";
 import { PercentInput } from "@/components/forms/percent-input";
+import { SharesInput } from "@/components/forms/shares-input";
 import { LockBanner } from "@/components/locks/lock-banner";
 import { useLockStore } from "@/lib/stores/lock-store";
 import type { LockResult } from "@/infrastructure/sync/lock-manager";
@@ -320,6 +321,22 @@ function dynamicOptions(
       ...context.scenarios.map((s) => ({ value: s.id, label: s.name, raw: true })),
     ];
   }
+  if (field.dynamicOptions === "investmentAccounts") {
+    return [
+      { value: "", label: "common:none", raw: false },
+      ...context.investmentAccounts
+        .filter((a) => !a.deletedAt)
+        .map((a) => ({ value: a.id, label: a.name, raw: true })),
+    ];
+  }
+  if (field.dynamicOptions === "holdings") {
+    return [
+      { value: "", label: "common:none", raw: false },
+      ...context.holdings
+        .filter((h) => !h.deletedAt)
+        .map((h) => ({ value: h.id, label: h.ticker || h.name, raw: true })),
+    ];
+  }
   return field.options ?? [];
 }
 
@@ -359,6 +376,16 @@ function FieldControl({
     case "percent":
       return (
         <PercentInput
+          id={field.name}
+          value={Number(value) || 0}
+          onChange={onChange}
+          disabled={readOnly}
+          {...ariaProps}
+        />
+      );
+    case "shares":
+      return (
+        <SharesInput
           id={field.name}
           value={Number(value) || 0}
           onChange={onChange}

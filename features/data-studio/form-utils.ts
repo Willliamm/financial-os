@@ -96,7 +96,12 @@ export function requiredFieldErrors(
   for (const f of fields) {
     if (!f.required) continue;
     const v = values[f.name];
-    if (f.type === "money" || f.type === "number" || f.type === "percent") {
+    if (
+      f.type === "money" ||
+      f.type === "number" ||
+      f.type === "percent" ||
+      f.type === "shares"
+    ) {
       if (!v || Number(v) <= 0) errors[f.name] = REQUIRED_ERROR_KEY;
     } else if (!v || String(v).trim() === "") {
       errors[f.name] = REQUIRED_ERROR_KEY;

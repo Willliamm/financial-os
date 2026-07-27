@@ -1,9 +1,11 @@
 import {
   Banknote,
   Building2,
+  Coins,
   CreditCard,
   History,
   Landmark,
+  Layers,
   PiggyBank,
   Receipt,
   ReceiptText,
@@ -11,9 +13,11 @@ import {
 } from "lucide-react";
 import type {
   Expense,
+  Holding,
   IncomeSource,
   InvestmentAccount,
   Loan,
+  Lot,
   Observation,
   Property,
   Scenario,
@@ -23,6 +27,7 @@ import type { EntityType } from "@/domain/entities/base";
 import type { FinancialContext } from "@/domain/context";
 import { formatCents } from "@/infrastructure/money/money";
 import { formatBps } from "@/domain/value-objects/basis-points";
+import { formatShares } from "@/domain/value-objects/shares";
 import { formatDate } from "@/infrastructure/dates/date-utils";
 import { Badge } from "@/components/ui/badge";
 import i18n from "@/lib/i18n/config";
@@ -119,6 +124,18 @@ const OBSERVATION_SUBJECT_TYPES = enumOpts("observationSubjectType", [
   "property",
   "loan",
 ]);
+
+const ASSET_CLASSES = enumOpts("assetClass", [
+  "us_equity",
+  "intl_equity",
+  "bond",
+  "reit",
+  "cash",
+  "crypto",
+  "other",
+]);
+
+const LOT_STATUS = enumOpts("lotStatus", ["open", "closed"]);
 
 /** Resolve a value to its translated enum label (label holds an i18n key). */
 function labelOf(options: SelectOption[], value: string): string {
@@ -457,6 +474,67 @@ const observation = def<Observation>({
     `${observationSubjectName(e, ctx)} ${e.subjectType} ${e.subjectId} ${e.observedAt} ${e.note}`,
 });
 
+/**
+ * Display name of the holding a lot belongs to. Falls back to a placeholder
+ * when the holding was deleted, so an orphan lot reads as orphaned rather
+ * than showing a blank row.
+ */
+function tickerForLot(lot: Lot, ctx: FinancialContext): string {
+  const holding = ctx.holdings.find((h) => !h.deletedAt && h.id === lot.holdingId);
+  return holding?.ticker || holding?.name || i18n.t("observations:unknownSubject");
+}
+
+const holding = def<Holding>({
+  type: "holding",
+  singular: "entities:holding.singular",
+  plural: "entities:holding.plural",
+  icon: Layers,
+  href: "/portfolio",
+  description: "dataStudio:modules.holding.description",
+  fields: [
+    { name: "accountId", label: "forms:holding.accountId.label", type: "select", dynamicOptions: "investmentAccounts", required: true },
+    { name: "ticker", label: "forms:holding.ticker.label", type: "text", required: true },
+    { name: "name", label: "forms:holding.name.label", type: "text", colSpan: 2 },
+    { name: "assetClass", label: "forms:holding.assetClass.label", type: "select", options: ASSET_CLASSES },
+    { name: "targetAllocationBps", label: "forms:holding.targetAllocationBps.label", type: "percent" },
+  ],
+  columns: [
+    { label: "forms:columns.type", render: (e) => <Badge variant="secondary">{labelOf(ASSET_CLASSES, e.assetClass)}</Badge> },
+    { label: "forms:columns.account", render: (e, ctx) => ctx.investmentAccounts.find((a) => a.id === e.accountId)?.name ?? "—" },
+  ],
+  primary: (e) => e.ticker || e.name,
+  secondary: (e) => e.name,
+  searchText: (e) => `${e.ticker} ${e.name} ${e.assetClass}`,
+});
+
+const lot = def<Lot>({
+  type: "lot",
+  singular: "entities:lot.singular",
+  plural: "entities:lot.plural",
+  icon: Coins,
+  href: "/portfolio",
+  description: "dataStudio:modules.lot.description",
+  fields: [
+    { name: "holdingId", label: "forms:lot.holdingId.label", type: "select", dynamicOptions: "holdings", required: true },
+    { name: "tradeDate", label: "forms:lot.tradeDate.label", type: "date", required: true },
+    { name: "sharesMicro", label: "forms:lot.sharesMicro.label", type: "shares", required: true },
+    { name: "costTotalCents", label: "forms:lot.costTotalCents.label", type: "money", required: true },
+    { name: "feesCents", label: "forms:lot.feesCents.label", type: "money" },
+    { name: "status", label: "forms:lot.status.label", type: "select", options: LOT_STATUS },
+    { name: "closeDate", label: "forms:lot.closeDate.label", type: "date" },
+    { name: "proceedsCents", label: "forms:lot.proceedsCents.label", type: "money" },
+    { name: "note", label: "forms:lot.note.label", type: "textarea", colSpan: 2 },
+  ],
+  columns: [
+    { label: "forms:columns.shares", align: "right", render: (e) => formatShares(e.sharesMicro) },
+    { label: "forms:columns.costBasis", align: "right", render: (e) => formatCents(e.costTotalCents + e.feesCents) },
+    { label: "forms:columns.status", render: (e) => <Badge variant="secondary">{labelOf(LOT_STATUS, e.status)}</Badge> },
+  ],
+  primary: (e, ctx) => tickerForLot(e, ctx),
+  secondary: (e) => `${formatShares(e.sharesMicro)} @ ${formatDate(e.tradeDate)}`,
+  searchText: (e, ctx) => `${tickerForLot(e, ctx)} ${e.tradeDate} ${e.note}`,
+});
+
 export const ENTITY_REGISTRY: Record<string, EntityConfig<never>> = {
   income_source: income as EntityConfig<never>,
   expense: expense as EntityConfig<never>,
@@ -466,6 +544,8 @@ export const ENTITY_REGISTRY: Record<string, EntityConfig<never>> = {
   tax_strategy: taxStrategy as EntityConfig<never>,
   scenario: scenario as EntityConfig<never>,
   observation: observation as EntityConfig<never>,
+  holding: holding as EntityConfig<never>,
+  lot: lot as EntityConfig<never>,
 };
 
 /** Entity types managed through the generic Data Studio CRUD UI. */
@@ -478,6 +558,8 @@ export const DATA_STUDIO_MODULES: EntityType[] = [
   "tax_strategy",
   "scenario",
   "observation",
+  "holding",
+  "lot",
 ];
 
 export function getEntityConfig(type: EntityType): EntityConfig<never> {

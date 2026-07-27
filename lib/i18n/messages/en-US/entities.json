@@ -7,6 +7,8 @@
   "taxStrategy": { "singular": "Tax strategy", "plural": "Tax strategies" },
   "scenario": { "singular": "Scenario", "plural": "Scenarios" },
   "observation": { "singular": "Mark", "plural": "Marks" },
+  "holding": { "singular": "Holding", "plural": "Holdings" },
+  "lot": { "singular": "Lot", "plural": "Lots" },
   "observationSubjectType": {
     "investment_account": "Investment account",
     "property": "Property",
@@ -101,5 +103,18 @@
     "draft": "Draft",
     "active": "Active",
     "archived": "Archived"
+  },
+  "assetClass": {
+    "us_equity": "US stocks",
+    "intl_equity": "International stocks",
+    "bond": "Bonds",
+    "reit": "Real estate (REIT)",
+    "cash": "Cash",
+    "crypto": "Crypto",
+    "other": "Other"
+  },
+  "lotStatus": {
+    "open": "Open",
+    "closed": "Closed"
   }
 }

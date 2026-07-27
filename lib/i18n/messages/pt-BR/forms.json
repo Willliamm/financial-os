@@ -36,7 +36,16 @@
     "horizon": "Horizonte",
     "subject": "Item",
     "asOf": "Data",
-    "lastMarked": "Última marcação"
+    "lastMarked": "Última marcação",
+    "ticker": "Ticker",
+    "shares": "Cotas",
+    "costBasis": "Custo base",
+    "marketValue": "Valor de mercado",
+    "gain": "Ganho",
+    "weight": "Peso",
+    "tradeDate": "Data da operação",
+    "price": "Preço",
+    "account": "Conta"
   },
   "incomeSource": {
     "name": { "label": "Nome" },
@@ -130,6 +139,24 @@
     },
     "observedAt": { "label": "Na data de" },
     "valueCents": { "label": "Valor" },
+    "note": { "label": "Observação" }
+  },
+  "holding": {
+    "accountId": { "label": "Conta" },
+    "ticker": { "label": "Ticker" },
+    "name": { "label": "Nome" },
+    "assetClass": { "label": "Classe de ativo" },
+    "targetAllocationBps": { "label": "Alocação alvo" }
+  },
+  "lot": {
+    "holdingId": { "label": "Posição" },
+    "tradeDate": { "label": "Data da operação" },
+    "sharesMicro": { "label": "Cotas" },
+    "costTotalCents": { "label": "Custo total" },
+    "feesCents": { "label": "Taxas" },
+    "status": { "label": "Status" },
+    "closeDate": { "label": "Data de encerramento" },
+    "proceedsCents": { "label": "Valor recebido" },
     "note": { "label": "Observação" }
   }
 }
