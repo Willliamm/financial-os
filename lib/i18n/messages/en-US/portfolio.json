@@ -1,6 +1,16 @@
 {
+  "holdingsPage": {
+    "title": "Holdings",
+    "description": "Every position you own, and which account holds it."
+  },
+  "lotsPage": {
+    "title": "Lots",
+    "description": "Each purchase, with its share count and what you paid."
+  },
   "title": "Portfolio",
   "description": "Positions, allocation and lot-level detail across every investment account.",
+  "addHolding": "Add holding",
+  "addLot": "Add lot",
   "asOf": "as of {{date}}",
   "summary": {
     "marketValue": "Market value",
@@ -18,6 +28,7 @@
   },
   "lots": {
     "title": "Lots",
+    "empty": "No lots yet. Add a purchase to a position to see it here.",
     "longTerm": "Long-term",
     "daysToLongTerm_one": "{{count}} day to long-term",
     "daysToLongTerm_other": "{{count}} days to long-term",

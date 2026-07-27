@@ -26,6 +26,10 @@ export function LotsTable({ views }: LotsTableProps) {
     else byTicker.set(v.ticker, [v]);
   }
 
+  if (views.length === 0) {
+    return <p className="text-sm text-muted-foreground">{t("portfolio:lots.empty")}</p>;
+  }
+
   return (
     <div className="overflow-x-auto rounded-lg border">
       <Table>

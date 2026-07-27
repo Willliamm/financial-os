@@ -110,3 +110,35 @@ typecheck, 190 passing tests, lint, and a successful static export. These need e
 - Confirm "Set price" is reachable on a position that already has a price, and that the
   dialog prefills with that price.
 - Check both locales for raw i18n keys, and both themes for the tables and the donut.
+
+---
+
+## Added 2026-07-27 — portfolio CRUD entry points
+
+The F2+F3 registry entries pointed `holding` and `lot` at `/portfolio`, which was built as a
+read-only panel, so the forms existed with no route to reach them — nobody could add a
+position through the UI at all. Fixed on `feat/portfolio-crud-entry` with two entry points:
+`/holdings` and `/lots` list routes, plus "Add holding" and per-position "Add lot" on the
+portfolio screen. Verified end to end in a browser.
+
+That branch's whole-branch review also fixed: a required reference dropdown offering only
+"None" and then rejecting it (a genuine cold-start dead end); holdings labelled by ticker
+alone, so the same ticker in two accounts was indistinguishable and a purchase could be
+booked to the wrong account; the new row action being unreachable on a phone; and a drawer
+that remounted mid-save when the first holding flipped the page out of its empty state.
+
+Still open from that review, none blocking:
+
+- **pt-BR names overlap.** `holdingsPage.title` and `positions.title` are both "Posições";
+  `lotsPage.title` and `lots.title` are both "Lotes". Two different screens carry the same
+  name. en-US avoids it (Holdings vs Positions). A product-naming call, not a mechanical fix.
+- **`/holdings` and `/lots` are not in the sidebar**, reachable only through Data Studio or
+  the portfolio screen. Deliberate — the sidebar already carries Portfolio, and two more
+  entries for sub-entities would crowd it.
+- **Deleting a holding does not cascade to its lots.** The engines all filter orphans
+  correctly, so no math breaks, but the lots stay in Dexie, keep syncing, and show as
+  "Unknown item" on `/lots`. This is how the generic Data Studio deletes every entity, so it
+  is a pre-existing model gap this feature newly exposes.
+- **`SharesInput` and `MoneyInput` strip everything but digits, `.` and `-`.** A pt-BR user
+  typing `12,5` gets 125, not 12.5. App-wide convention rather than a portfolio bug, but the
+  portfolio is where fractional quantities actually matter.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import type { BaseEntity } from "@/domain/entities/base";
 import type { FinancialContext } from "@/domain/context";
@@ -299,42 +300,76 @@ function FieldGrid({
   );
 }
 
+/**
+ * A required reference should never offer "none" as a choice — it just gives
+ * the user a way to submit an invalid form. Optional fields (a loan's
+ * property, an income source's person, ...) legitimately need it, so only
+ * omit it when the field is required.
+ */
+function noneOption(field: FieldDef): SelectOption[] {
+  return field.required ? [] : [{ value: "", label: "common:none", raw: false }];
+}
+
+/** Screen a `dynamicOptions` select should send the user to when it has
+ * nothing to offer, and the i18n key explaining why. */
+export const EMPTY_DYNAMIC_OPTIONS: Record<
+  NonNullable<FieldDef["dynamicOptions"]>,
+  { messageKey: string; href: string }
+> = {
+  people: { messageKey: "forms:emptyOptions.people", href: "/settings" },
+  properties: { messageKey: "forms:emptyOptions.properties", href: "/properties" },
+  scenarios: { messageKey: "forms:emptyOptions.scenarios", href: "/scenarios" },
+  investmentAccounts: { messageKey: "forms:emptyOptions.investmentAccounts", href: "/investments" },
+  holdings: { messageKey: "forms:emptyOptions.holdings", href: "/holdings" },
+};
+
 function dynamicOptions(
   field: FieldDef,
   context: FinancialContext,
 ): SelectOption[] {
   if (field.dynamicOptions === "people") {
     return [
-      { value: "", label: "common:none", raw: false },
+      ...noneOption(field),
       ...context.people.map((p) => ({ value: p.id, label: p.name, raw: true })),
     ];
   }
   if (field.dynamicOptions === "properties") {
     return [
-      { value: "", label: "common:none", raw: false },
+      ...noneOption(field),
       ...context.properties.map((p) => ({ value: p.id, label: p.name, raw: true })),
     ];
   }
   if (field.dynamicOptions === "scenarios") {
     return [
-      { value: "", label: "common:none", raw: false },
+      ...noneOption(field),
       ...context.scenarios.map((s) => ({ value: s.id, label: s.name, raw: true })),
     ];
   }
   if (field.dynamicOptions === "investmentAccounts") {
     return [
-      { value: "", label: "common:none", raw: false },
+      ...noneOption(field),
       ...context.investmentAccounts
         .filter((a) => !a.deletedAt)
         .map((a) => ({ value: a.id, label: a.name, raw: true })),
     ];
   }
   if (field.dynamicOptions === "holdings") {
+    const accountNameById = new Map(
+      context.investmentAccounts.map((a) => [a.id, a.name] as const),
+    );
     return [
-      { value: "", label: "common:none", raw: false },
+      ...noneOption(field),
       ...context.holdings
         .filter((h) => !h.deletedAt)
-        .map((h) => ({ value: h.id, label: h.ticker || h.name, raw: true })),
+        .map((h) => {
+          const ticker = h.ticker || h.name;
+          const accountName = accountNameById.get(h.accountId);
+          return {
+            value: h.id,
+            label: accountName ? `${ticker} · ${accountName}` : ticker,
+            raw: true,
+          };
+        }),
     ];
   }
   return field.options ?? [];
@@ -440,6 +475,17 @@ function FieldControl({
       );
     case "select": {
       const options = dynamicOptions(field, context);
+      if (field.dynamicOptions && options.length === 0) {
+        const empty = EMPTY_DYNAMIC_OPTIONS[field.dynamicOptions];
+        return (
+          <Link
+            href={empty.href}
+            className="block text-sm text-muted-foreground underline underline-offset-2 hover:text-foreground"
+          >
+            {t(empty.messageKey)}
+          </Link>
+        );
+      }
       return (
         <Select
           value={value ? String(value) : "__none__"}

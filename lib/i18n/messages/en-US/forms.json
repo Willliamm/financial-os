@@ -10,6 +10,13 @@
     "required": "(required)",
     "selectPlaceholder": "Select…"
   },
+  "emptyOptions": {
+    "investmentAccounts": "Create an investment account first.",
+    "holdings": "Create a holding first.",
+    "properties": "Create a property first.",
+    "people": "Add a person first.",
+    "scenarios": "Create a scenario first."
+  },
   "validation": {
     "required": "This field is required.",
     "fixFields_one": "Fix {{count}} field to continue.",
