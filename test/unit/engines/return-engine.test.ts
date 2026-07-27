@@ -87,4 +87,49 @@ describe("moneyWeightedReturnBps", () => {
     });
     expect(moneyWeightedReturnBps(ctx, {}, "2027-01-01")).toBeNull();
   });
+
+  it("ignores lots whose holding was soft-deleted", () => {
+    const liveOnly = makeContext({
+      holdings: [makeHolding({ id: "h-voo", ticker: "VOO" })],
+      lots: [
+        makeLot({
+          holdingId: "h-voo",
+          tradeDate: "2026-01-01",
+          sharesMicro: 10_000_000,
+          costTotalCents: 500_000,
+          feesCents: 0,
+        }),
+      ],
+    });
+    const expected = moneyWeightedReturnBps(liveOnly, { VOO: 60_000 }, "2027-01-01");
+
+    // Same as above, plus a deleted holding whose lot would otherwise count
+    // its cost basis as an outflow against zero market value and tank the
+    // return.
+    const withDeletedHolding = makeContext({
+      holdings: [
+        makeHolding({ id: "h-voo", ticker: "VOO" }),
+        makeHolding({ id: "h-gone", ticker: "GONE", deletedAt: "2026-02-01T00:00:00.000Z" }),
+      ],
+      lots: [
+        makeLot({
+          holdingId: "h-voo",
+          tradeDate: "2026-01-01",
+          sharesMicro: 10_000_000,
+          costTotalCents: 500_000,
+          feesCents: 0,
+        }),
+        makeLot({
+          holdingId: "h-gone",
+          tradeDate: "2026-01-01",
+          sharesMicro: 5_000_000,
+          costTotalCents: 10_000_000,
+          feesCents: 0,
+        }),
+      ],
+    });
+    const actual = moneyWeightedReturnBps(withDeletedHolding, { VOO: 60_000 }, "2027-01-01");
+
+    expect(actual).toBe(expected);
+  });
 });

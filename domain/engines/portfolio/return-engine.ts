@@ -109,7 +109,12 @@ export function moneyWeightedReturnBps(
   prices: PriceMap,
   asOf: string,
 ): BasisPoints | null {
-  const openLots = context.lots.filter((l) => !l.deletedAt && l.status === "open");
+  const liveHoldingIds = new Set(
+    context.holdings.filter((h) => !h.deletedAt).map((h) => h.id),
+  );
+  const openLots = context.lots.filter(
+    (l) => !l.deletedAt && l.status === "open" && liveHoldingIds.has(l.holdingId),
+  );
   if (openLots.length === 0) return null;
 
   const value = portfolioValueCents(buildPositions(context, prices));

@@ -17,6 +17,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { MoneyInput } from "@/components/forms/money-input";
 import { todayIsoDate } from "@/infrastructure/dates/date-utils";
+import { normalizeTicker } from "@/domain/value-objects/ticker";
 import { useEntityActions } from "@/features/data-studio/use-entity-actions";
 
 export interface SetPriceDialogProps {
@@ -64,7 +65,7 @@ export function SetPriceDialog({
     setSaving(true);
     try {
       await create<PriceQuote>("price_quote", {
-        ticker,
+        ticker: normalizeTicker(ticker),
         quoteDate: todayIsoDate(),
         priceCents,
         source: "manual",

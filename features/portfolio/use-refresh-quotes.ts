@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { getGoogleClients } from "@/infrastructure/google";
 import { refreshQuotes } from "@/infrastructure/market/quote-service";
 import { todayIsoDate } from "@/infrastructure/dates/date-utils";
+import { normalizeTicker } from "@/domain/value-objects/ticker";
 import { useFinancialContext, useInvalidateFinancialData } from "@/lib/queries/financial-data";
 import { useWorkbookStore } from "@/lib/stores/workbook-store";
 
@@ -30,7 +31,7 @@ export function useRefreshQuotes() {
       ...new Set(
         context.holdings
           .filter((h) => !h.deletedAt && h.ticker.trim() !== "")
-          .map((h) => h.ticker.trim().toUpperCase()),
+          .map((h) => normalizeTicker(h.ticker)),
       ),
     ];
     if (tickers.length === 0) return;
@@ -38,7 +39,6 @@ export function useRefreshQuotes() {
     setRunning(true);
     try {
       const result = await refreshQuotes(getGoogleClients(), workbookId, tickers, todayIsoDate());
-      await invalidate();
       if (result.failed.length > 0) {
         toast.warning(t("portfolio:refresh.failed", { tickers: result.failed.join(", ") }));
       } else {
@@ -49,6 +49,10 @@ export function useRefreshQuotes() {
     } catch (error) {
       toast.error(String(error instanceof Error ? error.message : error));
     } finally {
+      // Always refresh the view, even on a partial failure partway through
+      // the per-ticker loop — quotes already written must not stay invisible
+      // until something else happens to refetch.
+      await invalidate();
       setRunning(false);
     }
   }, [context.holdings, invalidate, t, workbookId]);

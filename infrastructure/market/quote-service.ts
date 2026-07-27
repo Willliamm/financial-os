@@ -17,6 +17,7 @@
  */
 
 import type { PriceQuote } from "@/domain/entities";
+import { normalizeTicker } from "@/domain/value-objects/ticker";
 import { createEntity } from "@/infrastructure/db/command-service";
 import { repositories } from "@/infrastructure/db/repositories";
 import type { GoogleClients, SheetValues } from "@/infrastructure/google/google-api-types";
@@ -111,7 +112,7 @@ export async function readQuoteRows(
     .slice(1)
     .filter((row) => (row[0] ?? "").trim() !== "")
     .map((row) => ({
-      ticker: (row[0] ?? "").trim().toUpperCase(),
+      ticker: normalizeTicker(row[0] ?? ""),
       priceCents: parseQuoteCell(row[1]),
       name: (row[2] ?? "").trim(),
       currency: (row[3] ?? "").trim(),
@@ -126,25 +127,53 @@ export interface RefreshResult {
   failed: string[];
 }
 
+export interface RefreshQuotesOptions {
+  /** How long to wait between reads while GOOGLEFINANCE settles. */
+  settleMs?: number;
+  /** Total number of reads attempted (the first read plus retries). */
+  maxReads?: number;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 /**
  * Full round trip: write the ticker block, read it back, and persist one
  * price_quote per ticker for `today`. A ticker that already has a quote for
  * today is skipped, so refreshing five times in an afternoon does not create
  * five rows.
+ *
+ * GOOGLEFINANCE is an external-data function: immediately after the formula
+ * is written, Sheets has not fetched a value yet and the cell reads
+ * "Loading...". A single write-then-read would convert that transient state
+ * straight into a reported failure, so this reads up to `maxReads` times,
+ * waiting `settleMs` between reads, and stops as soon as every requested
+ * ticker has a non-null price.
  */
 export async function refreshQuotes(
   clients: GoogleClients,
   spreadsheetId: string,
   tickers: string[],
   today: string,
+  options: RefreshQuotesOptions = {},
 ): Promise<RefreshResult> {
-  const wanted = [...new Set(tickers.map((t) => t.trim().toUpperCase()).filter(Boolean))];
+  const { settleMs = 1500, maxReads = 3 } = options;
+  const wanted = [...new Set(tickers.map((t) => normalizeTicker(t)).filter(Boolean))];
   if (wanted.length === 0) {
     return { requested: 0, written: 0, skippedSameDay: 0, failed: [] };
   }
 
   await writeQuoteTickers(clients, spreadsheetId, wanted, today);
-  const rows = await readQuoteRows(clients, spreadsheetId);
+
+  let rows = await readQuoteRows(clients, spreadsheetId);
+  for (let read = 1; read < Math.max(1, maxReads); read++) {
+    const byTicker = new Map(rows.map((r) => [r.ticker, r]));
+    const stillLoading = wanted.some((ticker) => byTicker.get(ticker)?.priceCents == null);
+    if (!stillLoading) break;
+    if (settleMs > 0) await sleep(settleMs);
+    rows = await readQuoteRows(clients, spreadsheetId);
+  }
   const byTicker = new Map(rows.map((r) => [r.ticker, r]));
 
   const existing = await repositories.price_quote.list();
@@ -163,6 +192,15 @@ export async function refreshQuotes(
     }
     const row = byTicker.get(ticker);
     if (!row || row.priceCents === null) {
+      failed.push(ticker);
+      continue;
+    }
+    // This project's rule is that money stays USD. GOOGLEFINANCE can return a
+    // ticker priced in another currency (e.g. GBX for a London listing, BRL
+    // for a B3 listing); storing that number as USD cents would silently
+    // corrupt market value, net worth, allocation and XIRR, so treat it the
+    // same as any other unusable row.
+    if (row.currency !== "" && row.currency.toUpperCase() !== "USD") {
       failed.push(ticker);
       continue;
     }

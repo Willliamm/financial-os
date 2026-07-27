@@ -13,6 +13,7 @@ import {
   sharesValueCents,
   type ShareMicros,
 } from "@/domain/value-objects/shares";
+import { normalizeTicker } from "@/domain/value-objects/ticker";
 import type { MoneyCents } from "@/infrastructure/money/money";
 
 /** ticker -> price per share in integer cents. A missing key means no price. */
@@ -65,7 +66,7 @@ export function buildPositions(
     const sharesMicro = lots.reduce((s, l) => s + l.sharesMicro, 0);
     const costBasisCents = lots.reduce((s, l) => s + lotCostBasisCents(l), 0);
 
-    const price = prices[holding.ticker];
+    const price = prices[normalizeTicker(holding.ticker)];
     const hasPrice = typeof price === "number" && price > 0;
     const marketValueCents = hasPrice
       ? sharesValueCents(sharesMicro, price)

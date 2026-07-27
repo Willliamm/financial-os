@@ -13,6 +13,7 @@
 import type { FinancialContext } from "@/domain/context";
 import type { Lot } from "@/domain/entities";
 import { costPerShareCents, sharesValueCents, type ShareMicros } from "@/domain/value-objects/shares";
+import { normalizeTicker } from "@/domain/value-objects/ticker";
 import { addDaysIso, addYearsIso, diffCalendarDays } from "@/infrastructure/dates/date-utils";
 import type { MoneyCents } from "@/infrastructure/money/money";
 import { lotCostBasisCents, type PriceMap } from "./portfolio-engine";
@@ -58,7 +59,7 @@ export function buildLotViews(
     .filter((l) => tickerByHolding.has(l.holdingId))
     .map((lot) => {
       const ticker = tickerByHolding.get(lot.holdingId) as string;
-      const price = prices[ticker];
+      const price = prices[normalizeTicker(ticker)];
       const hasPrice = typeof price === "number" && price > 0;
       const costBasisCents = lotCostBasisCents(lot);
       const marketValueCents = hasPrice

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeTicker } from "@/domain/value-objects/ticker";
 
 /**
  * Zod schemas for every entity. These validate data coming from Google Sheets
@@ -327,7 +328,11 @@ export const assetClassSchema = z.enum([
 export const holdingSchema = z.object({
   ...baseEntityShape,
   accountId: idString,
-  ticker: z.string().default(""),
+  // Normalized on the way in so a row imported from Google Sheets can never
+  // disagree, by case alone, with the ticker a quote is stored under.
+  // `applyCommand` does not run Zod, so entities created in the app instead
+  // normalize at each lookup/write site — see domain/value-objects/ticker.ts.
+  ticker: z.string().default("").transform(normalizeTicker),
   name: z.string().default(""),
   assetClass: assetClassSchema.default("us_equity"),
   targetAllocationBps: rateBps.default(0),
@@ -348,7 +353,7 @@ export const lotSchema = z.object({
 
 export const priceQuoteSchema = z.object({
   ...baseEntityShape,
-  ticker: z.string().min(1),
+  ticker: z.string().min(1).transform(normalizeTicker),
   quoteDate: dateOnly,
   priceCents: nonNegCents,
   source: z.enum(["googlefinance", "manual"]).default("manual"),

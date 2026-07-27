@@ -35,7 +35,9 @@ export default function PortfolioPage() {
   const { data: context } = useFinancialContext();
   const { prices, asOf } = useLatestPrices();
   const { refresh, running } = useRefreshQuotes();
-  const [settingPriceFor, setSettingPriceFor] = useState<string | null>(null);
+  const [priceDialog, setPriceDialog] = useState<{ ticker: string; currentPriceCents: number } | null>(
+    null,
+  );
 
   const model = useMemo(() => {
     const today = todayIsoDate();
@@ -121,9 +123,10 @@ export default function PortfolioPage() {
         <CardContent>
           <PositionsTable
             positions={model.positions}
+            prices={prices}
             asOf={asOf}
             accountNameById={accountNameById}
-            onSetPrice={setSettingPriceFor}
+            onSetPrice={(ticker, currentPriceCents) => setPriceDialog({ ticker, currentPriceCents })}
           />
         </CardContent>
       </Card>
@@ -187,12 +190,12 @@ export default function PortfolioPage() {
       </Card>
 
       <SetPriceDialog
-        open={settingPriceFor !== null}
+        open={priceDialog !== null}
         onOpenChange={(open) => {
-          if (!open) setSettingPriceFor(null);
+          if (!open) setPriceDialog(null);
         }}
-        ticker={settingPriceFor ?? ""}
-        currentPriceCents={settingPriceFor ? (prices[settingPriceFor] ?? 0) : 0}
+        ticker={priceDialog?.ticker ?? ""}
+        currentPriceCents={priceDialog?.currentPriceCents ?? 0}
       />
     </div>
   );
