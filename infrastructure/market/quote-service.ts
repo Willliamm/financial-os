@@ -56,6 +56,15 @@ export function parseQuoteCell(raw: string | undefined): MoneyCents | null {
 /**
  * Rewrite the whole ticker block, so a ticker removed from the portfolio stops
  * consuming a GOOGLEFINANCE call. Row 1 is the header; data starts at row 2.
+ *
+ * `updateRange` only touches the cells it is given — it does not clear rows
+ * beyond what is written. So if the portfolio shrinks from 5 tickers to 3,
+ * writing only 3 rows would leave rows 5 and 6 holding their old
+ * GOOGLEFINANCE formulas, quietly burning quota forever. To actually remove a
+ * dropped ticker's formulas, this first reads how many data rows currently
+ * exist, then pads the written block with blank rows so it fully overwrites
+ * whatever was there before. `readQuoteRows` already skips rows with a blank
+ * ticker cell, so the padding rows are invisible on read.
  */
 export async function writeQuoteTickers(
   clients: GoogleClients,
@@ -64,6 +73,10 @@ export async function writeQuoteTickers(
   now: string,
 ): Promise<void> {
   if (tickers.length === 0) return;
+
+  const existing = await clients.sheets.getValues(spreadsheetId, `${QUOTE_SHEET}!A:E`);
+  const existingDataRows = Math.max(0, existing.length - 1);
+
   const rows: SheetValues = tickers.map((ticker, i) => {
     const row = i + 2;
     return [
@@ -74,6 +87,10 @@ export async function writeQuoteTickers(
       now,
     ];
   });
+  while (rows.length < existingDataRows) {
+    rows.push(["", "", "", "", ""]);
+  }
+
   await clients.sheets.updateRange(spreadsheetId, `${QUOTE_SHEET}!A2`, rows, {
     formulas: true,
   });

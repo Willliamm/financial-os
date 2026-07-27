@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { parseQuoteCell, readQuoteRows, refreshQuotes } from "@/infrastructure/market/quote-service";
+import { parseQuoteCell, readQuoteRows, refreshQuotes, writeQuoteTickers } from "@/infrastructure/market/quote-service";
 import { getDb, resetDbSingleton } from "@/infrastructure/db/dexie";
 import { repositories } from "@/infrastructure/db/repositories";
 import type { GoogleClients, SheetValues } from "@/infrastructure/google/google-api-types";
@@ -44,6 +44,44 @@ function stubClients(readValues: SheetValues) {
   } as unknown as GoogleClients;
   return { clients, writes };
 }
+
+describe("writeQuoteTickers", () => {
+  it("pads a shrinking block so stale formulas are overwritten with blanks", async () => {
+    const { clients, writes } = stubClients([
+      ["ticker", "price", "name", "currency", "updated_at"],
+      ["AAA", "1.00", "", "USD", ""],
+      ["BBB", "2.00", "", "USD", ""],
+      ["CCC", "3.00", "", "USD", ""],
+      ["DDD", "4.00", "", "USD", ""],
+      ["EEE", "5.00", "", "USD", ""],
+    ]);
+
+    await writeQuoteTickers(clients, "ss", ["VOO", "BND"], "2026-07-27");
+
+    expect(writes).toHaveLength(1);
+    const values = writes[0].values;
+    expect(values.length).toBeGreaterThanOrEqual(5);
+    expect(values[0][0]).toBe("VOO");
+    expect(values[1][0]).toBe("BND");
+    for (let i = 2; i < values.length; i++) {
+      expect(values[i][0]).toBe("");
+    }
+  });
+
+  it("writes exactly N rows for a growing block, no stray blanks", async () => {
+    const { clients, writes } = stubClients([
+      ["ticker", "price", "name", "currency", "updated_at"],
+      ["AAA", "1.00", "", "USD", ""],
+    ]);
+
+    await writeQuoteTickers(clients, "ss", ["VOO", "BND", "SCHD"], "2026-07-27");
+
+    expect(writes).toHaveLength(1);
+    const values = writes[0].values;
+    expect(values).toHaveLength(3);
+    expect(values.map((r) => r[0])).toEqual(["VOO", "BND", "SCHD"]);
+  });
+});
 
 describe("readQuoteRows", () => {
   it("maps the sheet block into quote rows", async () => {
