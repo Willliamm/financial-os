@@ -17,3 +17,4 @@ export * from "./history/net-worth-history";
 export * from "./history/data-freshness";
 export * from "./portfolio/portfolio-engine";
 export * from "./portfolio/lot-engine";
+export * from "./portfolio/return-engine";
