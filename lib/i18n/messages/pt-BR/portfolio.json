@@ -1,0 +1,46 @@
+{
+  "title": "Carteira",
+  "description": "Posições, alocação e detalhe por lote em todas as contas de investimento.",
+  "asOf": "em {{date}}",
+  "summary": {
+    "marketValue": "Valor de mercado",
+    "costBasis": "Custo base",
+    "unrealizedGain": "Ganho não realizado",
+    "moneyWeightedReturn": "Retorno ponderado pelo dinheiro",
+    "missingPrices_one": "{{count}} posição sem preço",
+    "missingPrices_other": "{{count}} posições sem preço"
+  },
+  "positions": {
+    "title": "Posições",
+    "empty": "Adicione uma posição e um lote para ver suas posições aqui.",
+    "noPrice": "Sem preço",
+    "setPrice": "Definir preço"
+  },
+  "lots": {
+    "title": "Lotes",
+    "longTerm": "Longo prazo",
+    "daysToLongTerm_one": "{{count}} dia para longo prazo",
+    "daysToLongTerm_other": "{{count}} dias para longo prazo",
+    "perShare": "/ cota"
+  },
+  "allocation": {
+    "title": "Alocação",
+    "drift": "Desvio em relação à meta",
+    "overweight": "{{amount}} acima da meta",
+    "underweight": "{{amount}} abaixo da meta",
+    "noTargets": "Defina uma alocação-alvo em uma posição para ver o desvio aqui."
+  },
+  "refresh": {
+    "button": "Atualizar preços",
+    "running": "Atualizando preços…",
+    "success": "Preços atualizados.",
+    "skipped": "Nenhum ticker precisou de atualização.",
+    "failed": "Não foi possível atualizar os preços. Tente novamente mais tarde.",
+    "noWorkbook": "Conecte o Google Sheets para atualizar os preços."
+  },
+  "manualPrice": {
+    "title": "Definir preço",
+    "label": "Preço por cota",
+    "save": "Salvar"
+  }
+}
