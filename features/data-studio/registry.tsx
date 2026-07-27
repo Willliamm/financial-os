@@ -489,7 +489,7 @@ const holding = def<Holding>({
   singular: "entities:holding.singular",
   plural: "entities:holding.plural",
   icon: Layers,
-  href: "/portfolio",
+  href: "/holdings",
   description: "dataStudio:modules.holding.description",
   fields: [
     { name: "accountId", label: "forms:holding.accountId.label", type: "select", dynamicOptions: "investmentAccounts", required: true },
@@ -512,7 +512,7 @@ const lot = def<Lot>({
   singular: "entities:lot.singular",
   plural: "entities:lot.plural",
   icon: Coins,
-  href: "/portfolio",
+  href: "/lots",
   description: "dataStudio:modules.lot.description",
   fields: [
     { name: "holdingId", label: "forms:lot.holdingId.label", type: "select", dynamicOptions: "holdings", required: true },

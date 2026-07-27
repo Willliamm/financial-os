@@ -1,4 +1,12 @@
 {
+  "holdingsPage": {
+    "title": "Posições",
+    "description": "Cada papel que você tem, e em qual conta ele está."
+  },
+  "lotsPage": {
+    "title": "Lotes",
+    "description": "Cada compra, com a quantidade de cotas e o quanto você pagou."
+  },
   "title": "Carteira",
   "description": "Posições, alocação e detalhe por lote em todas as contas de investimento.",
   "asOf": "em {{date}}",

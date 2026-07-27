@@ -1,4 +1,12 @@
 {
+  "holdingsPage": {
+    "title": "Holdings",
+    "description": "Every position you own, and which account holds it."
+  },
+  "lotsPage": {
+    "title": "Lots",
+    "description": "Each purchase, with its share count and what you paid."
+  },
   "title": "Portfolio",
   "description": "Positions, allocation and lot-level detail across every investment account.",
   "asOf": "as of {{date}}",
