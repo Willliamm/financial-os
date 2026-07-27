@@ -28,6 +28,7 @@
   },
   "lots": {
     "title": "Lotes",
+    "empty": "Nenhum lote ainda. Adicione uma compra a uma posição para vê-la aqui.",
     "longTerm": "Longo prazo",
     "daysToLongTerm_one": "{{count}} dia para longo prazo",
     "daysToLongTerm_other": "{{count}} dias para longo prazo",

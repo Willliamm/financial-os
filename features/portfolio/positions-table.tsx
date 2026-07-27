@@ -44,7 +44,7 @@ export function PositionsTable({
             <TableHead className="text-right">{t("forms:columns.marketValue")}</TableHead>
             <TableHead className="text-right">{t("forms:columns.gain")}</TableHead>
             <TableHead className="text-right">{t("forms:columns.weight")}</TableHead>
-            <TableHead className="w-10" />
+            <TableHead className="sticky right-0 w-10 bg-background sm:static" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -124,11 +124,11 @@ export function PositionsTable({
                 <TableCell className="text-right tabular-nums">
                   {p.hasPrice ? formatBps(p.weightBps) : "—"}
                 </TableCell>
-                <TableCell>
+                <TableCell className="sticky right-0 bg-background sm:static sm:bg-transparent">
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="size-6"
+                    className="size-8 max-sm:size-10"
                     aria-label={t("portfolio:addLot")}
                     title={t("portfolio:addLot")}
                     onClick={() => onAddLot(p.holdingId)}

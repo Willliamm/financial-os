@@ -67,10 +67,30 @@ export default function PortfolioPage() {
     [context.investmentAccounts],
   );
 
-  if (model.positions.length === 0) {
-    return (
-      <div className="space-y-6">
-        <PageHeader title={t("portfolio:title")} description={t("portfolio:description")} />
+  const isEmpty = model.positions.length === 0;
+
+  return (
+    <div className="space-y-6">
+      <PageHeader title={t("portfolio:title")} description={t("portfolio:description")}>
+        {isEmpty ? null : (
+          <>
+            <Button variant="outline" onClick={() => setAddingHolding(true)}>
+              <Plus className="size-4" />
+              {t("portfolio:addHolding")}
+            </Button>
+            <Button variant="outline" onClick={() => void refresh()} disabled={running}>
+              {running ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <RefreshCw className="size-4" />
+              )}
+              {running ? t("portfolio:refresh.running") : t("portfolio:refresh.button")}
+            </Button>
+          </>
+        )}
+      </PageHeader>
+
+      {isEmpty ? (
         <EmptyState
           title={t("portfolio:positions.title")}
           description={t("portfolio:positions.empty")}
@@ -81,148 +101,123 @@ export default function PortfolioPage() {
             </Button>
           }
         />
-
-        <EntityFormDrawer
-          config={getEntityConfig("holding")}
-          open={addingHolding}
-          onOpenChange={setAddingHolding}
-          entity={null}
-          context={context}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-6">
-      <PageHeader title={t("portfolio:title")} description={t("portfolio:description")}>
-        <Button variant="outline" size="sm" onClick={() => setAddingHolding(true)}>
-          <Plus className="size-4" />
-          {t("portfolio:addHolding")}
-        </Button>
-        <Button variant="outline" onClick={() => void refresh()} disabled={running}>
-          {running ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <RefreshCw className="size-4" />
-          )}
-          {running ? t("portfolio:refresh.running") : t("portfolio:refresh.button")}
-        </Button>
-      </PageHeader>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard
-          label={t("portfolio:summary.marketValue")}
-          value={formatCents(model.valueCents)}
-        />
-        <KpiCard
-          label={t("portfolio:summary.costBasis")}
-          value={formatCents(model.basisCents)}
-        />
-        <KpiCard
-          label={t("portfolio:summary.unrealizedGain")}
-          value={formatCents(model.gainCents)}
-          tone={model.gainCents >= 0 ? "positive" : "negative"}
-          sub={
-            model.basisCents > 0
-              ? formatBps(Math.round((model.gainCents / model.basisCents) * 10_000))
-              : undefined
-          }
-        />
-        <KpiCard
-          label={t("portfolio:summary.moneyWeightedReturn")}
-          value={model.returnBps === null ? "—" : formatBps(model.returnBps)}
-          tone={model.missingPrices > 0 ? "warning" : "default"}
-          sub={
-            model.missingPrices > 0
-              ? t("portfolio:summary.missingPrices", { count: model.missingPrices })
-              : undefined
-          }
-        />
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("portfolio:positions.title")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <PositionsTable
-            positions={model.positions}
-            prices={prices}
-            asOf={asOf}
-            accountNameById={accountNameById}
-            onSetPrice={(ticker, currentPriceCents) => setPriceDialog({ ticker, currentPriceCents })}
-            onAddLot={setAddingLotFor}
-          />
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("portfolio:allocation.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <EChart
-              option={donutMoneyOption(
-                model.allocation.map((slice) => ({
-                  name: t(`entities:assetClass.${slice.assetClass}`),
-                  value: toDollars(slice.valueCents),
-                })),
-              )}
-              height={280}
+      ) : (
+        <>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <KpiCard
+              label={t("portfolio:summary.marketValue")}
+              value={formatCents(model.valueCents)}
             />
-          </CardContent>
-        </Card>
+            <KpiCard
+              label={t("portfolio:summary.costBasis")}
+              value={formatCents(model.basisCents)}
+            />
+            <KpiCard
+              label={t("portfolio:summary.unrealizedGain")}
+              value={formatCents(model.gainCents)}
+              tone={model.gainCents >= 0 ? "positive" : "negative"}
+              sub={
+                model.basisCents > 0
+                  ? formatBps(Math.round((model.gainCents / model.basisCents) * 10_000))
+                  : undefined
+              }
+            />
+            <KpiCard
+              label={t("portfolio:summary.moneyWeightedReturn")}
+              value={model.returnBps === null ? "—" : formatBps(model.returnBps)}
+              tone={model.missingPrices > 0 ? "warning" : "default"}
+              sub={
+                model.missingPrices > 0
+                  ? t("portfolio:summary.missingPrices", { count: model.missingPrices })
+                  : undefined
+              }
+            />
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("portfolio:allocation.drift")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {model.drift.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                {t("portfolio:allocation.noTargets")}
-              </p>
-            ) : (
-              model.drift.map((d) => (
-                <div key={d.holdingId} className="flex items-center justify-between text-sm">
-                  <span className="font-medium">{d.ticker}</span>
-                  <span className="tabular-nums text-muted-foreground">
-                    {formatBps(d.actualBps)} / {formatBps(d.targetBps)}
-                  </span>
-                  <span className="tabular-nums">
-                    {t(
-                      d.driftBps >= 0
-                        ? "portfolio:allocation.overweight"
-                        : "portfolio:allocation.underweight",
-                      { amount: formatBps(Math.abs(d.driftBps)) },
-                    )}
-                  </span>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("portfolio:positions.title")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PositionsTable
+                positions={model.positions}
+                prices={prices}
+                asOf={asOf}
+                accountNameById={accountNameById}
+                onSetPrice={(ticker, currentPriceCents) => setPriceDialog({ ticker, currentPriceCents })}
+                onAddLot={setAddingLotFor}
+              />
+            </CardContent>
+          </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("portfolio:lots.title")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <LotsTable views={model.lotViews} />
-        </CardContent>
-      </Card>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("portfolio:allocation.title")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <EChart
+                  option={donutMoneyOption(
+                    model.allocation.map((slice) => ({
+                      name: t(`entities:assetClass.${slice.assetClass}`),
+                      value: toDollars(slice.valueCents),
+                    })),
+                  )}
+                  height={280}
+                />
+              </CardContent>
+            </Card>
 
-      <SetPriceDialog
-        open={priceDialog !== null}
-        onOpenChange={(open) => {
-          if (!open) setPriceDialog(null);
-        }}
-        ticker={priceDialog?.ticker ?? ""}
-        currentPriceCents={priceDialog?.currentPriceCents ?? 0}
-      />
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("portfolio:allocation.drift")}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {model.drift.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t("portfolio:allocation.noTargets")}
+                  </p>
+                ) : (
+                  model.drift.map((d) => (
+                    <div key={d.holdingId} className="flex items-center justify-between text-sm">
+                      <span className="font-medium">{d.ticker}</span>
+                      <span className="tabular-nums text-muted-foreground">
+                        {formatBps(d.actualBps)} / {formatBps(d.targetBps)}
+                      </span>
+                      <span className="tabular-nums">
+                        {t(
+                          d.driftBps >= 0
+                            ? "portfolio:allocation.overweight"
+                            : "portfolio:allocation.underweight",
+                          { amount: formatBps(Math.abs(d.driftBps)) },
+                        )}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("portfolio:lots.title")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <LotsTable views={model.lotViews} />
+            </CardContent>
+          </Card>
+
+          <SetPriceDialog
+            open={priceDialog !== null}
+            onOpenChange={(open) => {
+              if (!open) setPriceDialog(null);
+            }}
+            ticker={priceDialog?.ticker ?? ""}
+            currentPriceCents={priceDialog?.currentPriceCents ?? 0}
+          />
+        </>
+      )}
 
       <EntityFormDrawer
         config={getEntityConfig("holding")}

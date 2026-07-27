@@ -10,6 +10,13 @@
     "required": "(obrigatório)",
     "selectPlaceholder": "Selecionar…"
   },
+  "emptyOptions": {
+    "investmentAccounts": "Crie uma conta de investimento primeiro.",
+    "holdings": "Crie uma posição primeiro.",
+    "properties": "Crie um imóvel primeiro.",
+    "people": "Adicione uma pessoa primeiro.",
+    "scenarios": "Crie um cenário primeiro."
+  },
   "validation": {
     "required": "Este campo é obrigatório.",
     "fixFields_one": "Corrija {{count}} campo para continuar.",
