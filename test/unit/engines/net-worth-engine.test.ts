@@ -15,6 +15,8 @@ import {
   makeInvestment,
   makeIncome,
   makeExpense,
+  makeHolding,
+  makeLot,
 } from "./fixtures";
 
 function buildContext() {
@@ -88,5 +90,34 @@ describe("projectNetWorth", () => {
       propertyAppreciationBps: 300,
     });
     expect(rows.length).toBe(1);
+  });
+});
+
+describe("net worth with portfolio holdings", () => {
+  it("is unchanged when no holdings exist", () => {
+    const ctx = makeContext({
+      investmentAccounts: [makeInvestment({ currentBalanceCents: 1_000_000 })],
+    });
+    expect(totalAssetsCents(ctx)).toBe(1_000_000);
+    expect(totalAssetsCents(ctx, { VOO: 60_000 })).toBe(1_000_000);
+  });
+
+  it("values an account from its positions once it has holdings", () => {
+    const ctx = makeContext({
+      investmentAccounts: [makeInvestment({ id: "acct-1", currentBalanceCents: 1 })],
+      holdings: [makeHolding({ id: "h-voo", accountId: "acct-1", ticker: "VOO" })],
+      lots: [makeLot({ holdingId: "h-voo", sharesMicro: 10_000_000, costTotalCents: 500_000, feesCents: 0 })],
+    });
+    // 10 shares x $600 = $6,000, replacing the $0.01 typed balance.
+    expect(totalAssetsCents(ctx, { VOO: 60_000 })).toBe(600_000);
+  });
+
+  it("falls back to cost basis when the price is missing", () => {
+    const ctx = makeContext({
+      investmentAccounts: [makeInvestment({ id: "acct-1", currentBalanceCents: 1 })],
+      holdings: [makeHolding({ id: "h-voo", accountId: "acct-1", ticker: "VOO" })],
+      lots: [makeLot({ holdingId: "h-voo", sharesMicro: 10_000_000, costTotalCents: 500_000, feesCents: 0 })],
+    });
+    expect(totalAssetsCents(ctx)).toBe(500_000);
   });
 });

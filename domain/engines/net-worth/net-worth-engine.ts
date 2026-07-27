@@ -10,6 +10,11 @@ import { loanForProperty } from "@/domain/context";
 import type { IncomeSource } from "@/domain/entities";
 import type { MoneyCents } from "@/infrastructure/money/money";
 import { monthlyCashFlowCents } from "@/domain/engines/real-estate/real-estate-engine";
+import {
+  accountValueCents,
+  buildPositions,
+  type PriceMap,
+} from "@/domain/engines/portfolio/portfolio-engine";
 
 /** Default effective tax rate (bps) when no tax assumption is available. */
 const DEFAULT_EFFECTIVE_TAX_BPS = 2200; // 22%
@@ -21,14 +26,25 @@ function notDeleted<T extends { deletedAt?: string | null }>(e: T): boolean {
   return !e.deletedAt;
 }
 
-/** Total assets: property values plus investment-account balances, in cents. */
-export function totalAssetsCents(context: FinancialContext): MoneyCents {
+/**
+ * Total assets: property values plus investment-account balances, in cents.
+ *
+ * `prices` is optional and defaults to empty, so every existing caller keeps
+ * its behaviour. An account that has holdings is valued from its positions;
+ * without a price those positions fall back to cost basis, so an unpriced
+ * portfolio is understated by market movement but never by its whole value.
+ */
+export function totalAssetsCents(
+  context: FinancialContext,
+  prices: PriceMap = {},
+): MoneyCents {
   const properties = context.properties
     .filter(notDeleted)
     .reduce((sum, p) => sum + p.currentValueCents, 0);
+  const positions = buildPositions(context, prices);
   const investments = context.investmentAccounts
     .filter(notDeleted)
-    .reduce((sum, a) => sum + a.currentBalanceCents, 0);
+    .reduce((sum, a) => sum + accountValueCents(a, positions), 0);
   return properties + investments;
 }
 
@@ -40,8 +56,11 @@ export function totalLiabilitiesCents(context: FinancialContext): MoneyCents {
 }
 
 /** Net worth = assets - liabilities, in cents. */
-export function netWorthCents(context: FinancialContext): MoneyCents {
-  return totalAssetsCents(context) - totalLiabilitiesCents(context);
+export function netWorthCents(
+  context: FinancialContext,
+  prices: PriceMap = {},
+): MoneyCents {
+  return totalAssetsCents(context, prices) - totalLiabilitiesCents(context);
 }
 
 function sumActiveIncomeAnnual(
